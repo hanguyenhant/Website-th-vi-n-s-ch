@@ -4,49 +4,51 @@
 	<title>Trang chủ</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/custom.css">
-	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/custom.css">
+	<script type="text/javascript" src="bootstrap/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<!-- Header -->
-	<div class="container">
-		<header class="page-header">
-			<!-- <img src="openlibrary-card.png" alt="logo" width="200" height="100"> -->
-			<form>
-				<div class="in-line">
-					<div class="row">							
-						<div class="col-sm-2">
-							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây...">
-						</div>
-						<div class="col-sm-2">
-							<select id="theLoai" class="form-control">
-	                    		<option selected>Chọn thể loại</option>
-	                    		<option>...</option>
-	                  		</select>
-						</div>
-						<div class="col-sm-2">
-							<button type="submit" class="btn" style="background-color: orange">Tìm kiếm</button>
-						</div>
+	<div>
+		<header>
+			<nav class="navbar navbar-inverse" role="navigation">
+			  	<!-- Brand and toggle get grouped for better mobile display -->
+			  	<div class="navbar-header">
+			    	<a class="navbar-brand" href="#" style="color: orange;">H2ON</a>
+			  	</div>
 
-						<div class="col-sm-2">
-							<input type="text" class="form-control" placeholder="username">
-						</div>
-						<div class="col-sm-2">
-							<input type="password" class="form-control" placeholder="password">
-						</div>
-						<div class="col-sm-2">
-							<button type="submit" class="btn" style="background-color: orange">Đăng nhập</button>
-						</div>
-						
-
-					</div>
-				</div>
-				
-			</form>
+			  	<!-- Collect the nav links, forms, and other content for toggling -->
+			  	<div class="collapse navbar-collapse">
+			    	<form class="navbar-form navbar-left" role="search">
+			      		<div class="form-group">
+			        		<input type="text" class="form-control" placeholder="Tìm kiếm tại đây...">
+			      		</div> 
+			      		<div class="form-group">
+			      			<select id="theLoai" class="form-control">
+				    			<option disabled selected hidden>Tìm kiếm theo thể loại</option>
+				    			<option>...</option>
+				  			</select>
+			      		</div>
+			      		<button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-search"></span>Tìm kiếm</button>
+			   		</form>
+			    	<div class="nav navbar-nav navbar-right">
+			    		<form class="navbar-form navbar-right" role="login">
+				      		<div class="form-group">
+				        		<input type="text" class="form-control" style="width: 160px;" placeholder="username">
+				      		</div>
+				      		<div class="form-group">
+				        		<input type="password" class="form-control" style="width: 160px;"  placeholder="password">
+				      		</div>
+				      		<button type="submit" class="btn btn-warning">Đăng nhập</button>
+			    		</form>
+			    	</div>
+			  	</div> 
+			</nav>
 		</header>
 	</div>
+	<br>
 
 	<!-- Ảnh chạy -->
 	<div class="container">
@@ -61,15 +63,15 @@
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner">
 				<div class="item active">
-					<img src="anh2.jpeg" alt="Thuvien1" width="1500" height="300">
+					<img src="images/anh2.jpeg" alt="Thuvien1" width="1500" height="300">
 				</div>
 
 				<div class="item">
-					<img src="anh2.jpeg" alt="Thuvien2" width="1500" height="300">
+					<img src="images/anh2.jpeg" alt="Thuvien2" width="1500" height="300">
 				</div>
 
 				<div class="item">
-					<img src="anh2.jpeg" alt="Thuvien3" width="1500" height="300">
+					<img src="images/anh2.jpeg" alt="Thuvien3" width="1500" height="300">
 				</div>
 			</div>
 
@@ -88,36 +90,41 @@
 	<!-- Main -->
 	<div class="container">
 		<a href="#"><h3>Sách khoa học</h3></a>
-		
+		<hr>
 		<div id="chaySachKhoaHoc" class="carousel slide" data-ride="carousel" data-interval="false">	
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner">							
 				<div class="item active">
 					<div class="row">
-						<div class="col-sm-2 col-sm-offset-1">
-							<div class="thumbnail">
-								<img src="sach1.jpg" alt="Sách 1">
-							</div>							
+						<div class="col-sm-2 col-sm-offset-1"> 
+							<a class="thumbnail">
+								<img src="images/sach1.jpg" alt="Sách 1" >
+								<span>book</span>
+							</a> 							
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach2.jpg" alt="Sách 2">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach2.jpg" alt="Sách 2" >
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach3.jpg" alt="Sách 3">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach3.jpg" alt="Sách 3" >
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach4.jpg" alt="Sách 4">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach4.jpg" alt="Sách 4">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach5.jpg" alt="Sách 5">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach5.jpg" alt="Sách 5">
+								<span>book</span>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -125,29 +132,34 @@
 				<div class="item">
 					<div class="row">
 						<div class="col-sm-2 col-sm-offset-1">
-							<div class="thumbnail">
-								<img src="sach1.jpg" alt="Sách 1">
-							</div>							
+							<a class="thumbnail">
+								<img src="images/sach1.jpg" alt="Sách 1">
+								<span>book</span>
+							</a>							
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach2.jpg" alt="Sách 2">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach2.jpg" alt="Sách 2">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach3.jpg" alt="Sách 3">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach3.jpg" alt="Sách 3">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach4.jpg" alt="Sách 4">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach4.jpg" alt="Sách 4">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach5.jpg" alt="Sách 5">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach5.jpg" alt="Sách 5">
+								<span>book</span>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -166,35 +178,41 @@
 
 
 		<a href="#"><h3>Truyện tranh</h3></a>	
+		<hr>
 		<div id="chayTruyenTranh" class="carousel slide" data-ride="carousel" data-interval="false">
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner">							
 				<div class="item active">
 					<div class="row">
 						<div class="col-sm-2 col-sm-offset-1">
-							<div class="thumbnail">
-								<img src="sach1.jpg" alt="Sách 1">
-							</div>							
+							<a class="thumbnail">
+								<img src="images/sach1.jpg" alt="Sách 1">
+								<span>book</span>
+							</a>							
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach2.jpg" alt="Sách 2">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach2.jpg" alt="Sách 2">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach3.jpg" alt="Sách 3">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach3.jpg" alt="Sách 3">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach4.jpg" alt="Sách 4">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach4.jpg" alt="Sách 4">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach5.jpg" alt="Sách 5">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach5.jpg" alt="Sách 5">
+								<span>book</span>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -202,29 +220,34 @@
 				<div class="item">
 					<div class="row justify-content-center">						
 						<div class="col-sm-2 col-sm-offset-1">
-							<div class="thumbnail">
-								<img src="sach1.jpg" alt="Sách 1">
-							</div>							
+							<a class="thumbnail">
+								<img src="images/sach1.jpg" alt="Sách 1">
+								<span>book</span>
+							</a>							
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach2.jpg" alt="Sách 2">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach2.jpg" alt="Sách 2">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach3.jpg" alt="Sách 3">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach3.jpg" alt="Sách 3">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach4.jpg" alt="Sách 4">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach4.jpg" alt="Sách 4">
+								<span>book</span>
+							</a>
 						</div>
 						<div class="col-sm-2">
-							<div class="thumbnail">
-								<img src="sach5.jpg" alt="Sách 5">
-							</div>
+							<a class="thumbnail">
+								<img src="images/sach5.jpg" alt="Sách 5">
+								<span>book</span>
+							</a>
 						</div>
 					</div>
 				</div>
