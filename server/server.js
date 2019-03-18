@@ -31,7 +31,7 @@ connect.connect(function(err) {
 
 // Trang chu 
 app.get('/', function(req, res) { 
-	res.render('public/trangchu', {data: null, message: null});
+	res.render('views/pages/trangchu', {data: null, message: null});
 })
 
 // Xu ly dang nhap
@@ -45,11 +45,11 @@ app.post('/', function(req, res) {
 
     // Sai tai khoan hoac mat khau => dua ra thong bao
 		if (results.length == 0) { 
-			res.render('public/trangchu', {data: null, message:'error'}); 
+			res.render('views/pages/trangchu', {data: null, message:'error'}); 
 		}
     // Dung => chuyen sang trang da dang nhap
-		else {
-			res.render('public/trangchu', {data: req.body.username, message: 'ok'});
+		else { 
+			res.render('views/pages/trangchu', {data: req.body.username, message: 'ok'});
 		}
 	}) 
 }) 
