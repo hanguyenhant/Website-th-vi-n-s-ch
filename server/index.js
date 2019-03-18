@@ -1,58 +1,56 @@
+// Khoi tao server
 const express = require("express");
-const jsonParser = require("body-parser") ;
-const mysql = require("mysql");  
-// var flash = require('express-flash');
-// var cookieParser = require('cookie-parser');
-// var session = require('express-session');
+const jsonParser = require("body-parser") ; 
+var app = express();   
+app.listen(3000, function() {console.log("Server is running")});
+
+app.use(jsonParser.urlencoded({ extended: true }));
  
-var app = express(); 
-// app.use(cookieParser('secretString'));
-// app.use(session({cookie: { maxAge: 60000 }}));
-// app.use(flash());
-
-
+// Render file ejs thanh file html
 app.set('views', __dirname);
-// Set view engine as EJS
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
+
+// Su dung cac file tinh: bootstrap, css, images...
 app.use(express.static('public'));
-//Note that in version 4 of express, express.bodyParser() was
-//deprecated in favor of a separate 'body-parser' module.
-app.use(jsonParser.urlencoded({ extended: true })); 
-var path = require ('path');
-app.use(express.static(path.join(__dirname + '.../public')));
  
 // Ket noi nodejs voi mysql
-var con = mysql.createConnection({
+const mysql = require("mysql"); 
+var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
 	password: '123456'
 });
 
-con.connect(function(err) {
+connect.connect(function(err) {
 	if (err) throw err;
 	console.log("Connected");
 });
- 
-app.get('/', (req, res) => {
 
-	// console.log("Lay duoc: " + req.query.message);
-	res.render('front-end/trangchu', {data: null, message: null});
+
+// Trang chu 
+app.get('/', function(req, res) { 
+	res.render('public/trangchu', {data: null, message: null});
 })
-app.post('/login', function(req, res) {
+
+// Xu ly dang nhap
+app.post('/', function(req, res) {
+  // Kiem tra thong tin tai khoan + mat khau cua nguoi dung
 	var sql = "select * from login where TenTk = ? and MatKhau = ?";
 	sql = mysql.format(sql, [req.body.username, req.body.password]);
-	con.query(sql, function(err, results) {
+
+	connect.query(sql, function(err, results) {
 		if(err) throw err;
+
+    // Sai tai khoan hoac mat khau => dua ra thong bao
 		if (results.length == 0) { 
-			res.render('front-end/trangchu', {data: null, message:'error'});
-			//res.redirect('/?message=' + 'error'); 
+			res.render('public/trangchu', {data: null, message:'error'}); 
 		}
+    // Dung => chuyen sang trang da dang nhap
 		else {
-			res.render('front-end/trangchu', {data: req.body.username, message: 'ok'});
+			res.render('public/trangchu', {data: req.body.username, message: 'ok'});
 		}
 	}) 
 }) 
-
-app.listen(3000, () => console.log("Server is running"));
+ 

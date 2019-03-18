@@ -4,16 +4,16 @@
 	<title>Trang chủ</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/custom.css">
-	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/custom.css">
+	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 </head>
 <body>
 	<!-- Header -->
 	<div>
 		<header>
-			<nav class="navbar navbar-inverse" role="navigation">
+			<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 			  	<!-- Brand and toggle get grouped for better mobile display -->
 			  	<div class="navbar-header">
 			    	<a class="navbar-brand" href="#" style="color: orange;">H2ON</a>
@@ -35,12 +35,12 @@
 			   		</form>
 			    	<div class="nav navbar-nav navbar-right">
 			    		<% if(data == null) { %>
-			    			<form class="navbar-form navbar-right" role="login" action="http://localhost:3000/login" method="post">
+			    			<form class="navbar-form navbar-right" role="login" action="http://localhost:3000" method="post">
 				      		<div class="form-group">
 				        		<input type="text" style="width: 160px;" class="form-control" placeholder="username" name="username">
 				      		</div>
 				      		<div class="form-group">
-				        		<input type="text" style="width: 160px; margin-left: 10px;" class="form-control" placeholder="password" name="password">
+				        		<input type="password" style="width: 160px; margin-left: 10px;" class="form-control" placeholder="password" name="password">
 				      		</div> 
 				      		<button type="submit" class="btn btn-warning">Đăng nhập</button>
 				    		</form>
@@ -254,16 +254,15 @@
 			</a>
 		</div>
 	</div>
-	
+	<br>
+	<br>
 	<!-- Footer -->
-	<div class="container">
-		<footer class="page-footer">			
+	<div class="container-fluid">
+		<footer class="page-footer" id="footer">			
 			<div class="footer-copyright text-center py-3">© 2018 Copyright: Trường Đại học Bách Khoa Hà Nội
 			</div>			
 		</footer>
-	</div>
-
-
+	</div> 
 
 </body>
 </html>
