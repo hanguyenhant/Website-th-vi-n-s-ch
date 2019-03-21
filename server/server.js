@@ -31,7 +31,7 @@ connect.connect(function(err) {
 
 // Trang chu 
 app.get('/', function(req, res) { 
-	res.render('views/pages/trangchu', {data: null, message: null});
+	res.render('views/pages/trangchu');
 })
 
 // Xu ly dang nhap
@@ -44,13 +44,30 @@ app.post('/', function(req, res) {
 		if(err) throw err;
 
     // Sai tai khoan hoac mat khau => dua ra thong bao
-		if (results.length == 0) { 
-			res.render('views/pages/trangchu', {data: null, message:'error'}); 
+		if (results.length == 0) {  
+			res.render('views/pages/trangchu', {message: 'error'}); 
 		}
     // Dung => chuyen sang trang da dang nhap
 		else { 
-			res.render('views/pages/trangchu', {data: req.body.username, message: 'ok'});
+			res.render('views/pages/trangchu', {data: req.body.username, message:'ok'});
 		}
-	}) 
+	})  
 }) 
- 
+
+// Tim kiem theo ten sach
+app.post('/search', function(req, res) {
+	var sql;
+	if (req.body.the_loai == "ten_sach") {
+		sql = "select * from tailieu where TenTL like ?";
+		sql = mysql.format(sql, "%" + req.body.noi_dung_tim_kiem + "%");
+		connect.query(sql, function(err, results) {
+			if (err) throw err; 
+			// res.send(Math.ceil(results.length / 12));
+			if (results.length == 0) {
+				res.render('views/pages/search', {ket_qua_tim_kiem: "Không tìm thấy kết quả nào", noi_dung_tim_kiem: req.body.noi_dung_tim_kiem});
+			}
+			else res.render('views/pages/search', {ket_qua_tim_kiem: results, noi_dung_tim_kiem: req.body.noi_dung_tim_kiem,
+				so_trang: (results.length / 12  + 1)});
+		})
+	}
+})
