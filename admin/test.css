@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  background: black;
+}
+
+#canvas {
+  float: left;
+  width: 800px;
+  height: 800px;
+  border: 1px solid #d3d3d3
+}
+
+.button {
+  border: 1px solid black;
+  cursor: pointer;
+  width: 230px;
+  height: 20px;
+}
+
+.button:hover {
+  background: blue;
+  color: white;
+}
