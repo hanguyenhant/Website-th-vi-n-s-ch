@@ -10,180 +10,66 @@
 
 	<!-- Main -->
 	<div class="container">
-		<a href="#"><h3>Sách khoa học</h3></a>
-		<hr>
-		<div id="chaySachKhoaHoc" class="carousel slide" data-ride="carousel" data-interval="false">	
-			<!-- Wrapper for slides -->
-			<div class="carousel-inner">							
-				<div class="item active">
-					<div class="row">
-						<div class="col-sm-2 col-sm-offset-1"> 
-							<a class="thumbnail">
-								<img src="images/sach1.jpg" alt="Sách 1" >
-								<span>book</span>
-							</a> 							
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach2.jpg" alt="Sách 2" >
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach3.jpg" alt="Sách 3" >
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach4.jpg" alt="Sách 4">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach5.jpg" alt="Sách 5">
-								<span>book</span>
-							</a>
+		<% for (var i = 0; i < array_object_documents.length; i++) { %>
+			<a href="#"><h3><%=array_object_documents[i].TenTheLoai%></h3></a>
+				<hr>
+				<div id="<%=i%>" class="carousel slide" data-ride="carousel" data-interval="false">	
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner">							
+						<div class="item active">
+							<div class="row">
+							<% for (var j = 0; j < 5 && j < array_object_documents[i].documents.length; j++) { %>
+								<% if (j % 5 == 0) { %> 
+									<div class="col-sm-2 col-sm-offset-1"> 
+										<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
+											<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
+											<span>book</span>
+										</a> 
+									</div>
+								<%} else {%>
+									<div class="col-sm-2"> 
+										<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
+											<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
+											<span>book</span>
+										</a> 
+									</div>
+								<%}%> 
+							<% }%>  					
 						</div>
 					</div>
+					 
+					<% for (var j = 5; j < array_object_documents[i].documents.length; j += 5) { %>  
+						<div class="item">
+							<div class="row"> 
+								<div class="col-sm-2 col-sm-offset-1"> 
+									<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
+										<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
+										<h3><%=array_object_documents[i].documents[j].Anh%></h3>
+										<span>book</span>
+									</a> 
+								</div>
+								<% for (var k = j + 1; k <(j + 5) && k < array_object_documents[i].documents.length; k++) { %> 										<div class="col-sm-2"> 
+										<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[k].id%>">
+											<img src="images/<%=array_object_documents[i].documents[k].Anh%>"> 
+											<span>book</span>
+										</a> 
+									</div> 
+								<% }%>  
+							</div>
+						</div> 
+					<%}%>
 				</div>
-				
-				<div class="item">
-					<div class="row">
-						<div class="col-sm-2 col-sm-offset-1">
-							<a class="thumbnail">
-								<img src="images/sach1.jpg" alt="Sách 1">
-								<span>book</span>
-							</a>							
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach2.jpg" alt="Sách 2">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach3.jpg" alt="Sách 3">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach4.jpg" alt="Sách 4">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach5.jpg" alt="Sách 5">
-								<span>book</span>
-							</a>
-						</div>
-					</div>
+				<!-- Left and right controls --> 
+				<a class="left carousel-control" href="#<%=i%>" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="right carousel-control" href="#<%=i%>" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right"></span>
+					<span class="sr-only">Next</span>
+				</a>
 				</div>
-			</div>
-
-			<!-- Left and right controls -->
-			<a class="left carousel-control" href="#chaySachKhoaHoc" data-slide="prev">
-				<span class="glyphicon glyphicon-chevron-left"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="right carousel-control" href="#chaySachKhoaHoc" data-slide="next">
-				<span class="glyphicon glyphicon-chevron-right"></span>
-				<span class="sr-only">Next</span>
-			</a>
-		</div>
-
-
-		<a href="#"><h3>Truyện tranh</h3></a>	
-		<hr>
-		<div id="chayTruyenTranh" class="carousel slide" data-ride="carousel" data-interval="false">
-			<!-- Wrapper for slides -->
-			<div class="carousel-inner">							
-				<div class="item active">
-					<div class="row">
-						<div class="col-sm-2 col-sm-offset-1">
-							<a class="thumbnail">
-								<img src="images/sach1.jpg" alt="Sách 1">
-								<span>book</span>
-							</a>							
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach2.jpg" alt="Sách 2">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach3.jpg" alt="Sách 3">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach4.jpg" alt="Sách 4">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach5.jpg" alt="Sách 5">
-								<span>book</span>
-							</a>
-						</div>
-					</div>
-				</div>
-				
-				<div class="item">
-					<div class="row justify-content-center">						
-						<div class="col-sm-2 col-sm-offset-1">
-							<a class="thumbnail">
-								<img src="images/sach1.jpg" alt="Sách 1">
-								<span>book</span>
-							</a>							
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach2.jpg" alt="Sách 2">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach3.jpg" alt="Sách 3">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach4.jpg" alt="Sách 4">
-								<span>book</span>
-							</a>
-						</div>
-						<div class="col-sm-2">
-							<a class="thumbnail">
-								<img src="images/sach5.jpg" alt="Sách 5">
-								<span>book</span>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Left and right controls -->
-			<a class="left carousel-control" href="#chayTruyenTranh" data-slide="prev">
-				<span class="glyphicon glyphicon-chevron-left"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="right carousel-control" href="#chayTruyenTranh" data-slide="next">
-				<span class="glyphicon glyphicon-chevron-right"></span>
-				<span class="sr-only">Next</span>
-			</a>
-		</div>
+		<% }%>
 	</div>
 	<br>
 	<br>

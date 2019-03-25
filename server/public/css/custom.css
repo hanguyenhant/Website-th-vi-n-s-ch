@@ -1,3 +1,6 @@
+body {
+	height: 100%;
+}
 .thumbnail {
 	height: 180px;
 	width: 80%;
@@ -47,10 +50,24 @@ hr {
 	font: bold 1.1em Verdana, Tahoma, 'Trebuchet MS',  Sans-serif;
 	color:#FFFFFF;
 	font-size:90%;
-	text-align: center;			
-}
+	text-align: center;	  
+} 
 
 /*Lam co label khong boi dam*/
 /*label {
     font-weight: normal !important;
 }*/
+
+/*.row {
+    display: table;
+}
+
+[class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+} */
+
+h4 {
+	margin-top: 20px;
+}

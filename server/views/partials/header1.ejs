@@ -1,0 +1,123 @@
+<!-- Header -->
+<div>
+	<header> 
+
+		 
+		<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+		  	<!-- Brand and toggle get grouped for better mobile display -->
+		  	<div class="navbar-header">
+		    	<a class="navbar-brand" href="#" style="color: orange;">H2ON</a>
+		  	</div>
+
+		  	<!-- Collect the nav links, forms, and other content for toggling -->
+		  	<div class="collapse navbar-collapse">
+		    	<form class="navbar-form navbar-left" action="http://localhost:3000/search" method="post">
+		      		<div class="form-group">
+		        		<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
+		      		</div> 
+		      		<div class="form-group" style="margin-left: 10px;">
+		      			<select id="theLoai" class="form-control" name="the_loai">
+			    			<option selected value="tat_ca">Tất cả</option>
+			    			<option value="ten_sach">Tên sách</option>
+			    			<option value="ngon_ngu">Ngôn ngữ</option>
+			    			<option value="tac_gia">Tác giả</option>
+			    			<option value="nha_xuat_ban">Nhà xuất bản</option>
+			  			</select>
+		      		</div>
+		      		<button type="submit" class="btn btn-warning">Tìm kiếm</button>
+		   		</form>
+
+		   			
+		   		<!-- Xu ly dang nhap -->
+		    	<div class="nav navbar-nav navbar-right"> 
+		    		<!-- Truong hop moi vao dang nhap hoac tim kiem sach => khong co bien message => message = undefined -->
+	    	 		<% if (typeof message === 'undefined') { %>
+				   		<div id="content">
+				   			
+				   		</div>
+				   		<script> 
+						    var el = document.getElementById('content');
+						    var content; 
+						    var username = sessionStorage.getItem("username"); 
+
+						    // Chua dang nhap thanh cong => tim kiem
+						    if  (username == undefined) {  
+						    	content  = `
+					    		<form class="navbar-form navbar-right" action="http://localhost:3000" method="post">
+						      		<div class="form-group">
+						        		<input type="text" style="width: 160px;" class="form-control" placeholder="username" name="username">
+						      		</div>
+						      		<div class="form-group">
+						        		<input type="password" style="width: 160px; margin-left: 10px;" class="form-control" placeholder="password" name="password">
+						      		</div> 
+						      		<button type="submit" class="btn btn-warning">Đăng nhập</button>
+						    	</form> 
+						    	`;
+						    } 
+
+						    // Da dang nhap thanh cong => tim kiem
+						    if (sessionStorage.getItem("username") != undefined)  {
+						        content = `
+						        	<div style="display: inline-block; margin-top: 10px;">
+						    			<p style="color: white;" ><label id="username"></label>&nbsp;<a href="http://localhost:3000" onclick="logout();">[Thoát đăng nhập]</a></p>  
+						    		</div> 
+						        `; 
+						    }   
+						    // Tao html trong the co id = "Content"
+					    	el.insertAdjacentHTML('afterbegin', content);
+
+						</script>
+			   			 
+					  
+					<% } 
+						// Dang nhap sai
+						else if (message == "error"){ %>
+
+							<form class="navbar-form navbar-right" action="http://localhost:3000" method="post">
+					       		<div class="form-group">
+					         		<input type="text" style="width: 160px;" class="form-control" placeholder="username" name="username">
+					       		</div>
+					      		<div class="form-group">
+					         		<input type="password" style="width: 160px; margin-left: 10px;" class="form-control" placeholder="password" name="password">
+					       		</div> 
+					       		<button type="submit" class="btn btn-warning">Đăng nhập</button>
+					     	</form> 
+							<script type="text/javascript"> 
+								window.onload = function() {
+									alert('Tên tài khoản hoặc mật khẩu bị sai!');
+								}
+								console.log("Vao day");
+							</script>
+						<% }
+
+						// Dang nhap thanh cong => luu thong tin ten tai khoan => chi xay ra 1 lan
+					 	else { %>
+							<script type="text/javascript">
+								sessionStorage.setItem("username", "<%=data%>"); ;
+							</script>
+							<div style="display: inline-block; margin-top: 10px;">
+				    			<p style="color: white;"><label><%=data%></label>&nbsp;<a href="http://localhost:3000" onclick="logout();">[Thoát đăng nhập]</a></p>  
+				    		</div> 
+					<% }%>
+				 
+				</div>
+			</div> 
+
+		<!-- Hien thi ten tai khoan -->
+		<script type="text/javascript">
+			if (sessionStorage.getItem("username") != undefined) { 
+				var s = document.getElementById("username"); 
+				s.innerHTML = sessionStorage.getItem("username");
+			}
+		</script>
+
+		<!-- Xoa sessionStorage khi thoat dang nhap -->
+		<script type="text/javascript">
+			function logout() {
+				sessionStorage.clear();
+			}
+		</script>
+		<!-- Ket thuc xu ly dang nhap -->
+		</nav>
+	</header>
+</div>

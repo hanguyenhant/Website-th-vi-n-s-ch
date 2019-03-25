@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Thông tin tài liệu</title>
+	<% include ../partials/head %>
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body>
+	<!-- Header -->
+	<% include ../partials/header1 %>
+	<!-- Main -->
+	<div class="container" style="margin-top: 20px; min-height: 85%">
+		<div class="row">
+			<div class="col-sm-3" style="margin-top: 20px;""> 
+					<img src="../images/<%=information[0].Anh %>" class="img-responsive" style="width: 100%"> 
+			</div>
+			<div class="col-sm-8 col-sm-offset-1"> 
+				<center><h3><b>Thông tin tài liệu</b></h3></center>
+				<h4><b>Tên tác giả: </b><%=information[0].TenTG %></h4> 
+				 
+				<h4><b>Tên tài liệu: </b><%=information[0].TenTL %></h4> 
+				 
+				<h4><b>Tên nhà xuất bản: </b><%=information[0].TenNXB %></h4> 
+				 
+				<h4><b>Số trang, khổ giấy: </b><%=information[0].SoTrang %>, <%=information[0].KhoGiay %></h4> 
+				 
+				<h4><b>Lần tái bản: </b><%=information[0].LanTB %></h4>
+			 
+				<h4><b>Nội dung: </b><%=information[0].NoiDung %></h4> 
+				 
+				<h4><b>Giá bìa: </b><%=information[0].GiaBia %></h4>  
+			</div>
+		</div>
+	</div> 
+	<!-- Footer -->
+	<% include ../partials/footer %> 
+</body>
+</html>
