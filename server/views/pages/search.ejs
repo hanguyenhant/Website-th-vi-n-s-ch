@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tìm kiếm</title>
+	<% include ../partials/head %>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body>	
+	<!-- Header -->
+	<% include ../partials/header1 %>
+	<!-- Main -->
+	<div class="container" style="margin-top: 20px; min-height: 85%">
+		<h3>Kết quả tìm kiếm cho <span style="color: orange">"<%=noi_dung_tim_kiem%>"</span>: <%=so_ket_qua%> kết quả</h3>	
+
+		<hr class="mt-2 mb-5">
+				
+		<%for(var i=0; i<ket_qua_tim_kiem.length; i++){%>					
+			<a href="/information/<%=ket_qua_tim_kiem[i].id%>" style="color:black; text-decoration: none;">
+				<div class="card">
+					<img src="images/<%=ket_qua_tim_kiem[i].Anh%>" title="<%=ket_qua_tim_kiem[i].TenTL%>">
+					<div class="container_card">
+						<b><%=ket_qua_tim_kiem[i].TenTL%></b>
+						<p><%=ket_qua_tim_kiem[i].TenTG%></p> 
+					</div>
+				</div>
+			</a>
+		<%};%>
+	</div>
+		
+	<% var url = "/search?noi_dung_tim_kiem="+noi_dung_tim_kiem+"&the_loai="+the_loai;%>
+
+	<div class="container" align="right">
+		<hr class="mt-2 mb-5">	
+		<%if (pageCount > 1) { %>
+	        <ul class="pagination">
+	            <% if (currentPage > 1) { %>
+	                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+	            <% }
+	            var i = 1;
+	            if (currentPage > 5) {
+	                i = +currentPage - 4;
+	            } %>
+	            <% if (i !== 1) { %>
+	                <li class="disabled"><a href="#">...</a></li>
+	            <% } %>
+	            <% for (i; i<=pageCount; i++) { %>
+	                <% if (currentPage == i) { %>
+	                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+	                <% } else { %>
+	                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+	                <% } %>
+	                <% if (i == (+currentPage + 4)) { %>
+	                    <li class="disabled"><a href="#">...</a></li>
+	                <% break; } %>
+	            <% } %>
+	            <% if (currentPage != pageCount) { %>
+	                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+	            <% } %>
+	        </ul>
+	    <% } %>	
+	</div>
+			
+	<!-- Footer -->
+	<% include ../partials/footer %> 
+	
+</body>
+</html>
