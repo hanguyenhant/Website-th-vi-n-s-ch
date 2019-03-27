@@ -6,18 +6,17 @@
 		<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 		  	<!-- Brand and toggle get grouped for better mobile display -->
 		  	<div class="navbar-header">
-		    	<a class="navbar-brand" href="#" style="color: orange;">H2ON</a>
+		    	<a class="navbar-brand" href="/" style="color: orange;">H2ON</a>
 		  	</div>
 
 		  	<!-- Collect the nav links, forms, and other content for toggling -->
 		  	<div class="collapse navbar-collapse">
-		    	<form class="navbar-form navbar-left" action="http://localhost:3000/search" method="post">
+		    	<form class="navbar-form navbar-left" action="http://localhost:3000/search" method="get">
 		      		<div class="form-group">
 		        		<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
 		      		</div> 
 		      		<div class="form-group" style="margin-left: 10px;">
 		      			<select id="theLoai" class="form-control" name="the_loai">
-			    			<option selected value="tat_ca">Tất cả</option>
 			    			<option value="ten_sach">Tên sách</option>
 			    			<option value="ngon_ngu">Ngôn ngữ</option>
 			    			<option value="tac_gia">Tác giả</option>
