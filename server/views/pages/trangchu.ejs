@@ -3,13 +3,18 @@
 <head>
 	<title>Trang chủ</title>
 	<% include ../partials/head %>
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
 </head>
 <body>
 	<!-- Header -->
 	<% include ../partials/header %>
 
 	<!-- Main -->
-	<div class="container">
+	<div class="container" style="margin-top: 20px; min-height: 85%"> 
 		<% for (var i = 0; i < array_object_documents.length; i++) { %>
 			<a href="#"><h3><%=array_object_documents[i].TenTheLoai%></h3></a>
 				<hr>
