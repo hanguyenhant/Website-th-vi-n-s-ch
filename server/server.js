@@ -91,4 +91,70 @@ app.get('/information/:id', function(req, res) {
 		res.render('views/pages/document_information', {information: results});
 	})
 })
+
+//Xử lý tìm kiếm
+app.get('/search', function(req, res) {
+
+	var noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	var the_loai = req.query.the_loai;
+
+	var pageSize = 8,
+		pageCount,
+		currentPage = 1,
+		books_currentpage = [];
+
+	if (typeof req.query.page !== 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+	var sql;
+	//Tìm kiếm theo tên sách
+	if(the_loai == "ten_sach")
+	{		
+		sql = "select * from tailieu where TenTL like ?";
+		sql = mysql.format(sql, "%"+[noi_dung_tim_kiem]+"%");
+	}
+
+	//Tìm kiếm theo ngôn ngữ
+	else if(the_loai == "ngon_ngu")
+	{		
+		sql = "select * from tailieu where TenNgonNgu like ?";
+		sql = mysql.format(sql, "%"+[noi_dung_tim_kiem]+"%");		 
+	}
+
+	//Tìm kiếm theo tác giả
+	else if(the_loai == "tac_gia")
+	{		
+		sql = "select * from tailieu where TenTG like ?";
+		sql = mysql.format(sql, "%"+[noi_dung_tim_kiem]+"%");
+	}
+
+	//Tìm kiếm theo nhà xuất bản
+	else if(the_loai == "nha_xuat_ban")
+	{		
+		sql = "select * from tailieu where TenNXB like ?";
+		sql = mysql.format(sql, "%"+[noi_dung_tim_kiem]+"%");
+	}
+
+	connect.query(sql, function(err, results) {
+		if(err) throw err;
+
+		pageCount = Math.ceil(results.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (results.length>i)
+				{
+					books_currentpage.push(results[i]);
+				}
+		
+		res.render('views/pages/search', { 	so_ket_qua: results.length,
+											ket_qua_tim_kiem: books_currentpage, 
+											noi_dung_tim_kiem: noi_dung_tim_kiem, 
+											the_loai: the_loai, 
+											pageSize: pageSize, 
+											pageCount: pageCount, 
+											currentPage: currentPage});
+
+	})
+});
  
