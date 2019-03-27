@@ -12,9 +12,9 @@ body {
 	margin-left: 10px;
 }
 
-hr {
+/*hr {
 	border: 1px solid gray;
-} 
+} */
 
 .thumbnail:hover {
 	background-color: transparent;
@@ -70,4 +70,31 @@ hr {
 
 h4 {
 	margin-top: 20px;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  /*box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);*/
+  transition: 0.3s;
+  width: 280px;
+  height: 310px;
+  text-align: center;	
+  display: inline-block;
+  /*cursor:pointer;*/
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container_card {
+  /*padding: 2px 5px;*/
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.card img{
+	height: 60%;
 }
