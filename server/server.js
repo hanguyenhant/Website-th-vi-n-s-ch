@@ -1,10 +1,11 @@
 // Khoi tao server
 const express = require("express");
-const jsonParser = require("body-parser"); 
+const jsonParser = require("body-parser").json(); 
+const json = require("body-parser");
 var app = express();   
 app.listen(3000, function() {console.log("Server is running")});
 
-app.use(jsonParser.urlencoded({ extended: true }));
+app.use(json.urlencoded({ extended: true }));
  
 // Render file ejs thanh file html
 app.set('views', __dirname);
@@ -62,7 +63,7 @@ app.get('/', async function(req, res) {
 })
  
 // Xu ly dang nhap
-app.post('/', function(req, res) {
+app.post('/', function(req, res) { 
   // Kiem tra thong tin tai khoan + mat khau cua nguoi dung
 	var sql = "select * from login where TenTk = ? and MatKhau = ?";
 	sql = mysql.format(sql, [req.body.username, req.body.password]);
@@ -200,3 +201,44 @@ app.get('/list', function(req, res) {
    res.render('views/pages/listtest', {data:results , message: null});
 	 });
 }); 
+
+// Form them nhan vien (url vi du)
+app.get('/hi', function(req, res) {
+	res.render('views/pages/them-nhan-vien.ejs');
+})
+// Them nhan vien
+app.post('/themNV', jsonParser, async function(req, res) {
+	// res.writeHead({
+
+	// })
+	var sql;
+	sql = "select Max(MaNV) as MaNV from nhanvien";
+	try {
+		MaNV = await queryPromise(sql);
+		MaNV = MaNV[0].MaNV;
+		stt = MaNV.substr(2, MaNV.length - 2);
+		stt = parseInt(stt) + 1;
+		if (stt.length < 3) {
+			MaNV = "NV0" + stt;
+		}
+		else MaNV = "NV" + stt; 
+		sql = `insert into nhanvien(MaNV, HoTen, DiaChi, Email, SoDienThoai, ChucVu) 
+		values (?, ?, ?, ?, ?, ?)`;
+		sql = mysql.format(sql, [MaNV, req.body.HoTen, req.body.DiaChi, 
+			req.body.Email, req.body.SoDienThoai, "Nhân viên"]); 
+		connect.query(sql, function(err, results) {
+			if (err) {
+				console.log("vao day");
+				res.write("0");
+				res.end();
+			}
+			else {
+				res.write("1");
+				res.end();
+			}
+		}) 
+	} catch (SQLException) {
+		res.write("0");
+		res.end();
+	}
+})
