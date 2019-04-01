@@ -1,0 +1,207 @@
+<html>
+   <head>
+      <title>My first Three.js app</title>
+      <script src="three.min.js"></script>
+      <script src="OrbitControls.js"></script>
+      <script src="tween.min.js"></script>
+      <script src="jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="test.css">
+   </head>
+   <body> 
+      <div id="canvas" style="width: 100%; height: 100%;">
+        <button id="zoomout" type="button" style="width: 30px;" class="button">+</button> 
+        <button id="zoomin" type="button" style="width: 30px;" class="button">-</button> 
+      </div>
+      <script>
+          
+      /**
+       * scene
+       */            
+      var scene = new THREE.Scene();
+      //LIGHTS
+      var light = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(light);
+      // var light2 = new THREE.PointLight(0xffffff, 2,200);
+      // scene.add(light2);
+      var light2 = new THREE.PointLight( 0xffffff, 2, 100 );
+      light2.position.set( 50, 50, 50 );
+      scene.add( light2 );
+
+      var camera = new THREE.OrthographicCamera(640 / -2, 640 / 2, 380 / 2, 380 / -2, -5000, 5000);
+      camera.position.set(100, 100, 100);
+      camera.zoom = 10;
+
+      var renderer = new THREE.WebGLRenderer();
+      HEIGHT = window.innerHeight;
+      WIDTH = window.innerWidth;
+      renderer.setSize(WIDTH, HEIGHT);
+      renderer.setClearColor("#FFF");
+      $("#canvas").append(renderer.domElement);
+
+      var DieuKhien = function() {
+
+      this.mesh = new THREE.Object3D();
+
+      //Tạo hình dáng cái điều khiển
+      var roundedRectShape = new THREE.Shape();
+      var x=0;
+      var y=0;
+      var width=25;
+      var height=0.5;
+      var radius=0.5;
+
+      roundedRectShape.moveTo( x, y + radius );
+      roundedRectShape.lineTo( x, y + height - radius );
+      roundedRectShape.quadraticCurveTo( x, y + height, x + radius, y + height );
+      roundedRectShape.lineTo( x + width - radius, y + height );
+      roundedRectShape.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
+      roundedRectShape.lineTo( x + width, y + radius );
+      roundedRectShape.quadraticCurveTo( x + width, y, x + width - radius, y );
+      roundedRectShape.lineTo( x + radius, y );
+      roundedRectShape.quadraticCurveTo( x, y, x, y + radius );
+
+      var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+      var geomDieuKhien = new THREE.ExtrudeGeometry( roundedRectShape, extrudeSettings ); 
+      var matDieuKhien = new THREE.MeshLambertMaterial({color: 0xF3FFE2});
+
+      var dieukhien = new THREE.Mesh(geomDieuKhien, matDieuKhien);
+      this.mesh.add(dieukhien);
+
+      //Tạo màn hình hiển thị
+      //
+      // Rectangle
+      var rectLength = 2, rectWidth = 0.5;
+      var rectShape = new THREE.Shape();
+      rectShape.moveTo( 0, 0 );
+      rectShape.lineTo( 0, rectWidth );
+      rectShape.lineTo( rectLength, rectWidth );
+      rectShape.lineTo( rectLength, 0 );
+      rectShape.lineTo( 0, 0 );
+
+      // var geomManHinh = new THREE.ShapeGeometry( rectShape );
+      // var matManHinh = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      // 
+
+      //Nút nguồn tắt/bật
+      var geomNutTat = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var nuttat = new THREE.Mesh( geomNutTat, new THREE.MeshLambertMaterial({color: 0xFF0000}));
+
+      nuttat.position.set(10,1.5,0);
+      nuttat.scale.set( 0.25, 0.25, 0.25 );
+      this.mesh.add(nuttat);
+
+      var geomNutBat = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var nutbat = new THREE.Mesh( geomNutBat, new THREE.MeshLambertMaterial({color: 0x008000}));
+
+      nutbat.position.set(10,1.5,6);
+      nutbat.scale.set( 0.25, 0.25, 0.25 );
+      this.mesh.add(nutbat);
+
+      //Nút tăng/giảm
+      var geomNutTang = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var nuttang = new THREE.Mesh( geomNutTang, new THREE.MeshLambertMaterial({color: 0xA9A9A9}));
+
+      nuttang.position.set(12,1.5,1);
+      nuttang.scale.set( 0.25, 0.25, 0.25 );
+      this.mesh.add(nuttang);
+
+      var geomNutGiam = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var nutgiam = new THREE.Mesh( geomNutGiam, new THREE.MeshLambertMaterial({color: 0xA9A9A9}));
+
+      nutgiam.position.set(12,1.5,5);
+      nutgiam.scale.set( 0.25, 0.25, 0.25 );
+      this.mesh.add(nutgiam);
+
+      //Nút tùy chọn
+      var geomNutTuyChon1 = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var nuttuychon1 = new THREE.Mesh( geomNutTuyChon1, new THREE.MeshLambertMaterial({color: 0xA9A9A9}));
+
+      nuttuychon1.position.set(14,1.5,1);
+      nuttuychon1.scale.set( 0.25, 0.25, 0.25 );
+      this.mesh.add(nuttuychon1);
+
+      var geomNutTuyChon2 = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var nuttuychon2 = new THREE.Mesh( geomNutTuyChon2, new THREE.MeshLambertMaterial({color: 0xA9A9A9}));
+
+      nuttuychon2.position.set(14,1.5,5);
+      nuttuychon2.scale.set( 0.25, 0.25, 0.25 );
+      this.mesh.add(nuttuychon2);
+
+      // Rectangle Màn hình
+      rectLength = 5, rectWidth = 0.5;
+      rectShape.moveTo( 0, 0 );
+      rectShape.lineTo( 0, rectWidth );
+      rectShape.lineTo( rectLength, rectWidth );
+      rectShape.lineTo( rectLength, 0 );
+      rectShape.lineTo( 0, 0 );
+
+      //Màn hình
+      var geomManHinh = new THREE.ExtrudeGeometry( rectShape, extrudeSettings );
+      var manhinh = new THREE.Mesh( geomManHinh, new THREE.MeshLambertMaterial({color: 0x696969}));
+
+      manhinh.position.set(2,1.5,1);
+      manhinh.scale.set( 1, 0.15, 0.75 );
+      this.mesh.add(manhinh);
+
+    }
+
+    var dieukhien = new DieuKhien();
+    scene.add(dieukhien.mesh);
+
+
+
+      var controls = new THREE.OrbitControls(camera, renderer.domElement, renderer, scene);
+
+      animate();
+
+      function animate() {
+        camera.updateProjectionMatrix();
+        requestAnimationFrame(animate);
+        TWEEN.update();
+        render();
+      }
+
+      function render() {
+        renderer.render(scene, camera);
+      };
+
+
+      i = 10;
+
+      $("#zoomout").click(function() {
+        var zoom = {
+          value: camera.zoom
+        };
+        var zoomEnd = {
+          value: ++i
+        };
+        var tween = new TWEEN.Tween(zoom).to(zoomEnd, 500);
+        tween.onUpdate(function() {
+          camera.zoom = zoom.value;
+        });
+        tween.start(); 
+      });
+       
+      $("#zoomin").click(function() {
+        k = --i;
+        if (k < 1) {
+          k = 1;
+          i = 1;
+        }
+        var zoom = {
+          value: camera.zoom
+        };
+        var zoomEnd = {
+          value: k
+        }; 
+        var tween = new TWEEN.Tween(zoom).to(zoomEnd, 500);
+        tween.onUpdate(function() {
+          camera.zoom = zoom.value;
+        });
+        tween.start();
+         
+      });
+
+    </script>
+  </body>
+</html>
