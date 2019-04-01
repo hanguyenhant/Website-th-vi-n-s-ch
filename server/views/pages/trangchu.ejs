@@ -9,14 +9,13 @@
 		}
 	</style>
 </head>
-<body>
-	<!-- Header -->
-	<% include ../partials/header %>
-
-	<!-- Main -->
+<body> 
+	 
+	<!-- Header --> 
+	<%include ../partials/header%>
 	<div class="container" style="margin-top: 20px; min-height: 85%"> 
 		<% for (var i = 0; i < array_object_documents.length; i++) { %>
-			<a href="#"><h3><%=array_object_documents[i].TenTheLoai%></h3></a>
+			<a href="/theloai/<%=array_object_documents[i].TenTheLoai%>" style="text-decoration: none;"><h3><%=array_object_documents[i].TenTheLoai%></h3></a>
 				<hr>
 				<div id="<%=i%>" class="carousel slide" data-ride="carousel" data-interval="false">	
 					<!-- Wrapper for slides -->
