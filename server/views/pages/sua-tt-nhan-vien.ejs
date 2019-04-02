@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+	<% include ../partials/head%>
+</head>
+<body style="margin-right: 0 !important">
+<% include ../partials/header%>
+<div class="container">  
+   	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="layTTNhanVien(1);">Sửa thông tin nhân viên</button>
+
+  	<!-- Modal -->
+ 	<div class="modal fade" id="myModal" role="dialog">
+    	<div class="modal-dialog modal-lg">
+    
+      	<!-- Noi dung cua modal -->
+      	<div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Thông tin nhân viên</h4>
+	        </div>
+
+	        <!-- Thong tin cua nhan vien -->
+	        <div class="modal-body"> 
+	        	<form >  
+					<div class="form-group-inline">
+           				<label for="ma-nhan-vien">Tên nhân viên: </label>
+           				<div class="input-group">
+           					<span class="input-group-addon">
+								<i class="glyphicon glyphicon-user"></i> 
+							</span>
+							<input type="text" class="form-control" required="" id="HoTen">
+           				</div>
+           			</div>   
+
+           			<div class="form-group-inline">
+           				<label for="ma-nhan-vien">Số điện thoại: </label>
+           				<div class="input-group">
+           					<span class="input-group-addon">
+								<i class="glyphicon glyphicon-phone"></i> 
+							</span>
+							<input type="text" class="form-control" required id="SoDienThoai" id="sdt">
+           				</div>
+           			</div>  
+
+           			<div class="form-group-inline">
+           				<label for="ma-nhan-vien">Địa chỉ: </label>
+           				<div class="input-group">
+           					<span class="input-group-addon">
+								<i class="glyphicon glyphicon-home"></i> 
+							</span>
+							<input type="text" class="form-control" required="" id="DiaChi">
+           				</div>
+           			</div>   
+
+           			<div class="form-group-inline">
+           				<label for="ma-nhan-vien">Email: </label>
+           				<div class="input-group">
+           					<span class="input-group-addon">
+								<i class="glyphicon glyphicon-envelope"></i> 
+							</span>
+							<input type="text" class="form-control" required="" id="Email">
+           				</div>
+           			</div>   
+	       		</div>
+	      		<div class="modal-footer">  
+		        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="suaNV();">Lưu</button>
+		        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close">Hủy</button> 
+		        </div>
+	    	</form> 
+ 		</div>
+ 	</div>
+ </div>
+</div>
+<script type="text/javascript" language="javascript">
+	 
+</script>
+<script type="text/javascript" language="javascript">  
+	var id;
+	function layTTNhanVien(id) {
+		this.id = id;
+		var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/suaNhanVien/" + id, false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText == "0") {
+						alert("Error!");
+					}
+					else { 
+						ttnv = JSON.parse(xmlhttp.responseText); 
+						document.getElementById("HoTen").value = ttnv.HoTen;
+						document.getElementById("SoDienThoai").value = ttnv.SoDienThoai;
+						document.getElementById("DiaChi").value = ttnv.DiaChi;
+						document.getElementById("Email").value = ttnv.Email;
+					}
+				}
+
+			}
+			xmlhttp.send(null);
+	}
+	function suaNV() {  
+		var valid = true;  
+		// pattern kiem tra email va so dien thoai 
+		var patternSDT = /^[0-9]{10,}$/;
+		var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+		var sdt = document.getElementById("SoDienThoai").value;
+		var email = document.getElementById("Email").value; 
+
+		if (!patternSDT.test(sdt, "gi")) {
+			alert("Số điện thoại có ít nhất 10 số.");
+			valid = false;
+		}
+
+		if (!patternEmail.test(email)) {
+			alert("Email không đúng định dạng.");
+			valid = false;
+		}
+ 
+		if (valid) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/suaNhanVien", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					console.log(xmlhttp.responseText);
+					if (xmlhttp.responseText == "1") {
+						alert("Sửa thông tin nhân viên thành công"); 
+						document.getElementById("close").click(); // dong modal popup
+						document.getElementById("HoTen").value = "";
+						document.getElementById("SoDienThoai").value = "";
+						document.getElementById("DiaChi").value = "";
+						document.getElementById("Email").value = "";
+					}
+					else if (xmlhttp.responseText == "0") {
+						alert("Error!");
+					}
+				}
+
+			}
+			console.log("id = " + this.id);
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinNV = JSON.stringify({"id": this.id, "HoTen": document.getElementById("HoTen").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
+
+			xmlhttp.send(thongTinNV); 
+		}
+	}
+</script>
+</body>
+</html>
