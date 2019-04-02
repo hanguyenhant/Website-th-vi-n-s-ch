@@ -1,11 +1,10 @@
 // Khoi tao server
-const express = require("express");
-const jsonParser = require("body-parser").json(); 
+const express = require("express"); 
 const json = require("body-parser");
 var app = express();   
 app.listen(3000, function() {console.log("Server is running")});
 
-app.use(json.urlencoded({ extended: true }));
+app.use(json.urlencoded({ extended: true })); 
  
 // Render file ejs thanh file html
 app.set('views', __dirname);
@@ -203,14 +202,11 @@ app.get('/list', function(req, res) {
 }); 
 
 // Form them nhan vien (url vi du)
-app.get('/hi', function(req, res) {
+app.get('/themNhanVien', function(req, res) {
 	res.render('views/pages/them-nhan-vien.ejs');
 })
 // Them nhan vien
-app.post('/themNV', jsonParser, async function(req, res) {
-	// res.writeHead({
-
-	// })
+app.post('/themNhanVien', json.json(), async function(req, res) { 
 	var sql;
 	sql = "select Max(MaNV) as MaNV from nhanvien";
 	try {
@@ -240,5 +236,40 @@ app.post('/themNV', jsonParser, async function(req, res) {
 	} catch (SQLException) {
 		res.write("0");
 		res.end();
-	}
+	} 
+})
+
+// Sua nhan vien
+app.get('/suaNhanVien/:id', async function(req, res) { 
+	var sql = `select SoDienThoai, DiaChi, Email, HoTen from nhanvien where id = ?`;
+	sql = mysql.format(sql, req.params.id);
+	try {
+		results = await queryPromise(sql);
+		res.write(JSON.stringify({SoDienThoai: results[0].SoDienThoai, 
+			DiaChi: results[0].DiaChi, Email: results[0].Email, HoTen: results[0].HoTen}));
+	} catch (SQLException) {
+		res.write('0');
+	} 
+	res.end();
+})
+app.get('/suaNhanVien', async function(req, res) { 
+		res.render('views/pages/sua-tt-nhan-vien.ejs');
+	 
+})
+app.post('/suaNhanVien', json.json(), function(req, res) {
+	var sql = `update nhanvien set HoTen = ?, SoDienThoai = ?, DiaChi = ?, Email = ? 
+	where id = ?`;
+	sql = mysql.format(sql, [req.body.HoTen, req.body.SoDienThoai, req.body.DiaChi,
+		req.body.Email, req.body.id]);
+	console.log(sql);
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			res.write('1');
+			res.end();
+		}
+	})
 })
