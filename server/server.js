@@ -241,11 +241,11 @@ app.post('/themNhanVien', json.json(), async function(req, res) {
 
 // Sua nhan vien
 app.get('/suaNhanVien/:id', async function(req, res) { 
-	var sql = `select SoDienThoai, DiaChi, Email, HoTen from nhanvien where id = ?`;
+	var sql = `select MaNV, SoDienThoai, DiaChi, Email, HoTen from nhanvien where id = ?`;
 	sql = mysql.format(sql, req.params.id);
 	try {
 		results = await queryPromise(sql);
-		res.write(JSON.stringify({SoDienThoai: results[0].SoDienThoai, 
+		res.write(JSON.stringify({MaNV: results[0].MaNV, SoDienThoai: results[0].SoDienThoai, 
 			DiaChi: results[0].DiaChi, Email: results[0].Email, HoTen: results[0].HoTen}));
 	} catch (SQLException) {
 		res.write('0');
@@ -272,4 +272,84 @@ app.post('/suaNhanVien', json.json(), function(req, res) {
 			res.end();
 		}
 	})
+})
+
+// Xem thong tin chi tiet cua nhan vien
+app.get('/thongTinChiTietNhanVien/:id', async function(req, res) { 
+	var sql = `select MaNV, SoDienThoai, DiaChi, Email, HoTen, ChucVu from nhanvien 
+	where id = ?`;
+	sql = mysql.format(sql, req.params.id);
+	try {
+		results = await queryPromise(sql);
+		res.write(JSON.stringify({MaNV: results[0].MaNV, SoDienThoai: results[0].SoDienThoai, 
+			DiaChi: results[0].DiaChi, Email: results[0].Email, HoTen: results[0].HoTen, 
+			ChucVu: results[0].ChucVu}));
+	} catch (SQLException) {
+		res.write('0');
+	} 
+	res.end();
+})
+
+// Lay danh sach tai khoan cua nguoi dung
+app.get('/danhSachTaiKhoan', async function(req, res) {
+	danhSachTaiKhoan = new Array(); 
+	var k = 0;
+	var sql; 
+	if (req.query.TenTk == undefined || req.query.TenTk.trim() == "") { 
+		sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, docgia where TenTk = MaThe`;
+		try { 
+			docgia = await queryPromise(sql);
+			for (var i = 0; i < docgia.length; i++) { 
+				danhSachTaiKhoan[k] = docgia[i];
+				k++;
+			} 
+			sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, nhanvien where TenTk = MaNV`;
+			try { 
+				nhanvien = await queryPromise(sql);
+				for (var i = 0; i < nhanvien.length; i++) {
+					danhSachTaiKhoan[k] = nhanvien[i];
+					k++;
+				} 
+				res.render('views/pages/quan-ly-tai-khoan', { danhSachTaiKhoan: danhSachTaiKhoan });
+			} catch(Exception) {
+				res.send('ERROR');
+			}
+		} catch(Exception) {
+			res.send('ERROR');
+		} 
+	} 
+	else {
+		sql = `select TenTk from login where TenTk like ?`;
+		try {
+			sql = mysql.format(sql, "%" + req.query.TenTk + "%");
+			TenTk = await queryPromise(sql);
+		} catch (Exception) {
+			res.send('ERROR');
+		}
+		for (var t = 0; t < TenTk.length; t++) { 
+			try { 
+				sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, docgia where TenTk = MaThe and TenTk = ?`;
+				sql = mysql.format(sql, TenTk[t].TenTk);
+				docgia = await queryPromise(sql);
+				for (var i = 0; i < docgia.length; i++) { 
+					danhSachTaiKhoan[k] = docgia[i];
+					k++;
+				} 
+				sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, nhanvien where TenTk = MaNV and TenTk = ?`;
+				sql = mysql.format(sql, TenTk[t].TenTk);
+				try { 
+					nhanvien = await queryPromise(sql);
+					for (var i = 0; i < nhanvien.length; i++) {
+						danhSachTaiKhoan[k] = nhanvien[i];
+						k++;
+					}   
+				} catch(Exception) {
+					res.send('ERROR'); 
+				}
+			} catch(Exception) {
+				res.send('ERROR'); 
+			} 
+		}
+		res.render('views/pages/quan-ly-tai-khoan', { danhSachTaiKhoan: danhSachTaiKhoan }); 
+ 	}
 })

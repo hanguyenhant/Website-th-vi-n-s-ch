@@ -3,8 +3,9 @@
 <head> 
 	<% include ../partials/head%>
 </head>
-<body>
-<% include ../partials/header%>
+<body style="margin-right: 0 !important">
+	<%include ../partials/header%>
+	<%include ../partials/anhchay%>
 <div class="container">  
    	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Thêm nhân viên</button>
 
@@ -79,7 +80,7 @@
 		var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
 
 		// pattern kiem tra email va so dien thoai 
-		var patternSDT = /^[0-9]{10}$/;
+		var patternSDT = /^[0-9]{10,}$/;
 		var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
 		var sdt = document.getElementById("SoDienThoai").value;
 		var email = document.getElementById("Email").value; 
@@ -96,17 +97,17 @@
  
 		if (valid) {
 			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.open("POST", "/themNV", false); 
+			xmlhttp.open("POST", "/themNhanVien", false); 
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 					console.log(xmlhttp.responseText);
 					if (xmlhttp.responseText == "1") {
-						alert("Thêm nhân viên thành công");
+						alert("Thêm nhân viên thành công"); 
+						document.getElementById("close").click(); // dong modal popup
 						document.getElementById("HoTen").value = "";
 						document.getElementById("SoDienThoai").value = "";
 						document.getElementById("DiaChi").value = "";
 						document.getElementById("Email").value = "";
-						document.getElementById("close").click(); // dong modal popup
 					}
 					else if (xmlhttp.responseText == "0") {
 						alert("Error!");

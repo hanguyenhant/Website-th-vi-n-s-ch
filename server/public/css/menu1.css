@@ -43,8 +43,7 @@
 #menu li:hover ul{
 	display:block;
         }
-.col-sm-2 {
-    width: 16.666666666666664%;
+.col-sm-2 { 
 	padding-left:0px;
 	padding-right:0px;
 }

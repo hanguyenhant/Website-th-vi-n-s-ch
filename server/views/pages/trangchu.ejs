@@ -8,72 +8,126 @@
 			height: 100%
 		}
 	</style>
-</head>
-<body> 
-	 
+</head> 
 	<!-- Header --> 
 	<%include ../partials/header%>
-	<div class="container" style="margin-top: 20px; min-height: 85%"> 
-		<% for (var i = 0; i < array_object_documents.length; i++) { %>
-			<a href="/theloai/<%=array_object_documents[i].TenTheLoai%>" style="text-decoration: none;"><h3><%=array_object_documents[i].TenTheLoai%></h3></a>
-				<hr>
-				<div id="<%=i%>" class="carousel slide" data-ride="carousel" data-interval="false">	
-					<!-- Wrapper for slides -->
-					<div class="carousel-inner">							
-						<div class="item active">
-							<div class="row">
-							<% for (var j = 0; j < 5 && j < array_object_documents[i].documents.length; j++) { %>
-								<% if (j % 5 == 0) { %> 
+	<div style="min-height: 85%"> 
+	<% if (typeof data != 'undefined') { %> 
+			<div id="menu" class="contaier-fluid" style="width: 100%; margin-left: 0px;">
+	   			
+	   		</div>
+			<script>
+				var el = document.getElementById('menu');
+				var username = sessionStorage.getItem("username");  
+				if (username.substr(0, 2) == "NV") {
+					var menu = `
+		        	<ul>
+				    	<div class="row">
+				    		<li class="col-sm-2"><a href="#">Trang chủ</a></li>
+					        <li class=" col-sm-2"><a href="#" >Quản Lí kho sách</a>
+							   <ul>
+					                <li><a href="/list">Danh sách tài Liệu</a></li>
+					                <li><a href="#">Nhà cung cấp </a></li>
+					                
+					            </ul>
+							</li>
+					        <li class=" col-sm-2"><a href="#" >Quản lí độc giả</a>
+					            
+					        </li>
+					        <li class=" col-sm-2"><a href="#">Quản lí nhân viên</a>
+					        	
+					        </li>
+					        <li class=" col-sm-2"><a href="#">Quản lí mượn trả</a>
+							    <ul>
+					                <li><a  href="#">Quản lí mượn sách</a></li>
+					                <li><a  href="#">Quản lí trả sách</a></li> 
+					            </ul>
+							</li>  
+				    	</div> 
+				    </ul>
+		        `; 
+				}
+				else if (username== "admin") {
+					var menu = `
+		        	<ul>
+				    	<div class="row">
+				    		<li class="col-sm-2"><a href= "#">Trang chủ</a></li> 
+					        <li class=" col-sm-2"><a href="/danhSachTaiKhoan" >Quản lí tài khoản</a>
+					            
+					        </li>
+					        <li class=" col-sm-2"><a href="#">Quản lí nhân viên</a>
+					        	
+					        </li> 
+				    </ul>
+		        	`; 
+				}
+	          	// Tao html trong the co id = "menu"
+				el.insertAdjacentHTML('afterbegin', menu);
+			</script> 
+		<%}%>  
+		<% include ../partials/anhchay %>
+		<div class="container" style="margin-top: 20px; "> 
+			<% for (var i = 0; i < array_object_documents.length; i++) { %>
+				<a href="/theloai/<%=array_object_documents[i].TenTheLoai%>" style="text-decoration: none;"><h3><%=array_object_documents[i].TenTheLoai%></h3></a>
+					<hr>
+					<div id="<%=i%>" class="carousel slide" data-ride="carousel" data-interval="false">	
+						<!-- Wrapper for slides -->
+						<div class="carousel-inner">							
+							<div class="item active">
+								<div class="row">
+								<% for (var j = 0; j < 5 && j < array_object_documents[i].documents.length; j++) { %>
+									<% if (j % 5 == 0) { %> 
+										<div class="col-sm-2 col-sm-offset-1"> 
+											<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
+												<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
+												<span>book</span>
+											</a> 
+										</div>
+									<%} else {%>
+										<div class="col-sm-2"> 
+											<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
+												<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
+												<span>book</span>
+											</a> 
+										</div>
+									<%}%> 
+								<% }%>  					
+							</div>
+						</div>
+						 
+						<% for (var j = 5; j < array_object_documents[i].documents.length; j += 5) { %>  
+							<div class="item">
+								<div class="row"> 
 									<div class="col-sm-2 col-sm-offset-1"> 
 										<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
 											<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
+											<h3><%=array_object_documents[i].documents[j].Anh%></h3>
 											<span>book</span>
 										</a> 
 									</div>
-								<%} else {%>
-									<div class="col-sm-2"> 
-										<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
-											<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
-											<span>book</span>
-										</a> 
-									</div>
-								<%}%> 
-							<% }%>  					
-						</div>
-					</div>
-					 
-					<% for (var j = 5; j < array_object_documents[i].documents.length; j += 5) { %>  
-						<div class="item">
-							<div class="row"> 
-								<div class="col-sm-2 col-sm-offset-1"> 
-									<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[j].id%>">
-										<img src="images/<%=array_object_documents[i].documents[j].Anh%>"> 
-										<h3><%=array_object_documents[i].documents[j].Anh%></h3>
-										<span>book</span>
-									</a> 
+									<% for (var k = j + 1; k <(j + 5) && k < array_object_documents[i].documents.length; k++) { %> 										<div class="col-sm-2"> 
+											<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[k].id%>">
+												<img src="images/<%=array_object_documents[i].documents[k].Anh%>"> 
+												<span>book</span>
+											</a> 
+										</div> 
+									<% }%>  
 								</div>
-								<% for (var k = j + 1; k <(j + 5) && k < array_object_documents[i].documents.length; k++) { %> 										<div class="col-sm-2"> 
-										<a class="thumbnail" href="http://localhost:3000/information/<%=array_object_documents[i].documents[k].id%>">
-											<img src="images/<%=array_object_documents[i].documents[k].Anh%>"> 
-											<span>book</span>
-										</a> 
-									</div> 
-								<% }%>  
-							</div>
-						</div> 
-					<%}%>
-				</div>
-				<!-- Left and right controls --> 
-				<a class="left carousel-control" href="#<%=i%>" data-slide="prev">
-					<span class="glyphicon glyphicon-chevron-left"></span>
-					<span class="sr-only">Previous</span>
-				</a>
-				<a class="right carousel-control" href="#<%=i%>" data-slide="next">
-					<span class="glyphicon glyphicon-chevron-right"></span>
-					<span class="sr-only">Next</span>
-				</a>
-				</div>
-		<% }%>
+							</div> 
+						<%}%>
+					</div>
+					<!-- Left and right controls --> 
+					<a class="left carousel-control" href="#<%=i%>" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="right carousel-control" href="#<%=i%>" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="sr-only">Next</span>
+					</a>
+					</div>
+			<% }%>
+		</div>
 	</div>
 	<br>
 	<br>

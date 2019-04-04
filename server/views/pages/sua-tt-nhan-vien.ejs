@@ -4,10 +4,11 @@
 	<% include ../partials/head%>
 </head>
 <body style="margin-right: 0 !important">
-<% include ../partials/header%>
+	<%include ../partials/header%>
+	<%include ../partials/anhchay%>
 <div class="container">  
    	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="layTTNhanVien(1);">Sửa thông tin nhân viên</button>
-
+    
   	<!-- Modal -->
  	<div class="modal fade" id="myModal" role="dialog">
     	<div class="modal-dialog modal-lg">
@@ -22,6 +23,15 @@
 	        <!-- Thong tin cua nhan vien -->
 	        <div class="modal-body"> 
 	        	<form >  
+	        		<div class="form-group-inline">
+	       				<label for="ma-nhan-vien">Mã nhân viên: </label>
+	       				<div class="input-group">
+	       					<span class="input-group-addon">
+								<i class="glyphicon glyphicon-user"></i> 
+							</span>
+							<input type="text" class="form-control" required="" id="MaNV" disabled="">
+	       				</div>
+           			</div>   
 					<div class="form-group-inline">
            				<label for="ma-nhan-vien">Tên nhân viên: </label>
            				<div class="input-group">
@@ -63,8 +73,8 @@
            			</div>   
 	       		</div>
 	      		<div class="modal-footer">  
-		        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="suaNV();">Lưu</button>
-		        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close">Hủy</button> 
+		        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaNV();">Lưu</button>
+		        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close">Close</button> 
 		        </div>
 	    	</form> 
  		</div>
@@ -79,23 +89,24 @@
 	function layTTNhanVien(id) {
 		this.id = id;
 		var xmlhttp = new XMLHttpRequest();
-			xmlhttp.open("GET", "/suaNhanVien/" + id, false); 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
-					if (xmlhttp.responseText == "0") {
-						alert("Error!");
-					}
-					else { 
-						ttnv = JSON.parse(xmlhttp.responseText); 
-						document.getElementById("HoTen").value = ttnv.HoTen;
-						document.getElementById("SoDienThoai").value = ttnv.SoDienThoai;
-						document.getElementById("DiaChi").value = ttnv.DiaChi;
-						document.getElementById("Email").value = ttnv.Email;
-					}
+		xmlhttp.open("GET", "/suaNhanVien/" + id, false); 
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+				if (xmlhttp.responseText == "0") {
+					alert("Error!");
 				}
-
+				else { 
+					ttnv = JSON.parse(xmlhttp.responseText); 
+					document.getElementById("MaNV").value = ttnv.MaNV;
+					document.getElementById("HoTen").value = ttnv.HoTen;
+					document.getElementById("SoDienThoai").value = ttnv.SoDienThoai;
+					document.getElementById("DiaChi").value = ttnv.DiaChi;
+					document.getElementById("Email").value = ttnv.Email;
+				}
 			}
-			xmlhttp.send(null);
+
+		}
+		xmlhttp.send(null);
 	}
 	function suaNV() {  
 		var valid = true;  
@@ -141,7 +152,8 @@
 
 			xmlhttp.send(thongTinNV); 
 		}
-	}
+	} 
+	 
 </script>
 </body>
 </html>
