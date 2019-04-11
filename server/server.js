@@ -353,3 +353,29 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 		res.render('views/pages/quan-ly-tai-khoan', { danhSachTaiKhoan: danhSachTaiKhoan }); 
  	}
 })
+
+//danh sách nhân viên
+app.get('/danhSachNhanVien', function(req, res) { 
+	var sql = "SELECT * FROM nhanvien WHERE ChucVu = 'Nhân viên'";
+	connect.query(sql, function (err, results) {
+		if (err) throw err;
+		res.render('views/pages/quan-ly-nhan-vien', {data: results , message: null});
+	});
+}); 
+
+//Tìm kiếm nhân viên
+app.get('/search_nhanvien', function(req, res) {
+
+	var noi_dung_tim_kiem = "%"+req.query.noi_dung_tim_kiem+"%";	
+	var sql;
+	sql = "select * from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?";
+	
+	sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem ]);	
+
+	connect.query(sql, function(err, results) {
+		if(err) throw err;
+		
+		res.render('views/pages/quan-ly-nhan-vien', {data: results});
+
+	})
+}); 
