@@ -82,8 +82,7 @@
 							<script type="text/javascript"> 
 								window.onload = function() {
 									alert('Tên tài khoản hoặc mật khẩu bị sai!');
-								}
-								console.log("Vao day");
+								} 
 							</script>
 						<% }
 
@@ -102,8 +101,7 @@
 
 		<!-- Hien thi ten tai khoan -->
 		<script type="text/javascript">
-			if (sessionStorage.getItem("username") != undefined) { 
-				console.log("!=undefined");
+			if (sessionStorage.getItem("username") != undefined) {  
 				var s = document.getElementById("username"); 
 				s.innerHTML = sessionStorage.getItem("username");
 			}

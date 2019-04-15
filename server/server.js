@@ -105,7 +105,7 @@ app.get('/theloai/:tenTheLoai', function(req, res) {
  
 	var sql = "select * from tailieu where TenTheLoai = ?"
 	sql = mysql.format(sql, req.params.tenTheLoai);
-
+	console.log("Ten the loai: " + req.params.tenTheLoai);
 	connect.query(sql, function(err, results) {
 		if(err) throw err;
 
@@ -260,8 +260,7 @@ app.post('/suaNhanVien', json.json(), function(req, res) {
 	var sql = `update nhanvien set HoTen = ?, SoDienThoai = ?, DiaChi = ?, Email = ? 
 	where id = ?`;
 	sql = mysql.format(sql, [req.body.HoTen, req.body.SoDienThoai, req.body.DiaChi,
-		req.body.Email, req.body.id]);
-	console.log(sql);
+		req.body.Email, req.body.id]); 
 	connect.query(sql, function(err, results) {
 		if (err) {
 			res.write('0');
@@ -353,13 +352,30 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 		res.render('views/pages/quan-ly-tai-khoan', { danhSachTaiKhoan: danhSachTaiKhoan }); 
  	}
 })
+// Reset mat khau
+app.post('/resetMatKhau', json.json(), function(req, res) {
+	TenTk = req.body.TenTk;
+	MatKhau = req.body.MatKhau;
+	sql = "update login set MatKhau = ? where TenTk = ?";
+	sql = mysql.format(sql, [MatKhau, TenTk]); 
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			res.write('1');
+			res.end();
+		}
+	})
+})
 
 //danh sách nhân viên
 app.get('/danhSachNhanVien', function(req, res) { 
 	var sql = "SELECT * FROM nhanvien WHERE ChucVu = 'Nhân viên'";
 	connect.query(sql, function (err, results) {
 		if (err) throw err;
-		res.render('views/pages/quan-ly-nhan-vien', {data: results , message: null});
+		res.render('views/pages/quan-ly-nhan-vien', {danhSachNhanVien: results});
 	});
 }); 
 
@@ -375,7 +391,7 @@ app.get('/search_nhanvien', function(req, res) {
 	connect.query(sql, function(err, results) {
 		if(err) throw err;
 		
-		res.render('views/pages/quan-ly-nhan-vien', {data: results});
+		res.render('views/pages/quan-ly-nhan-vien', {danhSachNhanVien: results});
 
 	})
 }); 

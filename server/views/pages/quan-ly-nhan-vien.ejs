@@ -10,10 +10,10 @@
 		}
 	</style>
 </head>
-<body>	
+<body style="margin-right: 0 !important">	
 	<%include ../partials/header%>
 	<div style="min-height: 85%"> 
-		<div id="menu" class="contaier-fluid" style="width: 100%; margin-left: 0px;">
+		<div id="menu" class="container-fluid" style="width: 100%; margin-left: 0px; overflow-x: hidden;">
 			<% include ../partials/admin %>
 		</div> 
 		<% include ../partials/anhchay %>
@@ -41,13 +41,13 @@
 			</thead>
 			<tbody>
 
-				<%for (var i=0; i<data.length; i++){%>
+				<%for (var i=0; i<danhSachNhanVien.length; i++){%>
 					<tr>
-						<td><%=data[i].MaNV%></td>
-						<td><%=data[i].HoTen%></td>
-						<td><%=data[i].DiaChi%></td>
-						<td><%=data[i].Email%></td>
-						<td><%=data[i].SoDienThoai%></td>
+						<td><%=danhSachNhanVien[i].MaNV%></td>
+						<td><%=danhSachNhanVien[i].HoTen%></td>
+						<td><%=danhSachNhanVien[i].DiaChi%></td>
+						<td><%=danhSachNhanVien[i].Email%></td>
+						<td><%=danhSachNhanVien[i].SoDienThoai%></td>
 						<td>							
 							<button type="submit" class="btn btn-default" name="edit">
 							    <span class="glyphicon glyphicon-wrench"></span>
@@ -60,9 +60,6 @@
 					</tr>	
 				<%};%>
 			</tbody>
-		</table>		
-	
-		
-	
+		</table>	 
 </body>
 </html>

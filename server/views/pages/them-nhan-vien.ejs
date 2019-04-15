@@ -70,11 +70,8 @@
 	    	</form> 
  		</div>
  	</div>
- </div>
-</div>
-<script type="text/javascript" language="javascript">
-	 
-</script>
+ 	<!-- Ket thuc modal -->
+</div> 
 <script type="text/javascript" language="javascript">  
 	function themNV() {    
 		var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
@@ -99,8 +96,7 @@
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.open("POST", "/themNhanVien", false); 
 			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					console.log(xmlhttp.responseText);
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 					if (xmlhttp.responseText == "1") {
 						alert("Thêm nhân viên thành công"); 
 						document.getElementById("close").click(); // dong modal popup

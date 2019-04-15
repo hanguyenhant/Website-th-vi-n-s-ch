@@ -32,8 +32,7 @@
 		<%};%>
 	</div>
 		
-	<% var url = "/theloai/"+the_loai.replace(' ', '%20')+"?";%>
-
+	<% var url = "/theloai/"+the_loai.replace(/ /g, '%20')+"?";%> 
 	<div class="container" align="right">
 		<hr class="mt-2 mb-5">	
 		<%if (pageCount > 1) { %>
@@ -51,7 +50,7 @@
 	            <% for (i; i<=pageCount; i++) { %>
 	                <% if (currentPage == i) { %>
 	                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
-	                <% } else { %>
+	                <% } else { %> 
 	                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
 	                <% } %>
 	                <% if (i == (+currentPage + 4)) { %>
