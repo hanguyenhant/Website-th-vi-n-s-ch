@@ -58,7 +58,7 @@ async function getInformation() {
 app.get('/', async function(req, res) { 
 	await getInformation();   
 	res.render('views/pages/trangchu', {array_object_documents: this.array_object_documents});
- 
+
 })
  
 // Xu ly dang nhap
@@ -88,7 +88,7 @@ app.get('/information/:id', function(req, res) {
 	sql = mysql.format(sql, req.params.id);
 	connect.query(sql, function(err, results) {
 		if (err) throw err; 
-		res.render('views/pages/document_information', {information: results});
+		res.render('views/pages/document_information1', {information: results});
 	})
 })
 

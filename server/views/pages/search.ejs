@@ -19,16 +19,31 @@
 
 		<hr class="mt-2 mb-5">
 				
-		<%for(var i=0; i<ket_qua_tim_kiem.length; i++){%>					
-			<a href="/information/<%=ket_qua_tim_kiem[i].id%>" style="color:black; text-decoration: none;">
-				<div class="card">
-					<img src="images/<%=ket_qua_tim_kiem[i].Anh%>" title="<%=ket_qua_tim_kiem[i].TenTL%>">
-					<div class="container_card">
-						<b><%=ket_qua_tim_kiem[i].TenTL%></b>
-						<p><%=ket_qua_tim_kiem[i].TenTG%></p> 
-					</div>
+		<%for(var i=0; i<ket_qua_tim_kiem.length; i+=4){%>
+			<div class="container">
+				<div class="row">
+					<%for (var j=i; j<i+4&&j<ket_qua_tim_kiem.length; j++){%>
+						<div class="col-sm-3"> 
+							<a href="/information/<%=ket_qua_tim_kiem[j].id%>" style="color:black; text-decoration: none;">
+								<div class="card">
+									<img src="images/<%=ket_qua_tim_kiem[j].Anh%>" title="<%=ket_qua_tim_kiem[j].TenTL%>">
+								
+									<%if (ket_qua_tim_kiem[j].TenTL.length>25)
+										{
+											var substr = ket_qua_tim_kiem[j].TenTL.substring(0,25);
+											var n = substr.lastIndexOf(" ");%>
+											<p><b><%=ket_qua_tim_kiem[j].TenTL.substring(0,n) + "..."%></b></p>
+										<%}
+									else{%>
+											<p><b><%=ket_qua_tim_kiem[j].TenTL%></b></p>
+									<%};%>
+									<p><%=ket_qua_tim_kiem[j].TenTG%></p> 
+								</div>
+							</a>
+						</div>
+					<%};%>
 				</div>
-			</a>
+			</div>			
 		<%};%>
 	</div>
 		
