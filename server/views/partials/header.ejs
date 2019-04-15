@@ -1,6 +1,12 @@
 <!-- Header -->
 <div>
 	<header id="header">  
+		<% if (typeof message != 'undefined' &&  message!="error") { %> 
+			<script type="text/javascript">
+				// Dang nhap thanh cong => luu thong tin ten tai khoan => chi xay ra 1 lan
+				sessionStorage.setItem("username", "<%=data%>"); ;
+			</script>
+		<% } %>
 		<nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0px; border-radius: 0">
 		  	<!-- Brand and toggle get grouped for better mobile display -->
 		  	<div class="navbar-header">
@@ -8,23 +14,72 @@
 		  	</div>
 
 		  	<!-- Collect the nav links, forms, and other content for toggling -->
-		  	<div class="collapse navbar-collapse" >
-		    	<form class="navbar-form navbar-left" action="http://localhost:3000/search" method="get">
-		      		<div class="form-group">
-		        		<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
-		      		</div> 
-		      		<div class="form-group" style="margin-left: 10px;">
-		      			<select id="theLoai" class="form-control" name="the_loai">
-			    			<option value="ten_sach">Tên sách</option>
-			    			<option value="ngon_ngu">Ngôn ngữ</option>
-			    			<option value="tac_gia">Tác giả</option>
-			    			<option value="nha_xuat_ban">Nhà xuất bản</option>
-			  			</select>
-		      		</div>
-		      		<button type="submit" class="btn btn-warning">Tìm kiếm</button>
-		   		</form>
-
-		   			
+		  	<div class="collapse navbar-collapse" id="menu">   
+				<script>
+					var el = document.getElementById('menu');
+					var username = sessionStorage.getItem("username");   
+					var menu; 
+					if (username != undefined && username.substring(0, 2) == "NV") { 
+						menu = `
+			        	<ul class="nav navbar-nav"> 
+				    		<li class="active"><a href="#">Trang chủ</a></li>
+					        <li class="dropdown"> 
+					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Quản lý kho sách <b class="caret"></b></a>
+						        <ul class="dropdown-menu">
+						          <li><a href="#">Danh sách tài liệu</a></li>
+						          <li><a href="#">Nhà cung cấp</a></li> 
+						        </ul>
+							</li>
+					        <li><a href="#">Quản lí độc giả</a>
+					            
+					        </li>
+					        <li><a href="#">Quản lí nhân viên</a>
+					        	
+					        </li>
+					        <li class="dropdown"> 
+					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Quản lý mượn trả <b class="caret"></b></a>
+						        <ul class="dropdown-menu">
+						          <li><a href="#">Quản lý mượn sách</a></li>
+						          <li><a href="#">Quản lý trả sách</a></li> 
+						        </ul>
+							</li>
+					    </ul>
+			        `;  
+					}
+					else if (username != undefined && username== "admin") {
+						menu = `
+			        	<ul class="nav navbar-nav"> 
+							<li class="active"><a href= "#">Trang chủ</a></li> 
+					        <li><a href="/danhSachTaiKhoan" >Quản lí tài khoản</a>
+					            
+					        </li>
+					        <li><a href="/danhSachNhanVien">Quản lí nhân viên</a>
+					        	
+					        </li>  
+						</ul>
+			        	`;  
+					}
+					else {
+						menu = `
+							<form class="navbar-form navbar-left" action="http://localhost:3000/search" method="get">
+					      		<div class="form-group">
+					        		<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
+					      		</div> 
+					      		<div class="form-group" style="margin-left: 10px;">
+					      			<select id="theLoai" class="form-control" name="the_loai">
+						    			<option value="ten_sach">Tên sách</option>
+						    			<option value="ngon_ngu">Ngôn ngữ</option>
+						    			<option value="tac_gia">Tác giả</option>
+						    			<option value="nha_xuat_ban">Nhà xuất bản</option>
+						  			</select>
+					      		</div>
+					      		<button type="submit" class="btn btn-warning">Tìm kiếm</button>
+					   		</form>
+						`
+					}
+					// Tao html trong the co id = "menu"
+					el.insertAdjacentHTML('afterbegin', menu);
+				</script>   
 		   		<!-- Xu ly dang nhap -->
 		    	<div class="nav navbar-nav navbar-right"> 
 		    		<!-- Truong hop moi vao dang nhap hoac tim kiem sach => khong co bien message => message = undefined -->
@@ -67,35 +122,29 @@
 			   			 
 					  
 					<% } 
-						// Dang nhap sai
-						else if (message == "error"){ %>
+					// Dang nhap sai
+					else if (message == "error"){ %>
 
-							<form class="navbar-form navbar-right" action="http://localhost:3000" method="post">
-					       		<div class="form-group">
-					         		<input type="text" style="width: 160px;" class="form-control" placeholder="username" name="username">
-					       		</div>
-					      		<div class="form-group">
-					         		<input type="password" style="width: 160px; margin-left: 10px;" class="form-control" placeholder="password" name="password">
-					       		</div> 
-					       		<button type="submit" class="btn btn-warning">Đăng nhập</button>
-					     	</form> 
-							<script type="text/javascript"> 
-								window.onload = function() {
-									alert('Tên tài khoản hoặc mật khẩu bị sai!');
-								} 
-							</script>
-						<% }
-
-						// Dang nhap thanh cong => luu thong tin ten tai khoan => chi xay ra 1 lan
-					 	else { %>
-							<script type="text/javascript">
-								sessionStorage.setItem("username", "<%=data%>"); ;
-							</script>
-							<div style="display: inline-block; margin-top: 10px;">
-				    			<p style="color: white;"><label><%=data%></label>&nbsp;<a href="http://localhost:3000" onclick="logout();">[Thoát đăng nhập]</a></p>  
-				    		</div> 
-					<% }%>
-				 
+						<form class="navbar-form navbar-right" action="http://localhost:3000" method="post">
+				       		<div class="form-group">
+				         		<input type="text" style="width: 160px;" class="form-control" placeholder="username" name="username">
+				       		</div>
+				      		<div class="form-group">
+				         		<input type="password" style="width: 160px; margin-left: 10px;" class="form-control" placeholder="password" name="password">
+				       		</div> 
+				       		<button type="submit" class="btn btn-warning">Đăng nhập</button>
+				     	</form> 
+						<script type="text/javascript"> 
+							window.onload = function() {
+								alert('Tên tài khoản hoặc mật khẩu bị sai!');
+							} 
+						</script>
+					<% } 
+				 	else { %>
+						<div style="display: inline-block; margin-top: 10px;">
+			    			<p style="color: white;"><label><%=data%></label>&nbsp;<a href="http://localhost:3000" onclick="logout();">[Thoát đăng nhập]</a></p>  
+			    		</div> 
+					<% }%> 
 				</div>
 			</div> 
 

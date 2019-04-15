@@ -83,7 +83,7 @@ h4 {
   opacity: 1;
 }
 
-#menu ul{
+/*#menu ul{
 	list-style: none;
 	font-family: Arial, san-serif;
 	font-size: 12px;
@@ -134,7 +134,7 @@ h4 {
 .col-sm-3 { 
 	padding-left:0px;
 	padding-right:0px;
-}
+}*/
 
 th, td {
 	text-align: center;

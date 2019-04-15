@@ -12,59 +12,7 @@
 <body>
 	<!-- Header --> 
 	<%include ../partials/header%>
-	<div style="min-height: 85%"> 
-		<div id="menu" style=" margin-left: 0px; margin-right: 0px;">
-	   			
-	   	</div>  
-		<script>
-				var el = document.getElementById('menu');
-				var username = sessionStorage.getItem("username");   
-				if (username != undefined && username.substr(0, 2) == "NV") { 
-					var menu = `
-		        	<ul>
-				    	<div class="row">
-				    		<li class="col-sm-2"><a href="#">Trang chủ</a></li>
-					        <li class=" col-sm-2"><a href="#" >Quản Lí kho sách</a>
-							   <ul>
-					                <li><a href="/list">Danh sách tài Liệu</a></li>
-					                <li><a href="#">Nhà cung cấp </a></li> 
-					            </ul>
-							</li>
-					        <li class=" col-sm-2"><a href="#">Quản lí độc giả</a>
-					            
-					        </li>
-					        <li class=" col-sm-2"><a href="#">Quản lí nhân viên</a>
-					        	
-					        </li>
-					        <li class=" col-sm-2"><a href="#">Quản lí mượn trả</a>
-							    <ul>
-					                <li><a  href="#">Quản lí mượn sách</a></li>
-					                <li><a  href="#">Quản lí trả sách</a></li> 
-					            </ul>
-							</li>  
-				    	</div> 
-				    </ul>
-		        `; 
-		        // Tao html trong the co id = "menu"
-				el.insertAdjacentHTML('afterbegin', menu);
-			}
-			else if (username != undefined && username== "admin") {
-				var menu = `
-	        	<ul>
-			    	<div class="row">
-			    		<li class="col-sm-2"><a href= "#">Trang chủ</a></li> 
-				        <li class=" col-sm-2"><a href="/danhSachTaiKhoan" id="quannlytaikhoan">Quản lí tài khoản</a>
-				            
-				        </li>
-				        <li class=" col-sm-2"><a href="/danhSachNhanVien">Quản lí nhân viên</a>
-				        	
-				        </li> 
-			    </ul>
-	        	`; 
-	        	// Tao html trong the co id = "menu"
-				el.insertAdjacentHTML('afterbegin', menu);
-			}
-		</script>   
+	<div style="min-height: 85%">  
 		<% include ../partials/anhchay %>
 		<div class="container" style="margin-top: 20px;"> 
 			<% for (var i = 0; i < array_object_documents.length; i++) { %>
