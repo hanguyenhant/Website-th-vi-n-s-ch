@@ -1,0 +1,249 @@
+#menu ul{
+	list-style: none;
+	font-family: Arial, san-serif;
+	font-size: 12px;
+	padding: 0;
+	}
+#menu {
+    background: url("../btl/images/menu.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-bottom: 4px solid #FFF;
+    height: 40px;
+    margin: 0 8%;
+  
+}
+ 
+#menu ul li{
+	float:left;
+	position:relative;
+	z-index:10;
+	}
+ 
+#menu ul a{
+	text-decoration:none;
+	color:#fff;
+	display:block;
+	padding:10px 30px;
+	background:#f98809;
+	border: 1px dotted #ccc;
+	}
+ 
+#menu ul a:hover{
+	background:red;
+	}
+	#menu li ul a{
+	background:#f98809;
+	}
+
+#menu li ul{
+	position:absolute;
+	display:none;
+	width: 119px;
+	}
+
+#menu li:hover ul{
+	display:block;
+        }
+.col-sm-2 {
+    width: 16.666666666666664%;
+	padding-left:0px;
+	padding-right:0px;
+}
+.col-sm-3 {
+    
+	padding-left:0px;
+	padding-right:0px;
+}
+body {
+    font-size: 12px;
+    color: #595959;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 20px;
+}
+.form-control {
+    height: 80%;
+}
+.form-group, .btn-warning {
+    margin-left: 10px;
+}
+.btn-warning {
+    margin-left: 30px;
+}
+.button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+    font-size: 10px;
+    font-weight: bold;
+    background-image: url(../images/ui/usualButtons.png);
+    background-repeat: repeat-x;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 12px;
+    display: inline-block;
+    max-height: 29px;
+}
+select {
+    color: #595959;
+    background: #fff;
+        background-color: rgb(255, 255, 255);
+    border: 1px solid #ccc;
+    outline: none;
+    padding: 4px 3px;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    box-shadow: none;
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+}
+.wrapper {
+    position: relative;
+    margin: 0 3%;
+}
+.line {
+    height: 8px;
+    background: url(../images/divider.png) repeat-x;
+    display: block;
+}
+.widget {
+    background: #f9f9f9;
+    border: 1px solid #cdcdcd;
+    margin-top: 10px;
+    clear: both;
+}
+.widget, .middleNav, .sItem, .statsDetailed {
+    box-shadow: 0 1px 0 #fff;
+    -moz-box-shadow: 0 1px 0 #fff;
+    -webkit-box-shadow: 0 1px 0 #fff;
+}
+.tab_container {
+    overflow: hidden;
+    width: 100%;
+}
+.tab_content {
+    padding: 10px 12px;
+}
+.widget .title:first-child, ul.tabs, .toggle .title:first-child {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+}
+.widget .title {
+    height: 36px;
+    background: #efefef url(../images/backgrounds/titleBg.png) repeat-x;
+    border-bottom: 1px solid #cdcdcd;
+}
+.widget .title .titleIcon {
+    float: left;
+    padding: 11px 11px;
+    border-right: 1px solid #D5D5D5;
+}
+.widget .title h6 {
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 9px 12px 8px 12px;
+}
+.widget .num {
+    float: right;
+    display: inline-block;
+    text-align: center;
+    margin: 8px 8px 0 0;
+    font-size: 11px;
+}
+.widget .num {
+    text-align: center;
+    font-size: 11px;
+}
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+.filter {
+    margin: 10px 0 22px 0;
+    position: relative;
+    width: 100%;
+}
+table {
+    border-collapse: collapse;
+}
+.cleditorMain, table tfoot td, .totalAmount, table tr:last-child {
+    -webkit-border-bottom-left-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-bottomright: 3px;
+}
+table.myTable thead.filter td {
+    background: none repeat scroll 0 0 #EFEFEF;
+    color: #666666;
+    font-size: 12px;
+    padding: 5px;
+    text-align: left;
+}
+.sTable thead td:first-child {
+    border-left: none;
+}
+.sTable thead td {
+    border-bottom: 1px solid #cbcbcb;
+    border-left: 1px solid #cbcbcb;
+    background: #efefef url(../images/backgrounds/titleBg.png) repeat-x;
+    color: #878787;
+    font-size: 11px;
+    color: #878787;
+    font-weight: normal;
+    padding: 3px 8px 2px 8px;
+}
+
+table.myTable thead.filter td {
+    background: none repeat scroll 0 0 #EFEFEF;
+    color: #666666;
+    font-size: 12px;
+    padding: 5px;
+    text-align: left;
+}
+.sTable thead td:first-child {
+    border-left: none;
+}
+
+.sTable thead td {
+    text-align: center;
+}
+.sTable tbody tr:first-child {
+    border-top: none;
+}
+.sTable tbody td {
+    border-left: 1px solid #e4e4e4;
+    padding: 8px;
+    vertical-align: middle;
+}
+.textC {
+    text-align: center;
+}
+.sTable tbody td {
+    border-left: 1px solid #e4e4e4;
+    padding: 8px;
+    vertical-align: middle;
+}
+.sTable tbody td {
+    border-left: 1px solid #e4e4e4;
+    padding: 8px;
+    vertical-align: middle;
+}
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+.textR {
+    text-align: right;
+}
+table.myTable a {
+    color: #595959;
+}
