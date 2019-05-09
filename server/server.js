@@ -20,7 +20,8 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '123456'
+	password: '123456',
+	dateStrings: 'date'
 });
 
 connect.connect(function(err) {
@@ -517,3 +518,57 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 		}
 	})
 })
+
+
+// Lay danh sach muon sach
+app.get('/quanLyMuonSach', async function(req, res) {
+	var pageSize = 5,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+	// Hien thi danh sach muon sach
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem phieu muon
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachMuonSach = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachMuonSach.length>i)
+				{
+					display_danhSachMuonSach.push(danhSachMuonSach[i]);
+				} 
+		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+// Lay danh sach tra sach
+app.get('/quanLyTraSach', async function(req, res) {
+	res.render('views/pages/quan-ly-tra-sach', { });
+});
