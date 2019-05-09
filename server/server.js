@@ -190,31 +190,53 @@ app.get('/search', function(req, res) {
 	})
 }); 
 
-//danh sách nhân viên
-app.get('/danhSachNhanVien', function(req, res) { 
-	var sql = "SELECT * FROM nhanvien WHERE ChucVu = 'Nhân viên'";
-	connect.query(sql, function (err, results) {
-		if (err) throw err;
-		res.render('views/pages/quan-ly-nhan-vien', {danhSachNhanVien: results});
-	});
-}); 
+// Lay danh sach nhan vien
+app.get('/danhSachNhanVien', async function(req, res) {
+	var pageSize = 4,
+		pageCount,
+		currentPage = 1;
+	danhSachNhanVien = new Array(); 
+	display_danhSachNhanVien = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
 
-//Tìm kiếm nhân viên
-app.get('/search_nhanvien', function(req, res) {
+	// Hien thi danh sach nhan vien
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem nhan vien
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachNhanVien = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachNhanVien.length/pageSize);
 
-	var noi_dung_tim_kiem = "%"+req.query.noi_dung_tim_kiem+"%";	
-	var sql;
-	sql = "select * from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?";
-	
-	sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem ]);	
-
-	connect.query(sql, function(err, results) {
-		if(err) throw err;
-		
-		res.render('views/pages/quan-ly-nhan-vien', {danhSachNhanVien: results});
-
-	})
-}); 
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachNhanVien.length>i)
+				{
+					display_danhSachNhanVien.push(danhSachNhanVien[i]);
+				} 
+		res.render('views/pages/quan-ly-nhan-vien', { danhSachNhanVien: display_danhSachNhanVien, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
 
 // Them nhan vien
 app.post('/themNhanVien', json.json(), async function(req, res) { 
@@ -289,7 +311,7 @@ app.get('/thongTinChiTietNhanVien/:id', async function(req, res) {
 
 // Lay danh sach tai khoan cua nguoi dung
 app.get('/danhSachTaiKhoan', async function(req, res) {
-	var pageSize = 1,
+	var pageSize = 4,
 		pageCount,
 		currentPage = 1;
 	danhSachTaiKhoan = new Array(); 

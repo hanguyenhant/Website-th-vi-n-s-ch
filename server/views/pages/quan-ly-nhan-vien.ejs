@@ -23,7 +23,7 @@
 						</a>
 					</div> 
 				</div> 
-				<form action="/search_nhanvien" method="get">
+				<form action="/danhSachNhanVien" method="get">
 					<div class="form-group">
 						<div class="col-sm-3 col-sm-offset-2">
 							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
@@ -102,7 +102,7 @@
 			<br><br>
 			<hr> 
 			<div id="DSNV">
-				<table class="table table-hover">
+				<table class="table table-striped">
 					<thead>
 						<tr>
 							<th>STT</th>
@@ -127,14 +127,66 @@
 									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(<%=danhSachNhanVien[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  
-									<button type="submit" class="btn btn-default" name="delete">
+									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal">
 									    <span class="glyphicon glyphicon-trash"></span>
-									</button>												
+									</button>			
+									<!-- Modal -->
+								 	<div class="modal fade" id="deleteModal" role="dialog">
+								    	<div class="modal-dialog modal-lg">
+								    
+								      	<!-- Noi dung cua modal -->
+								      	<div class="modal-content">
+									        <div class="modal-header">
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									          <h4 class="modal-title">Xoá nhân viên</h4>
+									        </div>
+
+									        <!-- Thong tin cua nhan vien -->
+									        <div class="modal-body">  
+								        		<p>Bạn có chắc chắn muốn xóa không?</p>
+									       	</div>
+								      		<div class="modal-footer">  
+									        	<button type="button" id="xoa" class="btn btn-primary" style="width: 90px;" onclick="xoaNV();">OK</button>
+									        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Delete">Cancel</button> 
+									        </div>  
+								 		</div>
+								 	</div>
+								 	<!-- Ket thuc Modal -->										
 								</td>						
 							</tr>	 
 						<%};%>
 					</tbody>
 				</table>
+				<% var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;%> 
+				<div class="container" align="right">
+					<hr class="mt-2 mb-5">	
+					<%if (pageCount > 1) { %>
+				        <ul class="pagination">
+				            <% if (currentPage > 1) { %>
+				                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+				            <% }
+				            var i = 1;
+				            if (currentPage > 5) {
+				                i = currentPage - 4;
+				            } %>
+				            <% if (i !== 1) { %>
+				                <li class="disabled"><a href="#">...</a></li>
+				            <% } %>
+				            <% for (i; i<=pageCount; i++) { %>
+				                <% if (currentPage == i) { %>
+				                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+				                <% } else { %> 
+				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+				                <% } %>
+				                <% if (i == (currentPage + 4)) { %>
+				                    <li class="disabled"><a href="#">...</a></li>
+				                <% break; } %>
+				            <% } %>
+				            <% if (currentPage != pageCount) { %>
+				                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+				            <% } %>
+				        </ul>
+				    <% } %>	
 			</div>
 			<!-- Modal -->
 		 	<div class="modal fade" id="editModal" role="dialog">
