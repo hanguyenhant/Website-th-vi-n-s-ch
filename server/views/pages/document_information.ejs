@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Thông tin tài liệu</title>
+	<% include ../partials/head %>
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body>
+	<!-- Header -->
+	<% include ../partials/header %>
+	<!-- Main -->
+	<div class="container" id="part1">
+		<div id="anh">
+			<img src="../images/<%=information[0].Anh %>">
+			<div class="sao-danh-gia">
+				<p>Đánh giá: </p>
+				<span class="fa fa-star"></span>
+				<span class="fa fa-star"></span>
+				<span class="fa fa-star"></span>
+				<span class="fa fa-star"></span>
+				<span class="fa fa-star"></span>
+			</div>
+			
+		</div>
+		<div id="thongtin">
+			<p id="tentailieu"><%=information[0].TenTL%></p>			
+			<p style="font-size: 16px"><b>THÔNG TIN CHI TIẾT</b></p>
+			<table class="table">
+				<tbody>
+					<tr>
+						<th>Tên tác giả</th>
+						<td><%=information[0].TenTG %></td>
+					</tr>
+					<tr>
+						<th>Tên nhà xuất bản</th>
+						<td><%=information[0].TenNXB %></td>
+					</tr>
+					<tr>
+						<th>Số trang</th>
+						<td><%=information[0].SoTrang %></td>
+					</tr>
+					<tr>
+						<th>Khổ giấy</th>
+						<td><%=information[0].KhoGiay %></td>
+					</tr>
+					<tr>
+						<th>Lần tái bản</th>
+						<td><%=information[0].LanTB %></td>
+					</tr>
+					<tr>
+						<th>Nội dung</th>
+						<td><%=information[0].NoiDung %></td>
+					</tr>
+					<tr>
+						<th>Giá bìa</th>
+						<td><%=information[0].GiaBia %></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="container" id="part2">
+		<p style="font-size: 16px"><b>ĐÁNH GIÁ CỦA ĐỘC GIẢ</b></p>
+		<p>4.1 average based on 254 reviews.</p>
+			<table class="table" id="bang-danh-gia">
+				<tbody>
+					<tr>
+						<td style="width: 20%">5 star</td>
+						<td><div class="bar-5"></div></td>
+						<td style="width: 10%">150</td>
+					</tr>
+					<tr>
+						<td>4 star</td>
+						<td><div class="bar-4"></div></td>
+						<td>150</td>
+					</tr>
+					<tr>
+						<td>3 star</td>
+						<td><div class="bar-3"></div></td>
+						<td>150</td>
+					</tr>
+					<tr>
+						<td>2 star</td>
+						<td><div class="bar-2"></div></td>
+						<td>150</td>
+					</tr>
+					<tr>
+						<td>1 star</td>
+						<td><div class="bar-1"></div></td>
+						<td>150</td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+	<!-- Footer -->
+	<% include ../partials/footer %> 
+</body>
+</html>
