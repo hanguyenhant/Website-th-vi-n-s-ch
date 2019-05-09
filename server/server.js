@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '123456'
+	password: ''
 });
 
 connect.connect(function(err) {
@@ -206,13 +206,13 @@ app.get('/danhSachNhanVien', async function(req, res) {
 
 	// Hien thi danh sach nhan vien
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien`;
+		sql = `select id, MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien`;
 		noi_dung_tim_kiem = '';
 	}
 	else //Tim kiem nhan vien
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
+		sql = `select id, MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
 								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
@@ -470,3 +470,128 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 		}
 	})
 })
+
+
+
+//// quản lí độc giả
+
+
+// Lay danh sach doc gia
+app.get('/danhSachDocGia', async function(req, res) {
+	var pageSize = 4,
+		pageCount,
+		currentPage = 1;
+	danhSachDocGia = new Array(); 
+	display_danhSachDocGia = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+	// Hien thi danh sach doc gia
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, MaNV from docgia`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem doc gia
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, MaNV from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachDocGia = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachDocGia.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachDocGia.length>i)
+				{
+					display_danhSachDocGia.push(danhSachDocGia[i]);
+				} 
+		res.render('views/pages/quan-ly-doc-gia', { danhSachDocGia: display_danhSachDocGia, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+// Them doc gia
+app.post('/themDocGia', json.json(), async function(req, res) { 
+	var sql;
+	sql = "select MaThe from docgia where id = (select max(id) from docgia)";
+	try {
+		MaThe = await queryPromise(sql);
+		MaThe = MaThe[0].MaThe;
+		stt = MaThe.substring(2); 
+		stt = parseInt(stt) + 1;
+		if (stt.toString().length == 1) {
+			MaThe = "DG00" + stt;
+		}
+		else if (stt.toString().length == 2) {
+			MaThe = "DG0" + stt;
+		}
+		else MaThe = "DG" + stt; 
+		sql = `insert into docgia(MaThe, HoTen, DiaChi, Email, SoDienThoai,NgayCap, HanSD, MaNV, NgayCN ) 
+		values (?, ?, ?, ?, ? , ?, ?, ?,?)`;
+		sql = mysql.format(sql, [MaThe, req.body.HoTen, req.body.DiaChi, 
+			req.body.Email, req.body.SoDienThoai, req.body.NgayCap, req.body.HanSD, req.body.MaNV, req.body.NgayCN]); 
+		connect.query(sql, async function(err, results) {
+			if (err) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				danhsachdocgia = await queryPromise("select * from docgia");
+				res.write(JSON.stringify(danhsachdocgia)); 
+				res.end();
+			}
+		}) 
+	} catch (SQLException) {
+		res.write("0");
+		res.end();
+	} 
+})
+ 
+// Sua doc gia
+app.post('/suaDocGia', json.json(), function(req, res) {
+	var sql = `update docgia set HoTen = ?, DiaChi = ? , Email = ? ,SoDienThoai = ?, NgayCap = ?, HanSD = ?, MaNV = ?, NgayCN = ?
+	where id = ?`;
+	sql = mysql.format(sql, [req.body.HoTen,req.body.DiaChi,req.body.Email, req.body.SoDienThoai, req.body.NgayCap,req.body.HanSD,req.body.MaNV, req.body.NgayCN, req.body.id]); 
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			res.write('1');
+			res.end();
+		}
+	})
+})
+  
+// Xem thong tin chi tiet cua doc gia
+app.get('/thongTinChiTietDocGia/:id', async function(req, res) { 
+	var sql = `select MaThe, SoDienThoai, DiaChi, Email, HoTen, NgayCap, HanSD, MaNV, NgayCN from docgia 
+	where id = ?`;
+	sql = mysql.format(sql, req.params.id);
+	try {
+		results = await queryPromise(sql);
+		res.write(JSON.stringify({MaThe: results[0].MaThe, SoDienThoai: results[0].SoDienThoai, 
+			DiaChi: results[0].DiaChi, Email: results[0].Email, HoTen: results[0].HoTen, 
+			NgayCap: results[0].NgayCap,HanSD: results[0].HanSD,
+			MaNV: results[0].MaNV, NgayCN: results[0].NgayCN}));
+	} catch (SQLException) {
+		res.write('0');
+	} 
+	res.end();
+})
+
