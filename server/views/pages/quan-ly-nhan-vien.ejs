@@ -23,7 +23,7 @@
 						</a>
 					</div> 
 				</div> 
-				<form action="/search_nhanvien" method="get">
+				<form action="/danhSachNhanVien" method="get">
 					<div class="form-group">
 						<div class="col-sm-3 col-sm-offset-2">
 							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
@@ -36,22 +36,22 @@
 					</div>					
 				</form>
 				<div class="col-sm-2" style="float: right;">
-					<button type="button" class="btn btn-primary" style="text-align: right;" data-toggle="modal" data-target="#myModal">Thêm nhân viên</button>
+					<button type="button" class="btn btn-primary" style="text-align: right;" onclick="openModal();">Thêm nhân viên</button>
 					<!-- Modal -->
-				 	<div class="modal fade" id="myModal" role="dialog">
+				 	<div class="modal fade" id="addModal" role="dialog">
 				    	<div class="modal-dialog modal-lg">
 				    
 				      	<!-- Noi dung cua modal -->
 				      	<div class="modal-content">
 					        <div class="modal-header">
-					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					          <button type="button" class="close" data-dismiss="modal" >&times;</button>
 					          <h4 class="modal-title">Thông tin nhân viên</h4>
 					        </div>
 
 					        <!-- Thong tin cua nhan vien -->
 					        <div class="modal-body">  
 								<div class="form-group-inline">
-			           				<label for="ma-nhan-vien">Tên nhân viên: </label>
+			           				<label>Tên nhân viên: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-user"></i> 
@@ -61,7 +61,7 @@
 			           			</div>   
 
 			           			<div class="form-group-inline">
-			           				<label for="ma-nhan-vien">Số điện thoại: </label>
+			           				<label>Số điện thoại: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-phone"></i> 
@@ -71,7 +71,7 @@
 			           			</div>  
 
 			           			<div class="form-group-inline">
-			           				<label for="ma-nhan-vien">Địa chỉ: </label>
+			           				<label>Địa chỉ: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-home"></i> 
@@ -81,7 +81,7 @@
 			           			</div>   
 
 			           			<div class="form-group-inline">
-			           				<label for="ma-nhan-vien">Email: </label>
+			           				<label>Email: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-envelope"></i> 
@@ -92,17 +92,17 @@
 				       		</div>
 				      		<div class="modal-footer">  
 					        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="themNV();">Tạo mới</button>
-					        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close">Close</button> 
-					        </div>  
+					        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="huy">Hủy</button> 
+					        </div> 
 				 		</div>
-				 	</div>
-				 	<!-- Ket thuc modal -->
+				 	</div> 
 				</div>
+				<!-- Ket thuc modal -->
 			</div>
 			<br><br>
 			<hr> 
 			<div id="DSNV">
-				<table class="table table-hover">
+				<table class="table table-striped">
 					<thead>
 						<tr>
 							<th>STT</th>
@@ -115,100 +115,160 @@
 						</tr>
 					</thead>
 					<tbody> 
-						<%for (var i=0; i<danhSachNhanVien.length; i++){%>
+						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachNhanVien.length && j<(danhSachNhanVien.length + 4 * currentPage); i++, j++){%>
 							<tr>
-								<td><%=i+1%></td>
-								<td><%=danhSachNhanVien[i].MaNV%></td>
-								<td><%=danhSachNhanVien[i].HoTen%></td>
-								<td><%=danhSachNhanVien[i].DiaChi%></td>
-								<td><%=danhSachNhanVien[i].Email%></td>
-								<td><%=danhSachNhanVien[i].SoDienThoai%></td>
+								<td id="<%=danhSachNhanVien[i].id%>"><%=j + 1%></td>
+								<td id="MaNV<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].MaNV%></td>
+								<td id="HoTen<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].HoTen%></td>
+								<td id="DiaChi<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].DiaChi%></td>
+								<td id="Email<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].Email%></td>
+								<td id="SoDienThoai<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].SoDienThoai%></td>
 								<td>							
-									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(<%=danhSachNhanVien[i].id%>, '<%=danhSachNhanVien[i].MaNV%>', '<%=danhSachNhanVien[i].HoTen%>', '<%=danhSachNhanVien[i].DiaChi%>', '<%=danhSachNhanVien[i].Email%>', '<%=danhSachNhanVien[i].SoDienThoai%>');" data-toggle="modal" data-target="#editModal">
+									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(<%=danhSachNhanVien[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  
-									<button type="submit" class="btn btn-default" name="delete">
+									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal" onclick="layTTNhanVien(<%=danhSachNhanVien[i].id%>);">
 									    <span class="glyphicon glyphicon-trash"></span>
-									</button>												
+									</button>			
+									<!-- Modal -->
+								 	<div class="modal fade" id="deleteModal" role="dialog">
+								    	<div class="modal-dialog modal-lg">
+								    
+								      	<!-- Noi dung cua modal -->
+								      	<div class="modal-content">
+									        <div class="modal-header">
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									          <h4 class="modal-title">Xoá nhân viên</h4>
+									        </div>
+
+									        <!-- Thong tin cua nhan vien -->
+									        <div class="modal-body">  
+								        		<p>Bạn có chắc chắn muốn xóa không?</p>
+									       	</div>
+								      		<div class="modal-footer">  
+									        	<button type="button" id="xoa" class="btn btn-primary" style="width: 90px;" onclick="xoaNV();">OK</button>
+									        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Delete">Cancel</button> 
+									        </div>  
+								 		</div>
+								 	</div>
+								 	<!-- Ket thuc Modal -->	 
 								</td>						
 							</tr>	 
 						<%};%>
 					</tbody>
-				</table>
-			</div>
+				</table> 
+				</div>
+				<% var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;%> 
+				<div class="container" align="right" id="phantrang">
+					<hr class="mt-2 mb-5">	
+					<%if (pageCount > 1) { %>
+				        <ul class="pagination">
+				            <% if (currentPage > 1) { %>
+				                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+				            <% }
+				            var i = 1;
+				            if (currentPage > 5) {
+				                i = currentPage - 4;
+				            } %>
+				            <% if (i !== 1) { %>
+				                <li class="disabled"><a href="#">...</a></li>
+				            <% } %>
+				            <% for (i; i<=pageCount; i++) { %>
+				                <% if (currentPage == i) { %>
+				                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+				                <% } else { %> 
+				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+				                <% } %>
+				                <% if (i == (currentPage + 4)) { %>
+				                    <li class="disabled"><a href="#">...</a></li>
+				                <% break; } %>
+				            <% } %>
+				            <% if (currentPage != pageCount) { %>
+				                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+				            <% } %>
+				        </ul>
+				    <% } %>	
+				</div>
 			<!-- Modal -->
-		 	<div class="modal fade" id="editModal" role="dialog">
+		 	<div class="modal fade" id="editModal" role="dialog" style="text-align: left;">
 		    	<div class="modal-dialog modal-lg">
 		    
-		      	<!-- Noi dung cua modal -->
-		      	<div class="modal-content">
-			        <div class="modal-header">
-			          <button type="button" class="close" data-dismiss="modal">&times;</button>
-			          <h4 class="modal-title">Thông tin nhân viên</h4>
-			        </div>
+			      	<!-- Noi dung cua modal -->
+			      	<div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Thông tin nhân viên</h4>
+				        </div>
 
-			        <!-- Thong tin cua nhan vien -->
-			        <div class="modal-body">  
-		        		<div class="form-group-inline">
-		       				<label for="ma-nhan-vien">Mã nhân viên: </label>
-		       				<div class="input-group">
-		       					<span class="input-group-addon">
-									<i class="glyphicon glyphicon-user"></i> 
-								</span>
-								<input type="text" class="form-control" required="" id="MaNV" disabled="">
-		       				</div>
-	           			</div>   
-						<div class="form-group-inline">
-	           				<label for="ma-nhan-vien">Tên nhân viên: </label>
-	           				<div class="input-group">
-	           					<span class="input-group-addon">
-									<i class="glyphicon glyphicon-user"></i> 
-								</span>
-								<input type="text" class="form-control" required="" id="HoTen_Edit">
-	           				</div>
-	           			</div>   
+				        <!-- Thong tin cua nhan vien -->
+				        <div class="modal-body">  
+			        		<div class="form-group-inline">
+			       				<label>Mã nhân viên: </label>
+			       				<div class="input-group">
+			       					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-user"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="MaNV" disabled="">
+			       				</div>
+		           			</div>   
+							<div class="form-group-inline">
+		           				<label>Tên nhân viên: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-user"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="HoTen_Edit">
+		           				</div>
+		           			</div>   
 
-	           			<div class="form-group-inline">
-	           				<label for="ma-nhan-vien">Số điện thoại: </label>
-	           				<div class="input-group">
-	           					<span class="input-group-addon">
-									<i class="glyphicon glyphicon-phone"></i> 
-								</span>
-								<input type="text" class="form-control" required id="SoDienThoai_Edit" id="sdt">
-	           				</div>
-	           			</div>  
+		           			<div class="form-group-inline">
+		           				<label>Số điện thoại: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-phone"></i> 
+									</span>
+									<input type="text" class="form-control" required id="SoDienThoai_Edit" id="sdt">
+		           				</div>
+		           			</div>  
 
-	           			<div class="form-group-inline">
-	           				<label for="ma-nhan-vien">Địa chỉ: </label>
-	           				<div class="input-group">
-	           					<span class="input-group-addon">
-									<i class="glyphicon glyphicon-home"></i> 
-								</span>
-								<input type="text" class="form-control" required="" id="DiaChi_Edit">
-	           				</div>
-	           			</div>   
+		           			<div class="form-group-inline">
+		           				<label>Địa chỉ: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-home"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="DiaChi_Edit">
+		           				</div>
+		           			</div>   
 
-	           			<div class="form-group-inline">
-	           				<label for="ma-nhan-vien">Email: </label>
-	           				<div class="input-group">
-	           					<span class="input-group-addon">
-									<i class="glyphicon glyphicon-envelope"></i> 
-								</span>
-								<input type="text" class="form-control" required="" id="Email_Edit">
-	           				</div>
-	           			</div>   
-			       	</div>
-		      		<div class="modal-footer">  
+		           			<div class="form-group-inline">
+		           				<label>Email: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-envelope"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="Email_Edit">
+		           				</div>
+		           			</div>   
+			 		</div>
+			 		<div class="modal-footer">  
 			        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaNV();">Lưu</button>
 			        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Edit">Close</button> 
-			        </div>  
-		 		</div>
-		 	</div>
-		 	<!-- Ket thuc Modal -->	
-		</div>	 
+			        </div>
+		 		</div> 
+			</div>
+		</div> 
 	</div>
+	<!-- Ket thuc Modal -->
 	<script type="text/javascript" language="javascript">  
-		function themNV() {    
+		function openModal() {
+			$('#addModal').modal(); 
+			document.getElementById("HoTen").value = '';
+			document.getElementById("DiaChi").value = '';
+			document.getElementById("Email").value = '';
+			document.getElementById("SoDienThoai").value = '';
+		}
+		function themNV() {     
 			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
 
 			// pattern kiem tra email va so dien thoai 
@@ -232,9 +292,12 @@
 				xmlhttp.open("POST", "/themNhanVien", false); 
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
-						if (// xu ly ajax
+						if (xmlhttp.responseText != "0") { 
+							// xu ly ajax
 							dsnv = document.getElementById("DSNV"); 
-							danhsachnhanvien = JSON.parse(xmlhttp.responseText);  
+							ketqua = JSON.parse(xmlhttp.responseText);  
+							danhsachnhanvien = ketqua.danhsachnhanvien;
+							pageCount = ketqua.pageCount;
 							hienthi = '<table class="table table-striped">';
 								hienthi += '<thead>';
 									hienthi += '<tr>';
@@ -248,31 +311,53 @@
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
-								for (var i = 0; i < danhsachnhanvien.length; i++)
+								for (var i = 0, j=(pageCount - 1)*4; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + 4 * pageCount); i++, j++)
 								{
 									hienthi += '<tr>';
-										hienthi += '<td>' + (i + 1) + '</td>';
-										hienthi += '<td>' + danhsachnhanvien[i].MaNV+ '</td>';
-										hienthi += '<td>' + danhsachnhanvien[i].HoTen+ '</td>';
-										hienthi += '<td>' + danhsachnhanvien[i].DiaChi+ '</td>';
-										hienthi += '<td>' + danhsachnhanvien[i].Email+ '</td>';
-										hienthi += '<td>' + danhsachnhanvien[i].SoDienThoai+ '</td>';
+										hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (j + 1) + '</td>';
+										hienthi +=  '<td id = MaNV' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].MaNV + '</td>';
+										hienthi += '<td id = HoTen' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].HoTen + '</td>';
+										hienthi += '<td id = DiaChi' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].DiaChi + '</td>';
+										hienthi += '<td id = Email' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].Email + '</td>';
+										hienthi += '<td id = SoDienThoai' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].SoDienThoai + '</td>';
+ 
 										hienthi += 
 										'<td>' +							
-											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');" data-toggle="modal" data-target="#editModal">' +
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
 											'</button>' +  
-											'<button type="submit" class="btn btn-default" name="delete">' + 
-											    '<span class="glyphicon glyphicon-trash"></span>' + 
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
 										'</td>';				
 									hienthi += '</tr>';
 								}
 								hienthi +='</body>';
 							hienthi += '</table>'; 
+							var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=" + pageCount; 
+					  
+				    		phantrang = document.getElementById('phantrang');
+				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
+				    		hienthi_phantrang += '<ul class="pagination">';
+				    		hienthi_phantrang += '<li><a href=" ' + url + "&page=1"+ '">' + '&laquo;</a></li>';
+				    		var amount = 0;
+				    		hienthi_phantrang += '<li><a disabled>...</a></li>';
+				    		 
+				    		for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
+				    			amount += 1;
+				    			hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
+				    		}   
+				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+				            hienthi_phantrang += '</ul>';
 							// Tao html trong the co id = "menu"
 							dsnv.innerHTML = hienthi; 
-							
+							// Tao html trong the co phantrang = "menu"
+							phantrang.innerHTML = hienthi_phantrang; 
+
+							// Thay doi gia tri url 
+							history.pushState(null, '', url); 
+
+							document.getElementById("huy").click(); // dong modal popup
 						}
 						else {
 							alert("Error!");
@@ -286,14 +371,15 @@
 				xmlhttp.send(thongTinNV); 
 			}
 		}
-		var id;
-		function layTTNhanVien(id, MaNV, HoTen, SoDienThoai, DiaChi, Email) {
+		var id, sothutu;
+		function layTTNhanVien(id) {
 			this.id = id;  
-			document.getElementById("MaNV").value = MaNV;
-			document.getElementById("HoTen_Edit").value = HoTen;
-			document.getElementById("SoDienThoai_Edit").value = SoDienThoai;
-			document.getElementById("DiaChi_Edit").value = DiaChi;
-			document.getElementById("Email_Edit").value = Email;  
+			document.getElementById("MaNV").value = document.getElementById("MaNV" + id).innerHTML ;
+			document.getElementById("HoTen_Edit").value = document.getElementById("HoTen" + id).innerHTML;
+			document.getElementById("SoDienThoai_Edit").value = document.getElementById("SoDienThoai" + id).innerHTML;
+			document.getElementById("DiaChi_Edit").value = document.getElementById("DiaChi" + id).innerHTML;
+			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;     
+			this.sothutu = document.getElementById(id).innerHTML; 
 		}
 
 		function suaNV() {  
@@ -319,10 +405,20 @@
 				xmlhttp.open("POST", "/suaNhanVien", false); 
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
-						if (xmlhttp.responseText == "1") { 
-							window.location = "/danhSachNhanVien";
+						if (xmlhttp.responseText != "0") { 
+							// xu ly ajax 
+							thongtinnhanviendasua = JSON.parse(xmlhttp.responseText); 
+							thongtinnhanviendasua = thongtinnhanviendasua[0];
+							id = thongtinnhanviendasua.id; 
+							document.getElementById(id).innerHTML = thongtinnhanviendasua.id;
+							document.getElementById("MaNV" + id).innerHTML = thongtinnhanviendasua.MaNV;
+							document.getElementById("HoTen" + id).innerHTML = thongtinnhanviendasua.HoTen;
+							document.getElementById("SoDienThoai" + id).innerHTML = thongtinnhanviendasua.SoDienThoai;
+							document.getElementById("DiaChi" + id).innerHTML = thongtinnhanviendasua.DiaChi;
+							document.getElementById("Email" + id).innerHTML = thongtinnhanviendasua.Email; 
+							document.getElementById("close_Edit").click(); // dong modal popup
 						}
-						else if (xmlhttp.responseText == "0") {
+						else {
 							alert("Error!");
 						}
 					}
@@ -334,6 +430,75 @@
 				xmlhttp.send(thongTinNV); 
 			}
 		} 
+		function xoaNV() {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/xoaNhanVien", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") { 
+						var currentPage = location.search.split('page=')[1]; 
+						// xu ly ajax
+						dsnv = document.getElementById("DSNV"); 
+						ketqua = JSON.parse(xmlhttp.responseText); 
+						danhsachnhanvien = ketqua.danhsachnhanvien;
+						console.log("dn:" + danhsachnhanvien[3]);
+						pageCount = ketqua.pageCount;
+						if (pageCount < currentPage) {
+							currentPage = 1;
+							var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=1"; 
+							// Thay doi gia tri url 
+							history.pushState(null, '', url); 
+							console.log("pageCount: "+ pageCount);
+							console.log("Current page: " + currentPage);
+						}
+						hienthi = '<table class="table table-striped">';
+							hienthi += '<thead>';
+								hienthi += '<tr>';
+									hienthi += '<th>STT</th>'; 
+									hienthi += '<th>Mã nhân viên</th>'; 
+									hienthi += '<th>Họ tên</th>'; 
+									hienthi += '<th>Địa chỉ</th>'; 
+									hienthi += '<th>Email</th>';
+									hienthi += '<th>Số điện thoại</th>'; 
+									hienthi += '<th>Hành động</th>'; 
+								hienthi += '</tr>';
+							hienthi += '</thead>';
+							hienthi += '<body>';
+							for (var i = 0, j=(currentPage - 1)*4; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + 4 * currentPage); i++, j++)
+							{ 
+								hienthi += '<tr>';
+									hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (j + 1) + '</td>';
+									hienthi +=  '<td id = MaNV' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].MaNV + '</td>';
+									hienthi += '<td id = HoTen' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].HoTen + '</td>';
+									hienthi += '<td id = DiaChi' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].DiaChi + '</td>';
+									hienthi += '<td id = Email' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].Email + '</td>';
+									hienthi += '<td id = SoDienThoai' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].SoDienThoai + '</td>';
+									hienthi += 
+									'<td>' +							
+										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+								    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+										'</button>' +  
+										'<button type="submit" class="btn btn-default" name="delete">' + 
+										    '<span class="glyphicon glyphicon-trash"></span>' + 
+										'</button>' + 											
+									'</td>';				
+								hienthi += '</tr>';
+							}
+							hienthi +='</body>';
+						hienthi += '</table>';     
+						// Tao html trong the co id = "menu"
+						dsnv.innerHTML = hienthi;   
+					}
+					else {
+						alert("Error!");
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinNV = JSON.stringify({"id": this.id, "sothutu": this.sothutu}); 
+			xmlhttp.send(thongTinNV); 
+		}
 	</script>
 </body>
 </html>

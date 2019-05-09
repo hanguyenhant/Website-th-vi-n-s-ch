@@ -22,7 +22,7 @@
 					if (username != undefined && username.substring(0, 2) == "NV") { 
 						menu = `
 			        	<ul class="nav navbar-nav"> 
-				    		<li class="active"><a href="#">Trang chủ</a></li>
+				    		<li class="active"><a href="/">Trang chủ</a></li>
 					        <li class="dropdown"> 
 					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Quản lý kho sách <b class="caret"></b></a>
 						        <ul class="dropdown-menu">
@@ -30,14 +30,14 @@
 						          <li><a href="#">Nhà cung cấp</a></li> 
 						        </ul>
 							</li>
-					        <li><a href="#">Quản lí độc giả</a>
+					        <li><a href="/danhSachDocGia">Quản lí độc giả</a>
 					            
 					        </li> 
 					        <li class="dropdown"> 
 					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Quản lý mượn trả <b class="caret"></b></a>
 						        <ul class="dropdown-menu">
-						          <li><a href="#">Quản lý mượn sách</a></li>
-						          <li><a href="#">Quản lý trả sách</a></li> 
+						          <li><a href="/quanLyMuonSach">Quản lý mượn sách</a></li>
+						          <li><a href="/quanLyTraSach">Quản lý trả sách</a></li> 
 						        </ul>
 							</li>
 					    </ul>
@@ -46,7 +46,7 @@
 					else if (username != undefined && username== "admin") {
 						menu = `
 			        	<ul class="nav navbar-nav"> 
-							<li class="active"><a href= "#">Trang chủ</a></li> 
+							<li class="active"><a href= "/">Trang chủ</a></li> 
 					        <li><a href="/danhSachTaiKhoan" >Quản lí tài khoản</a>
 					            
 					        </li>
