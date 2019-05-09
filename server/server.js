@@ -30,7 +30,7 @@ connect.connect(function(err) {
 
 // Trang chu 
 app.get('/', async function(req, res) { 
-	await getInformation();   
+	// await getInformation();   
 	res.render('views/pages/trangchu', {array_object_documents: this.array_object_documents});
 
 })
