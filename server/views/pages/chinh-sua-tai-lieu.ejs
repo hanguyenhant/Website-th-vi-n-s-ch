@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Trang chủ</title>
+	<% include ../partials/head %>
+	<style>
+		html, body{
+			height: 100%;
+		}
+	</style>
+</head> 
+<body>
+	<!-- Header --> 
+	<%include ../partials/header%>
+	<div style="min-height: 85%">  
+		<% include ../partials/anhchay %>
+<!-- Main -->
+	<div class="container">
+	<div class="wrapper">
+	   <div class="line"></div>
+    
+	   <!--form class="form" id="form" action="http://localhost:3000/capnhat/<!--%= dulieu[0].id %>" method="post" enctype="multipart/form-data">
+		-->
+		<fieldset>
+				<div class="widget">
+				    <div class="title">
+						<img src="images/icons/dark/add.png" class="titleIcon" />
+						<h6>Cập nhật Sách</h6>
+					</div>
+					
+			<form class="form" action="http://localhost:3000/capnhat/<%= dulieu[0].id %>" method="post" >
+		    
+			<div class="tab_container">
+			
+	
+		<div id='tab1' class="tab_content pd0">
+		
+		 <div class="formRow">
+			<label class="formLeft" for="param_name">Tên Tài Liệu:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="tentailieu" id="param_TenTL" _autocheck="true" type="text"  value="<%= dulieu[0].TenTL%>"/></span>
+				<span name="TenTL_autocheck" class="autocheck"></span>
+				<div name="TenTL_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+	<div class="formRow">
+			<label class="formLeft" for="param_TenTheLoai">Thể Loại:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="tentheloai" id="param_TenTheLoai" _autocheck="true" type="text" value="<%= dulieu[0].TenTheLoai%>"/></span>
+				<span name="TenTheLoai_autocheck" class="autocheck"></span>
+				<div name="TenTheLoai_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Tên Tác Giả:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="tentg" id="param_TenTG" _autocheck="true" type="text" value="<%= dulieu[0].TenTG%>"/></span>
+				<span name="TenTG_autocheck" class="autocheck"></span>
+				<div name="TenTG_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Tên NXB:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="tennxb" id="param_TenNXB" _autocheck="true" type="text" value="<%= dulieu[0].TenNXB%>" /></span>
+				<span name="TenNXB_autocheck" class="autocheck"></span>
+				<div name="TenNXB_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Năm Xuất Bản:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="namxb" id="param_NamXB" _autocheck="true" type="text" value="<%= dulieu[0].NamXB%>"/></span>
+				<span name="NamXB_autocheck" class="autocheck"></span>
+				<div name="NamXB_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Ngôn Ngữ:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="tenngonngu" id="param_TenNgonNgu" _autocheck="true" type="text" value="<%= dulieu[0].TenNgonNgu%>" /></span>
+				<span name="TenNgonNgu_autocheck" class="autocheck"></span>
+				<div name="TenNgonNgu_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		
+			
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Số Trang:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="sotrang" id="param_SoTrang" _autocheck="true" type="text" value="<%= dulieu[0].SoTrang%>" /></span>
+				<span name="SoTrang_autocheck" class="autocheck"></span>
+				<div name="SoTrang_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Khổ giấy:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="khogiay" id="param_KhoGiay" _autocheck="true" type="text" value="<%= dulieu[0].KhoGiay%>" /></span>
+				<span name="KhoGiay_autocheck" class="autocheck"></span>
+				<div name="KhoGiay_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Lần tái bản:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="lantb" id="param_LanTB" _autocheck="true" type="text" value="<%= dulieu[0].LanTB%>" /></span>
+				<span name="LanTB_autocheck" class="autocheck"></span>
+				<div name="LanTB_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Giá Bìa<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="giabia" id="param_GiaBia" _autocheck="true" type="text" value="<%= dulieu[0].GiaBia%>"/></span>
+				<span name="GiaBia_autocheck" class="autocheck"></span>
+				<div name="GiaBia_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Số PH:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="soph" id="param_SoPH" _autocheck="true" type="text" value="<%= dulieu[0].SoPH%>" /></span>
+				<span name="SoPH_autocheck" class="autocheck"></span>
+				<div name="SoPH_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Ngày PH:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="ngayph" id="param_NgayPH" _autocheck="true" type="text" value="<%= dulieu[0].NgayPH%>" /></span>
+				<span name="NgayPH_autocheck" class="autocheck"></span>
+				<div name="NgayPH_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Tổng số:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="tongso" id="param_TongSo" _autocheck="true" type="text" value="<%= dulieu[0].TongSo%>"/></span>
+				<span name="TongSo_autocheck" class="autocheck"></span>
+				<div name="TongSo_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+		
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Mã VT:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="mavt" id="param_MaVT" _autocheck="true" type="text" value="<%= dulieu[0].MaVT%>" /></span>
+				<span name="MaVT_autocheck" class="autocheck"></span>
+				<div name="MaVT_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Ngày CN:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="ngaycn" id="param_NgayCN" _autocheck="true" type="text" value="<%= dulieu[0].NgayCN%>" /></span>
+				<span name="NgayCN_autocheck" class="autocheck"></span>
+				<div name="NgayCN_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		
+		<div class="formRow">
+			<label class="formLeft" for="param_name">Mã NV:<span class="req">*</span></label>
+			<div class="formRight">
+				<span class="oneTwo"><input name="manv" id="param_MaNV" _autocheck="true" type="text" value="<%= dulieu[0].MaNV%>"/></span>
+				<span name="MaNV_autocheck" class="autocheck"></span>
+				<div name="MaNV_error" class="clear error"></div>
+		    </div>
+		    <div class="clear"></div>
+        </div>
+		
+		<div class="formRow">
+				<label class="formLeft">Nội dung:</label>
+				<div class="formRight">
+					<textarea name="noidung" id="param_NoiDung" class="editor"> <%= dulieu[0].NoiDung%></textarea>
+					<div name="NoiDung_error" class="clear error"></div>
+				</div>
+				<div class="clear"></div>
+            </div>
+
+						      <div class="formRow hide"></div>
+						 </div>
+						
+						 
+	        		</div><!-- End tab_container-->
+	        		
+	        		<div class="formSubmit">
+	           			<input type="submit" class="btn btn-warning" name ="submit" value="Update" class="redB" />
+	           			<input type="reset"  class="btn btn-warning" value="Hủy bỏ" class="basic" />
+	           		</div>
+	        		<div class="clear"></div>
+					</form>
+				</div>
+			</fieldset>
+		<!--/form-->
+    </div>
+	
+		
+</div>
+	<br>
+	<br>
+	<!-- Footer -->
+	<% include ../partials/footer %>
+</body>
+</html>
