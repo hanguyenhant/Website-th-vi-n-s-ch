@@ -451,7 +451,7 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 
 // Lay danh sach tai lieu
 app.get('/danhSachTaiLieu', async function(req, res) {
-	var pageSize = 4,
+	var pageSize = 10,
 		pageCount,
 		currentPage = 1;
 	danhSachTaiLieu = new Array(); 
