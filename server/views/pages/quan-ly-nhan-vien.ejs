@@ -232,13 +232,44 @@
 				xmlhttp.open("POST", "/themNhanVien", false); 
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
-						if (xmlhttp.responseText != "0") { 
-							// xu ly ajax
-							dsnv = document.getElementById("DSNV");
+						if (// xu ly ajax
+							dsnv = document.getElementById("DSNV"); 
 							danhsachnhanvien = JSON.parse(xmlhttp.responseText);  
-							hienthi = ` 
-								 
-							`;
+							hienthi = '<table class="table table-striped">';
+								hienthi += '<thead>';
+									hienthi += '<tr>';
+										hienthi += '<th>STT</th>'; 
+										hienthi += '<th>Mã nhân viên</th>'; 
+										hienthi += '<th>Họ tên</th>'; 
+										hienthi += '<th>Địa chỉ</th>'; 
+										hienthi += '<th>Email</th>';
+										hienthi += '<th>Số điện thoại</th>'; 
+										hienthi += '<th>Hành động</th>'; 
+									hienthi += '</tr>';
+								hienthi += '</thead>';
+								hienthi += '<body>';
+								for (var i = 0; i < danhsachnhanvien.length; i++)
+								{
+									hienthi += '<tr>';
+										hienthi += '<td>' + (i + 1) + '</td>';
+										hienthi += '<td>' + danhsachnhanvien[i].MaNV+ '</td>';
+										hienthi += '<td>' + danhsachnhanvien[i].HoTen+ '</td>';
+										hienthi += '<td>' + danhsachnhanvien[i].DiaChi+ '</td>';
+										hienthi += '<td>' + danhsachnhanvien[i].Email+ '</td>';
+										hienthi += '<td>' + danhsachnhanvien[i].SoDienThoai+ '</td>';
+										hienthi += 
+										'<td>' +							
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');" data-toggle="modal" data-target="#editModal">' +
+									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+											'</button>' +  
+											'<button type="submit" class="btn btn-default" name="delete">' + 
+											    '<span class="glyphicon glyphicon-trash"></span>' + 
+											'</button>' + 											
+										'</td>';				
+									hienthi += '</tr>';
+								}
+								hienthi +='</body>';
+							hienthi += '</table>'; 
 							// Tao html trong the co id = "menu"
 							dsnv.innerHTML = hienthi; 
 							
