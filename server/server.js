@@ -206,13 +206,13 @@ app.get('/danhSachNhanVien', async function(req, res) {
 
 	// Hien thi danh sach nhan vien
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien`;
+		sql = `select id, MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien`;
 		noi_dung_tim_kiem = '';
 	}
 	else //Tim kiem nhan vien
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
+		sql = `select id, MaNV, HoTen, DiaChi, Email, SoDienThoai from nhanvien where MaNV like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
 								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
@@ -264,9 +264,21 @@ app.post('/themNhanVien', json.json(), async function(req, res) {
 				res.end();
 			}
 			else {
-				danhsachnhanvien = await queryPromise("select * from nhanvien");
-				res.write(JSON.stringify(danhsachnhanvien)); 
-				res.end();
+				var pageSize = 4,
+					pageCount;
+				danhsachnhanvien = [];
+				results = await queryPromise("select * from nhanvien order by id desc");
+				pageCount = Math.ceil(results.length/pageSize);
+				for (var i = 0; i < pageSize; i++) {
+					danhsachnhanvien[i] = results[pageSize - i - 1];
+				}
+				dsnv_pagecount = {
+					'danhsachnhanvien': danhsachnhanvien,
+					'pageCount': pageCount
+
+				}; 
+				res.write(JSON.stringify(dsnv_pagecount)); 
+				res.end(); 
 			}
 		}) 
 	} catch (SQLException) {
@@ -281,13 +293,48 @@ app.post('/suaNhanVien', json.json(), function(req, res) {
 	where id = ?`;
 	sql = mysql.format(sql, [req.body.HoTen, req.body.SoDienThoai, req.body.DiaChi,
 		req.body.Email, req.body.id]); 
-	connect.query(sql, function(err, results) {
+	connect.query(sql, async function(err, results) {
 		if (err) {
 			res.write('0');
 			res.end();
 		}
 		else {
-			res.write('1');
+			sql = "select * from nhanvien where id = ?";
+			sql = mysql.format(sql, req.body.id);
+			danhsachnhanvien = await queryPromise(sql); 
+			res.write(JSON.stringify(danhsachnhanvien)); 
+			res.end();
+		}
+	})
+})
+
+// Xoa nhan vien 
+app.post('/xoaNhanVien', json.json(), function(req, res) {
+	var sql = `delete from nhanvien where id = ?`; 
+	sql = mysql.format(sql, req.body.id);  
+	connect.query(sql, async function(err, result) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			sql = "select * from nhanvien"; 
+			sql = mysql.format(sql, req.body.id);
+			results = await queryPromise(sql);
+			pageCount = Math.ceil(results.length / 4)
+			page = Math.ceil(req.body.sothutu / 4);  
+			danhsachnhanvien = [];
+			k = 0;
+			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+				danhsachnhanvien[k] = results[i - 1]; 
+				k++;
+			} 
+			dsnv_pagecount = {
+					'danhsachnhanvien': danhsachnhanvien,
+					'pageCount': pageCount
+
+			}; 
+			res.write(JSON.stringify(dsnv_pagecount)); 
 			res.end();
 		}
 	})
