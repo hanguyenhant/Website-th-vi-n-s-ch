@@ -115,9 +115,9 @@
 						</tr>
 					</thead>
 					<tbody> 
-						<%for (var i=0; i<danhSachNhanVien.length; i++){%>
+						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachNhanVien.length && j<(danhSachNhanVien.length + 4 * currentPage); i++, j++){%>
 							<tr>
-								<td id="<%=danhSachNhanVien[i].id%>"><%=i+1%></td>
+								<td id="<%=danhSachNhanVien[i].id%>"><%=j + 1%></td>
 								<td id="MaNV<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].MaNV%></td>
 								<td id="HoTen<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].HoTen%></td>
 								<td id="DiaChi<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].DiaChi%></td>
@@ -127,7 +127,7 @@
 									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(<%=danhSachNhanVien[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  
-									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal">
+									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal" onclick="layTTNhanVien(<%=danhSachNhanVien[i].id%>);">
 									    <span class="glyphicon glyphicon-trash"></span>
 									</button>			
 									<!-- Modal -->
@@ -151,14 +151,15 @@
 									        </div>  
 								 		</div>
 								 	</div>
-								 	<!-- Ket thuc Modal -->										
+								 	<!-- Ket thuc Modal -->	 
 								</td>						
 							</tr>	 
 						<%};%>
 					</tbody>
-				</table>
+				</table> 
+				</div>
 				<% var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;%> 
-				<div class="container" align="right">
+				<div class="container" align="right" id="phantrang">
 					<hr class="mt-2 mb-5">	
 					<%if (pageCount > 1) { %>
 				        <ul class="pagination">
@@ -187,9 +188,9 @@
 				            <% } %>
 				        </ul>
 				    <% } %>	
-			</div>
+				</div>
 			<!-- Modal -->
-		 	<div class="modal fade" id="editModal" role="dialog">
+		 	<div class="modal fade" id="editModal" role="dialog" style="text-align: left;">
 		    	<div class="modal-dialog modal-lg">
 		    
 			      	<!-- Noi dung cua modal -->
@@ -256,9 +257,9 @@
 			        </div>
 		 		</div> 
 			</div>
-		</div>	 
-		<!-- Ket thuc Modal -->
+		</div> 
 	</div>
+	<!-- Ket thuc Modal -->
 	<script type="text/javascript" language="javascript">  
 		function openModal() {
 			$('#addModal').modal(); 
@@ -294,7 +295,9 @@
 						if (xmlhttp.responseText != "0") { 
 							// xu ly ajax
 							dsnv = document.getElementById("DSNV"); 
-							danhsachnhanvien = JSON.parse(xmlhttp.responseText);  
+							ketqua = JSON.parse(xmlhttp.responseText);  
+							danhsachnhanvien = ketqua.danhsachnhanvien;
+							pageCount = ketqua.pageCount;
 							hienthi = '<table class="table table-striped">';
 								hienthi += '<thead>';
 									hienthi += '<tr>';
@@ -308,30 +311,52 @@
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
-								for (var i = 0; i < danhsachnhanvien.length; i++)
+								for (var i = 0, j=(pageCount - 1)*4; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + 4 * pageCount); i++, j++)
 								{
 									hienthi += '<tr>';
-										hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (i + 1) + '</td>';
+										hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (j + 1) + '</td>';
 										hienthi +=  '<td id = MaNV' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].MaNV + '</td>';
 										hienthi += '<td id = HoTen' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].HoTen + '</td>';
 										hienthi += '<td id = DiaChi' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].DiaChi + '</td>';
 										hienthi += '<td id = Email' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].Email + '</td>';
 										hienthi += '<td id = SoDienThoai' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].SoDienThoai + '</td>';
+ 
 										hienthi += 
 										'<td>' +							
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
 											'</button>' +  
-											'<button type="submit" class="btn btn-default" name="delete">' + 
-											    '<span class="glyphicon glyphicon-trash"></span>' + 
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
 										'</td>';				
 									hienthi += '</tr>';
 								}
 								hienthi +='</body>';
 							hienthi += '</table>'; 
+							var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=" + pageCount; 
+					  
+				    		phantrang = document.getElementById('phantrang');
+				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
+				    		hienthi_phantrang += '<ul class="pagination">';
+				    		hienthi_phantrang += '<li><a href=" ' + url + "&page=1"+ '">' + '&laquo;</a></li>';
+				    		var amount = 0;
+				    		hienthi_phantrang += '<li><a disabled>...</a></li>';
+				    		 
+				    		for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
+				    			amount += 1;
+				    			hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
+				    		}   
+				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+				            hienthi_phantrang += '</ul>';
 							// Tao html trong the co id = "menu"
 							dsnv.innerHTML = hienthi; 
+							// Tao html trong the co phantrang = "menu"
+							phantrang.innerHTML = hienthi_phantrang; 
+
+							// Thay doi gia tri url 
+							history.pushState(null, '', url); 
+
 							document.getElementById("huy").click(); // dong modal popup
 						}
 						else {
@@ -346,14 +371,15 @@
 				xmlhttp.send(thongTinNV); 
 			}
 		}
-		var id;
+		var id, sothutu;
 		function layTTNhanVien(id) {
 			this.id = id;  
 			document.getElementById("MaNV").value = document.getElementById("MaNV" + id).innerHTML ;
 			document.getElementById("HoTen_Edit").value = document.getElementById("HoTen" + id).innerHTML;
 			document.getElementById("SoDienThoai_Edit").value = document.getElementById("SoDienThoai" + id).innerHTML;
 			document.getElementById("DiaChi_Edit").value = document.getElementById("DiaChi" + id).innerHTML;
-			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;   
+			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;     
+			this.sothutu = document.getElementById(id).innerHTML; 
 		}
 
 		function suaNV() {  
@@ -404,6 +430,75 @@
 				xmlhttp.send(thongTinNV); 
 			}
 		} 
+		function xoaNV() {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/xoaNhanVien", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") { 
+						var currentPage = location.search.split('page=')[1]; 
+						// xu ly ajax
+						dsnv = document.getElementById("DSNV"); 
+						ketqua = JSON.parse(xmlhttp.responseText); 
+						danhsachnhanvien = ketqua.danhsachnhanvien;
+						console.log("dn:" + danhsachnhanvien[3]);
+						pageCount = ketqua.pageCount;
+						if (pageCount < currentPage) {
+							currentPage = 1;
+							var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=1"; 
+							// Thay doi gia tri url 
+							history.pushState(null, '', url); 
+							console.log("pageCount: "+ pageCount);
+							console.log("Current page: " + currentPage);
+						}
+						hienthi = '<table class="table table-striped">';
+							hienthi += '<thead>';
+								hienthi += '<tr>';
+									hienthi += '<th>STT</th>'; 
+									hienthi += '<th>Mã nhân viên</th>'; 
+									hienthi += '<th>Họ tên</th>'; 
+									hienthi += '<th>Địa chỉ</th>'; 
+									hienthi += '<th>Email</th>';
+									hienthi += '<th>Số điện thoại</th>'; 
+									hienthi += '<th>Hành động</th>'; 
+								hienthi += '</tr>';
+							hienthi += '</thead>';
+							hienthi += '<body>';
+							for (var i = 0, j=(currentPage - 1)*4; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + 4 * currentPage); i++, j++)
+							{ 
+								hienthi += '<tr>';
+									hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (j + 1) + '</td>';
+									hienthi +=  '<td id = MaNV' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].MaNV + '</td>';
+									hienthi += '<td id = HoTen' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].HoTen + '</td>';
+									hienthi += '<td id = DiaChi' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].DiaChi + '</td>';
+									hienthi += '<td id = Email' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].Email + '</td>';
+									hienthi += '<td id = SoDienThoai' + danhsachnhanvien[i].id + '>' + danhsachnhanvien[i].SoDienThoai + '</td>';
+									hienthi += 
+									'<td>' +							
+										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+								    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+										'</button>' +  
+										'<button type="submit" class="btn btn-default" name="delete">' + 
+										    '<span class="glyphicon glyphicon-trash"></span>' + 
+										'</button>' + 											
+									'</td>';				
+								hienthi += '</tr>';
+							}
+							hienthi +='</body>';
+						hienthi += '</table>';     
+						// Tao html trong the co id = "menu"
+						dsnv.innerHTML = hienthi;   
+					}
+					else {
+						alert("Error!");
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinNV = JSON.stringify({"id": this.id, "sothutu": this.sothutu}); 
+			xmlhttp.send(thongTinNV); 
+		}
 	</script>
 </body>
 </html>

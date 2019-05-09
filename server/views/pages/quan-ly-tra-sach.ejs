@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quản lí trả sách</title>
+	<% include ../partials/head %>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body style="margin-right: 0 !important; overflow-y: auto;">	
+	<%include ../partials/header%>
+	<div style="min-height: 85%"> 
+		<% include ../partials/anhchay %>
+		<div class="container" style="margin-top: 20px; ">  
+			<!-- <div class="row"> -->
+				<div class="form-group">
+					<!-- <div class="col-sm-3"> -->
+						<a href="/quanLyTraSach">
+							<h4 style="color: red;"><b>Quản lý trả sách</b></h4>
+						</a>
+					<!-- </div>  -->
+				</div> 
+				<form action="/quanLyTraSach" method="get">
+					<div class="form-inline">
+				        <label>Mã Độc giả</label>
+				        <input id="MaDocGia" name="MaDocGia" placeholder="Nhập mã độc giả" type="text"/>
+				    </div>				
+				</form>
+			<!-- </div> -->
+				<hr>
+				<div class="form-inline">
+			        <label>Ngày mượn</label>
+			        <input id="NgayMuon" name="date" placeholder="yyyy-mm-dd" type="text" disabled="" />
+			        <label>Thời hạn mượn</label>
+			        <input id="ThoiHanMuon" type="text" disabled=""/>
+			        <label>Ngày trả</label>
+			        <input id="NgayTra" name="date" placeholder="yyyy-mm-dd" type="text"/>
+			    </div>
+				<hr> 
+			    
+			    <div class="form-group">
+				    <div class="panel panel-primary">
+						<div class="panel-heading">
+							Thông tin độc giả
+						</div>
+						<div class="panel-body">
+							<div class="form-inline">
+			       				<label>Mã độc giả: </label>
+			       				<input type="text" class="form-control" required="" id="MaDocGia" disabled="">
+		           			</div>
+						    <div class="form-group-inline">
+			       				<label >Tên độc giả: </label>
+			       				<input type="text" class="form-control" required="" id="TenDocGia" disabled="">
+		           			</div>
+		           			<div class="form-group-inline">
+			       				<label>Email: </label>
+			       				<input type="text" class="form-control" required="" id="Email" disabled="">
+		           			</div>
+		           			<div class="form-group-inline">
+			       				<label>Số điện thoại: </label>
+			       				<input type="text" class="form-control" required="" id="SoDienThoai" disabled="">
+		           			</div>
+							
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							Thông tin sách mượn
+						</div>
+						<div class="panel-body">
+							<div class="form-inline">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>STT</th>
+											<th>Mã vạch</th>
+											<th>Tên sách</th>
+											<th>Số lượng</th>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
+		           			</div>
+						</div>
+					</div>
+					<label>Tổng số sách mượn: </label>
+					<input type="text" class="form-control" required="" id="TongSoSachMuon" disabled="">
+					<label>Tổng tiền cọc: </label>
+					<input type="text" class="form-control" required="" id="TongTienCoc" disabled="">
+				</div>
+				<hr>
+				<button type="submit" id="trasach" class="btn btn-warning" onclick="xacNhanTraSach();">Xác nhận trả sách</button>
+			<hr> 
+			
+		</div>	 
+	</div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+	    var date_input=$('input[name="date"]'); //our date input has the name "date"
+	    var container=$('.bootstrap form').length>0 ? $('.bootstrap form').parent() : "body";
+	    var options={
+	    	format: 'yyyy-mm-dd',
+	        container: container,
+	        todayHighlight: true,
+	        autoclose: true,
+	    };
+	    date_input.datepicker(options);
+	})
+</script>
+</html>
