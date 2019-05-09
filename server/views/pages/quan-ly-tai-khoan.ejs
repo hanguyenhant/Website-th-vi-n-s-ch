@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Trang chủ</title>
+	<% include ../partials/head %>
+	<style>
+		html, body{
+			height: 100%; 
+	</style>
+</head> 
+<body style="margin-right: 0px !important; overflow-y: auto;">
+	<!-- Header --> 
+	<%include ../partials/header%>
+	<div style="min-height: 85%">  
+		<% include ../partials/anhchay %>
+		<div class="container" style="margin-top: 20px; ">  
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-3">
+						<a href="/danhSachTaiKhoan">
+							<h4 style="color: red;"><b>Danh sách tài khoản</b></h4>
+						</a>					
+					</div> 
+				</div>
+				<form action="/danhSachTaiKhoan" method="get">
+					<div class="form-group">
+						<div class="col-sm-3 col-sm-offset-2">
+							<input type="text" name="TenTk" class="form-control" placeholder="Nhập tên tài khoản..." id="TenTk">
+						</div>
+						<div class="col-sm-1">
+							<div class="btn-group"> 
+								<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Tìm kiếm</button>
+							</div> 
+						</div>  
+					</div>  
+				</form>
+				<div class="col-sm-2" style="float: right;">
+					<button type="button" class="btn btn-primary" style="text-align: right;">Thêm tài khoản</button>
+				</div> 
+			</div>
+			<hr>
+			<table class="table table-striped">
+				<thead>
+					<th>STT</th>
+					<th>Tên tài khoản</th>
+					<th>Họ tên</th>
+					<th>Địa chỉ</th>
+					<th>Email</th>
+					<th>Số điện thoại</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<% for (var i = 0; i < danhSachTaiKhoan.length && i < 10; i++) { %>
+						<tr>
+							<td><%= i + 1 %></td>
+							<td><%=danhSachTaiKhoan[i].TenTk%></td>
+							<td><%=danhSachTaiKhoan[i].HoTen%></td>
+							<td><%=danhSachTaiKhoan[i].DiaChi%></td>
+							<td><%=danhSachTaiKhoan[i].Email%></td>
+							<td><%=danhSachTaiKhoan[i].SoDienThoai%></td>
+							<td>
+								<button id="buttonReset" type="button" class="btn btn-info" onclick="openModal('<%=danhSachTaiKhoan[i].TenTk%>');">Reset mật khẩu</button>
+
+							  	<!-- Modal -->
+							 	<div class="modal fade" id="resetMK" role="dialog" style="text-align: left;">
+							    	<div class="modal-dialog modal-lg">
+							    
+							      	<!-- Noi dung cua modal -->
+							      	<div class="modal-content">
+								        <div class="modal-header">
+								          <button type="button" class="close" data-dismiss="modal">&times;</button>
+								          <h4 class="modal-title">Reset mật khẩu</h4>
+								        </div>
+
+								        <!-- Thong tin cua nhan vien -->
+								        <div class="modal-body"> 
+								        	<form >  
+												<div class="form-group-inline">
+							           				<label for="ma-nhan-vien">Tên tài khoản: </label>
+							           				<div class="input-group">
+							           					<span class="input-group-addon">
+															<i class="glyphicon glyphicon-user"></i> 
+														</span>
+														<input type="text" class="form-control" required="" id="TenTk1" disabled="" value=" ">
+							           				</div>
+							           			</div>    
+
+							           			<div class="form-group-inline">
+							           				<label for="ma-nhan-vien">Mật khẩu: </label>
+							           				<div class="input-group">
+							           					<span class="input-group-addon">
+															<i class="glyphicon glyphicon-lock"></i> 
+														</span>
+														<input type="password" class="form-control" required id="MatKhau" id="sdt">
+							           				</div>
+							           			</div>  
+
+							           			<div class="form-group-inline">
+							           				<label for="ma-nhan-vien">Nhập lại mật khẩu: </label>
+							           				<div class="input-group">
+							           					<span class="input-group-addon">
+															<i class="glyphicon glyphicon-lock"></i> 
+														</span>
+														<input type="password" class="form-control" required="" id="NhapLaiMatKhau">
+							           				</div>
+							           			</div>    
+								       		</div>
+								      		<div class="modal-footer">  
+									        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="ResetMK();">Lưu</button>
+									        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="huy">Hủy</button> 
+									        </div>
+								    	</form> 
+							 		</div>
+							 	</div>
+							 	<!-- Ket thuc modal -->
+							</td>
+						</tr> 
+					<% } %> 
+				</tbody>
+			</table>
+			<% var url = "/danhSachTaiKhoan" + "?TenTk=" + TenTk;%> 
+				<div class="container" align="right">
+					<hr class="mt-2 mb-5">	
+					<%if (pageCount > 1) { %>
+				        <ul class="pagination">
+				            <% if (currentPage > 1) { %>
+				                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+				            <% }
+				            var i = 1;
+				            if (currentPage > 5) {
+				                i = currentPage - 4;
+				            } %>
+				            <% if (i !== 1) { %>
+				                <li class="disabled"><a href="#">...</a></li>
+				            <% } %>
+				            <% for (i; i<=pageCount; i++) { %>
+				                <% if (currentPage == i) { %>
+				                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+				                <% } else { %> 
+				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+				                <% } %>
+				                <% if (i == (currentPage + 4)) { %>
+				                    <li class="disabled"><a href="#">...</a></li>
+				                <% break; } %>
+				            <% } %>
+				            <% if (currentPage != pageCount) { %>
+				                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+				            <% } %>
+				        </ul>
+				    <% } %>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" language="javascript">  
+		document.getElementById("TenTk").value = '<%=TenTk%>';  
+		function openModal(tentk1) {
+			$('#resetMK').modal();
+			document.getElementById('TenTk1').value = tentk1;
+		}
+		function ResetMK() {    
+			var valid = true; // Kiem tra 2 mat khau nhap co giong nhau khong. true => hop le 
+			var matkhau = document.getElementById("MatKhau").value;
+			var nhaplaimatkhau = document.getElementById("NhapLaiMatKhau").value;  
+			var TenTk = document.getElementById("TenTk1").value; 
+
+			if (matkhau != nhaplaimatkhau) {
+				alert("Mật khẩu bị sai.");
+				document.getElementById("MatKhau").focus();
+				valid = false;
+			} 
+			if (valid) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/resetMatKhau", false); 
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+						if (xmlhttp.responseText == "1") {
+							alert("Reset mật khẩu thành công."); 
+							document.getElementById("huy").click(); // dong modal popup
+							document.getElementById("MatKhau").value = "";
+							document.getElementById("NhapLaiMatKhau").value = ""; 
+						}
+						else if (xmlhttp.responseText == "0") {
+							alert("Error!");
+						}
+					}
+
+				}
+				xmlhttp.setRequestHeader('Content-type', 'application/json');
+				var thongTinMatKhau = JSON.stringify({"TenTk": document.getElementById("TenTk1").value, "MatKhau": matkhau}); 
+				xmlhttp.send(thongTinMatKhau); 
+			}
+		}
+	</script>
+	<br>
+	<br>
+	<!-- Footer -->
+	<% include ../partials/footer %> 
+</body>
+</html>

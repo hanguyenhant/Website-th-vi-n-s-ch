@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tìm kiếm</title>
+	<% include ../partials/head %>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body>	
+	<!-- Header -->
+	<% include ../partials/header %>
+	<!-- Main -->
+	<div class="container" style="margin-top: 20px; min-height: 85%">
+		<h3>Số lượng sách thuộc thể loại <span style="color: orange">"<%=the_loai%>"</span>: <%=so_ket_qua%> quyển sách</h3>	
+
+		<hr class="mt-2 mb-5">
+				
+		<%for(var i=0; i<ket_qua_tim_kiem.length; i+=4){%>
+			<div class="container">
+				<div class="row">
+					<%for (var j=i; j<i+4&&j<ket_qua_tim_kiem.length; j++){%>
+						<div class="col-sm-3"> 
+							<a href="/information/<%=ket_qua_tim_kiem[j].id%>" style="color:black; text-decoration: none;">
+								<div class="card">
+									<img src="../images/<%=ket_qua_tim_kiem[j].Anh%>" title="<%=ket_qua_tim_kiem[j].TenTL%>">
+								
+									<%if (ket_qua_tim_kiem[j].TenTL.length>25)
+										{
+											var substr = ket_qua_tim_kiem[j].TenTL.substring(0,25);
+											var n = substr.lastIndexOf(" ");%>
+											<p><b><%=ket_qua_tim_kiem[j].TenTL.substring(0,n) + "..."%></b></p>
+										<%}
+									else{%>
+											<p><b><%=ket_qua_tim_kiem[j].TenTL%></b></p>
+									<%};%>
+									<p><%=ket_qua_tim_kiem[j].TenTG%></p> 
+								</div>
+							</a>
+						</div>
+					<%};%>
+				</div>
+			</div>			
+		<%};%>
+	</div>
+		
+	<% var url = "/theloai/"+the_loai.replace(/ /g, '%20')+"?";%> 
+	<div class="container" align="right">
+		<hr class="mt-2 mb-5">	
+		<%if (pageCount > 1) { %>
+	        <ul class="pagination">
+	            <% if (currentPage > 1) { %>
+	                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+	            <% }
+	            var i = 1;
+	            if (currentPage > 5) {
+	                i = +currentPage - 4;
+	            } %>
+	            <% if (i !== 1) { %>
+	                <li class="disabled"><a href="#">...</a></li>
+	            <% } %>
+	            <% for (i; i<=pageCount; i++) { %>
+	                <% if (currentPage == i) { %>
+	                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+	                <% } else { %> 
+	                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+	                <% } %>
+	                <% if (i == (+currentPage + 4)) { %>
+	                    <li class="disabled"><a href="#">...</a></li>
+	                <% break; } %>
+	            <% } %>
+	            <% if (currentPage != pageCount) { %>
+	                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+	            <% } %>
+	        </ul>
+	    <% } %>	
+	</div>
+			
+	<!-- Footer -->
+	<% include ../partials/footer %> 
+	
+</body>
+</html>

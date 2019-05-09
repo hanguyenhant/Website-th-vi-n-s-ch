@@ -161,52 +161,113 @@
 			});
 		</script>
 
-		<script type="text/javascript" language="javascript">  
-		function suaNV() {    
-			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
+		<script type="text/javascript" language="javascript"> 
+			function themNV() {    
+				var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
 
-			// pattern kiem tra email va so dien thoai 
-			var patternSDT = /^[0-9]{10,}$/;
-			var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-			var sdt = document.getElementById("SoDienThoai").value;
-			var email = document.getElementById("Email").value; 
+				// pattern kiem tra email va so dien thoai 
+				var patternSDT = /^[0-9]{10,}$/;
+				var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+				var sdt = document.getElementById("SoDienThoai").value;
+				var email = document.getElementById("Email").value; 
 
-			if (!patternSDT.test(sdt, "gi")) {
-				alert("Số điện thoại có ít nhất 10 số.");
-				valid = false;
-			}
-
-			if (!patternEmail.test(email)) {
-				alert("Email không đúng định dạng.");
-				valid = false;
-			}
-	 
-			if (valid) {
-				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.open("POST", "/suaNhanVien", false); 
-				xmlhttp.onreadystatechange = function() {
-					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-						console.log(xmlhttp.responseText);
-						if (xmlhttp.responseText == "1") {
-							alert("Sửa nhân viên thành công"); 
-							document.getElementById("huybo").click(); // dong modal popup
-							document.getElementById("HoTen").value = "";
-							document.getElementById("SoDienThoai").value = "";
-							document.getElementById("DiaChi").value = "";
-							document.getElementById("Email").value = "";
-						}
-						else if (xmlhttp.responseText == "0") {
-							alert("Error!");
-						}
-					}
-
+				if (!patternSDT.test(sdt, "gi")) {
+					alert("Số điện thoại có ít nhất 10 số.");
+					valid = false;
 				}
-				xmlhttp.setRequestHeader('Content-type', 'application/json');
-				var thongTinNV = JSON.stringify({"HoTen": document.getElementById("HoTen").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
 
-				xmlhttp.send(thongTinNV); 
+				if (!patternEmail.test(email)) {
+					alert("Email không đúng định dạng.");
+					valid = false;
+				}
+		 
+				if (valid) {
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.open("POST", "/themNhanVien", false); 
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+							if (xmlhttp.responseText != "0") { 
+								// xu ly ajax
+								dsnv = document.getElementById("DSNV");
+								danhsachnhanvien = JSON.parse(xmlhttp.responseText); 
+								hienthi = ` 
+								`;
+								// Tao html trong the co id = "menu"
+								dsnv.innerHTML = hienthi;
+								document.write("<table>");
+									document.write("<thead>");
+										document.write("<tr>");
+											document.write("<th>STT</th>");
+											document.write("<th>Mã nhân viên</th>");
+											document.write("<th>Họ tên</th>");
+											document.write("<th>Địa chỉ</th>");
+											document.write("<th>Email</th>");
+											document.write("<th>Số điện thoại</th>");
+											document.write("<th>Hành động</th>");
+										document.write("</tr>");
+									document.write("</thead>");
+								document.write("</table>");
+								
+							}
+							else {
+								alert("Error!");
+							}
+						}
+
+					}
+					xmlhttp.setRequestHeader('Content-type', 'application/json');
+					var thongTinNV = JSON.stringify({"HoTen": document.getElementById("HoTen").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
+
+					xmlhttp.send(thongTinNV); 
+				}
 			}
-		}
+		 
+ 
+			function suaNV() {    
+				var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
+
+				// pattern kiem tra email va so dien thoai 
+				var patternSDT = /^[0-9]{10,}$/;
+				var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+				var sdt = document.getElementById("SoDienThoai").value;
+				var email = document.getElementById("Email").value; 
+
+				if (!patternSDT.test(sdt, "gi")) {
+					alert("Số điện thoại có ít nhất 10 số.");
+					valid = false;
+				}
+
+				if (!patternEmail.test(email)) {
+					alert("Email không đúng định dạng.");
+					valid = false;
+				}
+		 
+				if (valid) {
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.open("POST", "/suaNhanVien", false); 
+					xmlhttp.onreadystatechange = function() {
+						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+							console.log(xmlhttp.responseText);
+							if (xmlhttp.responseText == "1") {
+								alert("Sửa nhân viên thành công"); 
+								document.getElementById("huybo").click(); // dong modal popup
+								document.getElementById("HoTen").value = "";
+								document.getElementById("SoDienThoai").value = "";
+								document.getElementById("DiaChi").value = "";
+								document.getElementById("Email").value = "";
+							}
+							else if (xmlhttp.responseText == "0") {
+								alert("Error!");
+							}
+						}
+
+					}
+					xmlhttp.setRequestHeader('Content-type', 'application/json');
+					var thongTinNV = JSON.stringify({"HoTen": document.getElementById("HoTen").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
+
+					xmlhttp.send(thongTinNV); 
+				}
+			}
 		</script>
 </body>
 </html>
