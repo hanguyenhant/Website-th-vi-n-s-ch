@@ -2,7 +2,7 @@
 Công nghệ sử dụng JS: NodeJS 
 - Phân quyền người dùng: 
 + Khách 
-+ Nhân viên, độc giả được cấp tài khoản đăng nhập vào hệ thống. 
++ Nhân viên(NV. admin), độc giả được cấp tài khoản đăng nhập vào hệ thống. 
 ----
 Các tính năng của hệ thống: 
 + Quản lý kho sách 
