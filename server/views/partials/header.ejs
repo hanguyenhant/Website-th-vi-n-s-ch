@@ -40,6 +40,13 @@
 						          <li><a href="/quanLyTraSach">Quản lý trả sách</a></li> 
 						        </ul>
 							</li>
+							<li class="dropdown"> 
+					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Thông tin nhân viên<b class="caret"></b></a>
+						        <ul class="dropdown-menu">
+						          	<li><a href="/doiMatKhau">Đổi mật khẩu</button></li>
+						          	<li><a href="/thongTinCaNhan">Thông tin cá nhân</a></li>
+						        </ul>
+							</li>
 					    </ul>
 			        `;  
 					}
@@ -47,15 +54,26 @@
 						menu = `
 			        	<ul class="nav navbar-nav"> 
 							<li class="active"><a href= "/">Trang chủ</a></li> 
-					        <li><a href="/danhSachTaiKhoan" >Quản lí tài khoản</a>
-					            
-					        </li>
-					        <li><a href="/danhSachNhanVien">Quản lí nhân viên</a>
-					        	
-					        </li>  
+					        <li><a href="/danhSachTaiKhoan">Quản lí tài khoản</a></li>
+					        <li><a href="/danhSachNhanVien">Quản lí nhân viên</a></li>  
 						</ul>
 			        	`;  
 					}
+					else if (username != undefined && username.substring(0, 2) == "DG") {
+						menu = `
+			        	<ul class="nav navbar-nav"> 
+							<li class="active"><a href= "/">Trang chủ</a></li> 
+					        <li><a href="/thongTinMuonSach" >Thông tin mượn sách</a>
+					        <li class="dropdown"> 
+					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Thông tin độc giả<b class="caret"></b></a>
+						        <ul class="dropdown-menu">
+						          <li><a href="/doiMatKhau">Đổi mật khẩu</a></li>
+						          <li><a href="/thongTinCaNhan">Thông tin cá nhân</a></li>
+						        </ul>
+							</li>
+						</ul>
+			        	`;
+			        }
 					else {
 						menu = `
 							<form class="navbar-form navbar-left" action="http://localhost:3000/search" method="get">
