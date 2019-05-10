@@ -596,8 +596,110 @@ app.get('/doiMatKhau', async function(req, res) {
 	res.render('views/pages/doi-mat-khau');
 });
 
+app.post('/doiMatKhau', json.json(), function(req, res) {
+	TenTk = req.body.TenTk;
+	MatKhauCu = req.body.MatKhauCu;
+	MatKhauMoi = req.body.MatKhauMoi;
+	sql = "select * from login where TenTk = ? and MatKhau = ?";
+	sql = mysql.format(sql, [TenTk, MatKhauCu]);
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			if (results.length == 0)
+			{
+				res.write('0');
+				res.end();
+			}
+			else 
+			{
+				sql = "update login set MatKhau = ? where TenTk = ?";
+				sql = mysql.format(sql, [MatKhauMoi, TenTk]); 
+				connect.query(sql, function(err, results) {
+					if (err) {
+						res.write('0');
+						res.end();
+					}
+					else {
+						res.write('1');
+						res.end();
+					}
+				})
+			}	
+		}
+	})
+});
+
 // Thông tin người dùng
 app.get('/thongTinCaNhan', async function(req, res) {
-	res.render('views/pages/thong-tin-ca-nhan');
+	var TenTk = req.query.username;
+	thongTinCaNhan = new Array();
+
+	sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, docgia where TenTk = MaThe and TenTk = ?`;
+	sql = mysql.format(sql, TenTk); 
+	try { 
+		docgia = await queryPromise(sql);
+		if (docgia.length == 0)
+		{
+			sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, nhanvien where TenTk = MaNV and TenTk = ?`;
+			sql = mysql.format(sql, TenTk); 
+			try { 
+				nhanvien = await queryPromise(sql);
+				thongTinCaNhan.push(nhanvien[0]);
+			}
+			catch(Exception) {
+				res.send('ERROR');
+			}
+		}
+		else
+		{
+			thongTinCaNhan.push(docgia[0]);
+		}
+
+	} catch(Exception) {
+		res.send('ERROR');
+	}
+
+	console.log(thongTinCaNhan);
+	res.render('views/pages/thong-tin-ca-nhan', {thongTinCaNhan: thongTinCaNhan});
 });
+
+app.post('/capNhatThongTin', json.json(), function(req, res) {
+	TenTk = req.body.TenTk;
+	DiaChi = req.body.DiaChi;
+	Email = req.body.Email;
+	SoDienThoai = req.body.SoDienThoai;
+
+	if (TenTk.substring(0, 2) == "NV")
+	{
+		console.log('ha');
+		sql = "update nhanvien set DiaChi = ?, Email = ?, SoDienThoai = ? where MaNV = ?";
+	}
+	else //Độc giả
+	{
+		sql = "update docgia set DiaChi = ?, Email = ?, SoDienThoai = ? where MaThe = ?";
+		
+	}
+	sql = mysql.format(sql, [DiaChi, Email, SoDienThoai, TenTk]);
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			capNhatThongTin = {
+					'DiaChi': DiaChi,
+					'Email': Email,
+					'SoDienThoai': SoDienThoai,
+			};  
+
+			res.write(JSON.stringify(capNhatThongTin));
+			res.end();
+		}
+	})
+});
+
+
 
