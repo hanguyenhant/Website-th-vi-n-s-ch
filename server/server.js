@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: ''
+	password: '123456'
 });
 
 connect.connect(function(err) {
