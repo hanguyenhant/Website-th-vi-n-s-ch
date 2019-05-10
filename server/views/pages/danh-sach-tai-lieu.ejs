@@ -61,7 +61,7 @@
 			           			</div>   
 
 			           			<div class="form-group-inline">
-			           				<label>TenTheLoai: </label>
+			           				<label>Tên thể loại: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class=""></i> 
@@ -84,7 +84,7 @@
 			           				<label>Giá Bìa: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-etlelope"></i> 
 										</span>
 										<input type="text" class="form-control" required="" id="GiaBia">
 			           				</div>
@@ -102,7 +102,7 @@
 			<br><br>
 			<hr> 
 			<div id="DSTL">
-				<table class="table table-striped" id="table_dsnv">
+				<table class="table table-striped" id="table_dstl">
 					<thead>
 						<tr>
 							<th>STT</th>
@@ -199,12 +199,12 @@
 			           			</div>   
 
 			           			<div class="form-group-inline">
-			           				<label>TenTheLoai: </label>
+			           				<label>Tên Thể loại: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class=""></i> 
 										</span>
-										<input type="text" class="form-control" required id="TenTheLoai_Edit" id="ttl">
+										<input type="text" class="form-control" required id="TenTheLoai_Edit">
 			           				</div>
 			           			</div>  
 
@@ -229,7 +229,7 @@
 			           			</div>    
 				 		</div>
 				 		<div class="modal-footer">  
-				        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaNV();">Lưu</button>
+				        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaTL();">Lưu</button>
 				        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Edit">Close</button> 
 				        </div>
 		 			</div> 
@@ -270,24 +270,8 @@
 			document.getElementById("TenTG").value = '';
 			document.getElementById("GiaBia").value = '';
 		}
-		function themNV() {     
-			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
-
-			// pattern kiem tra email va so dien thoai 
-			var patternSDT = /^[0-9]{10,}$/;
-			var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-			var sdt = document.getElementById("SoDienThoai").value;
-			var email = document.getElementById("Email").value; 
-
-			if (!patternSDT.test(sdt, "gi")) {
-				alert("Số điện thoại có ít nhất 10 số.");
-				valid = false;
-			}
-
-			if (!patternEmail.test(email)) {
-				alert("Email không đúng định dạng.");
-				valid = false;
-			}
+		function themTL() {     
+			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop l
 	 
 			if (valid) {
 				var xmlhttp = new XMLHttpRequest();
@@ -296,7 +280,7 @@
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
 							// xu ly ajax
-							dsnv = document.getElementById("DSTL"); 
+							dstl = document.getElementById("DSTL"); 
 							ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
 							danhsachtailieu = ketqua.danhsachtailieu;
 							pageCount = ketqua.pageCount;
@@ -330,7 +314,7 @@
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
 											'</button>' +  
-											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonDelete" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
 										'</td>';				
@@ -365,7 +349,7 @@
 				            hienthi_phantrang += '</ul>';
 
 							// Tao html trong the co id = "menu"
-							dsnv.innerHTML = hienthi; 
+							dstl.innerHTML = hienthi; 
 							// Tao html trong the co phantrang = "menu"
 							phantrang.innerHTML = hienthi_phantrang; 
 
@@ -399,23 +383,7 @@
 		}
 
 		function suaTL() {  
-			var valid = true;  
-			// pattern kiem tra email va so dien thoai 
-			var patternSDT = /^[0-9]{10,}$/;
-			var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-			var sdt = document.getElementById("SoDienThoai_Edit").value;
-			var email = document.getElementById("Email_Edit").value; 
-
-			if (!patternSDT.test(sdt, "gi")) {
-				alert("Số điện thoại có ít nhất 10 số.");
-				valid = false;
-			}
-
-			if (!patternEmail.test(email)) {
-				alert("Email không đúng định dạng.");
-				valid = false;
-			}
-	 
+			var valid = true; 
 			if (valid) {
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.open("POST", "/suaTaiLieu", false); 
@@ -512,7 +480,7 @@
 									hienthi_phantrang += '<li><a disabled>...</a></li>';
 								 
 								}  
-								hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ pageCount '">' + '&raquo;</a></li>';
+								hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>';
 				    		}    
 							else {
 								var url = "/danhSachTaiLieu" + "?noi_dung_tim_kiem=&page=" + pageCount;
@@ -559,7 +527,7 @@
 								hienthi +='</body>';
 							hienthi += '</table>'; 
 						// Tao html trong the co id = "menu"
-						dsnv.innerHTML = hienthi;  
+						dstl.innerHTML = hienthi;  
 						// Dong modal xoa tai lieu
 						document.getElementById('close_Delete').click();
 					}

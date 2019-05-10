@@ -1167,8 +1167,8 @@ app.post('/themTaiLieu', json.json(), async function(req, res) {
 		(stt.toString().length == 1) 
 			id = "" + stt;
 			
-		sql = `INSERT INTO tailieu id, TenTL, TenTheLoai, TenTG, GiaBia, 
-		VALUES (NULL, ?, ?, ?, ?,)`;
+		sql = `INSERT INTO tailieu (id, TenTL, TenTheLoai, TenTG, GiaBia) 
+		VALUES (?, ?, ?, ?, ?,)`;
 		sql = mysql.format(sql, [id, req.body.TenTL, req.body.TenTheLoai, 
 			req.body.TenTG, req.body.GiaBia, "Tài liệu"]); 
 		connect.query(sql, async function(err, results) {
@@ -1192,7 +1192,7 @@ app.post('/themTaiLieu', json.json(), async function(req, res) {
 					'pageCount': pageCount
 
 				};  
-				res.write(JSON.stringify(dsnv_pagecount)); 
+				res.write(JSON.stringify(dstl_pagecount)); 
 				res.end();
 			}
 		}) 
@@ -1205,9 +1205,10 @@ app.post('/themTaiLieu', json.json(), async function(req, res) {
 
 // Sua tai lieu 
 app.post('/suaTaiLieu', json.json(), function(req, res) {
-	var sql = `update tailieu set TenTL = ?, TenTheLoai = ?, TenTG = ?, TenNXB = ?, NamXB = ?, GiaBia = ? 
+	var sql = `update tailieu set TenTL = ?, TenTheLoai = ?, TenTG = ?, GiaBia = ? 
 	where id = ?`;
-	sql = mysql.format(sql, [req.body.TenTL, req.body.TenTheLoai, req.body.TenTG, req.body.TenNXB, req.body.NamXB,
+	
+	sql = mysql.format(sql, [req.body.TenTL, req.body.TenTheLoai, req.body.TenTG,
 		req.body.GiaBia, req.body.id]); 
 	connect.query(sql, async function(err, results) {
 		if (err) {
@@ -1226,7 +1227,7 @@ app.post('/suaTaiLieu', json.json(), function(req, res) {
 
 // Xoa tai lieu
 app.post('/xoaTaiLieu', json.json(), async function(req, res) {
-	var sql = "select TenTL from tailieu where id = ?" ;
+	var sql = "select id from tailieu where id = ?" ;
 	sql = mysql.format(sql, req.body.id);
 	result = await queryPromise(sql);
 	id = result[0].id;
