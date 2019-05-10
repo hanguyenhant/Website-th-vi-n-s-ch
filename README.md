@@ -1,4 +1,4 @@
-# Website-th-vi-n-s-ch
+# Website thư viện sách
 Công nghệ sử dụng JS: NodeJS 
 - Phân quyền người dùng: 
 + Khách 
