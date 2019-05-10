@@ -56,14 +56,14 @@
 								<td><%=danhSachMuonSach[i].MaVach%></td>
 								<td><%=danhSachMuonSach[i].NgayMuon%></td>
 								<td><%=danhSachMuonSach[i].ThoiHanMuon%></td>
-								<td><%=danhSachMuonSach[i].TienCoc%></td>
+								<td><%=danhSachMuonSach[i].TienCoc%> đ</td>
 							</tr>	 
 						<%};%>
 					</tbody>
 				</table>
 				<hr>
-				<p>Tổng số sách mượn: </p>
-				<p>Tổng số tiền cọc: </p>
+				<p>Tổng số sách mượn: <%=tong_so_sach_muon%></p>
+				<p>Tổng số tiền cọc: <%=tong_so_tien_coc%> đ</p>
 				<% var url = "/thongTinMuonSach" + "?username=" + username + "&noi_dung_tim_kiem=" + noi_dung_tim_kiem;
 				var i = 1;%> 
 				<div class="container" align="right">
