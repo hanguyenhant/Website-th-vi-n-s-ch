@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '123456',
+	password: '',
 	dateStrings: 'date',
 });
 
@@ -1085,4 +1085,175 @@ app.get('/thongTinChiTietDocGia/:id', async function(req, res) {
 	} 
 	res.end();
 })
+
+// Lay danh sach tai lieu
+app.get('/danhSachTaiLieu', async function(req, res) {
+	var pageSize = 10,
+		pageCount,
+		currentPage = 1;
+	danhSachTaiLieu = new Array(); 
+	display_danhSachTaiLieu = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+	// Hien thi danh sach tai lieu
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = "select id, TenTL, TenTheLoai,TenTG, TenNXB, NamXB, GiaBia from tailieu";
+		//console.log(sql);
+		noi_dung_tim_kiem = '';
+	}
+	else
+		//Tim kiem tai lieu
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql ="select id, TenTL, TenTheLoai, GiaBia from tailieu where id like ? or TenTL like ? or TenTheLoai like ? or GiaBia like ?" ;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachTaiLieu = await queryPromise(sql);
+		//console.log(danhSachTaiLieu);
+		pageCount = Math.ceil(danhSachTaiLieu.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachTaiLieu.length>i)
+				{
+					display_danhSachTaiLieu.push(danhSachTaiLieu[i]);
+				} 
+		res.render('views/pages/danh-sach-tai-lieu', { danhSachTaiLieu: display_danhSachTaiLieu, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+//Tìm kiếm tai lieu
+app.get('/search_tailieu', function(req, res) {
+
+	var noi_dung_tim_kiem = "%"+req.query.noi_dung_tim_kiem+"%";	
+	var sql;
+	sql = "select id, TenTL, TenTheLoai, GiaBia from tailieu where id like ? or TenTL like ? or TenTheLoai like ? or GiaBia like ?";
+	
+	sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem ]);	
+
+	connect.query(sql, function(err, results) {
+		if(err) throw err;
+		
+		res.render('views/pages/danh-sach-tai-lieu', {danhSachTaiLieu: results});
+
+	})
+}); 
+
+// Them tai lieu
+app.post('/themTaiLieu', json.json(), async function(req, res) { 
+	var sql;
+	sql = "select id from tailieu where id = (select max(id) from tailieu)";
+	try {
+		id = await queryPromise(sql);
+		id = id[0].id;
+		stt = id.substring(2); 
+		stt = parseInt(stt) + 1;
+		(stt.toString().length == 1) 
+			id = "" + stt;
+			
+		sql = `INSERT INTO tailieu id, TenTL, TenTheLoai, TenTG, GiaBia, 
+		VALUES (NULL, ?, ?, ?, ?,)`;
+		sql = mysql.format(sql, [id, req.body.TenTL, req.body.TenTheLoai, 
+			req.body.TenTG, req.body.GiaBia, "Tài liệu"]); 
+		connect.query(sql, async function(err, results) {
+			if (err) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				var pageSize = 4,
+					pageCount;
+				danhsachtailieu = [];
+				results = await queryPromise("select * from tailieu order by id desc");
+				pageCount = Math.ceil(results.length/pageSize);
+				soluong = results.length % pageSize; // so luong tai lieu thuoc trang cuoi cung
+				if (soluong == 0) soluong = pageSize;
+				for (var i = 0; i < pageSize && i < soluong; i++) {
+					danhsachtailieu[soluong - i - 1] = results[i];
+				}
+				dsnv_pagecount = {
+					'danhsachtailieu': danhsachtailieu,
+					'pageCount': pageCount
+
+				};  
+				res.write(JSON.stringify(dsnv_pagecount)); 
+				res.end();
+			}
+		}) 
+	} catch (SQLException) {
+		res.write("0");
+		res.send('ERROR');
+		res.end();
+	} 
+})
+
+// Sua tai lieu 
+app.post('/suaTaiLieu', json.json(), function(req, res) {
+	var sql = `update tailieu set TenTL = ?, TenTheLoai = ?, TenTG = ?, TenNXB = ?, NamXB = ?, GiaBia = ? 
+	where id = ?`;
+	sql = mysql.format(sql, [req.body.TenTL, req.body.TenTheLoai, req.body.TenTG, req.body.TenNXB, req.body.NamXB,
+		req.body.GiaBia, req.body.id]); 
+	connect.query(sql, async function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			sql = "select * from tailieu where id = ?";
+			sql = mysql.format(sql, req.body.id);
+			danhsachtailieu = await queryPromise(sql); 
+			res.write(JSON.stringify(danhsachtailieu)); 
+			res.end();
+		}
+	})
+})
+
+// Xoa tai lieu
+app.post('/xoaTaiLieu', json.json(), async function(req, res) {
+	var sql = "select TenTL from tailieu where id = ?" ;
+	sql = mysql.format(sql, req.body.id);
+	result = await queryPromise(sql);
+	id = result[0].id;
+	sql = `delete from  where id = ?`; 
+	sql = mysql.format(sql, req.body.id);  
+	connect.query(sql, async function(err, result) {
+	res.end();
+	})
+})
+  
+// Xem thong tin chi tiet cua tai lieu
+app.get('/thongTinChiTietTaiLieu/:id', async function(req, res) { 
+	var sql = `select TenTL, TenTheLoai, TenTG, TenNXB, NamXB, TenNgonNgu, NoiDung, SoTrang, KhoGiay, LanTB, GiaBia, SoPH, NgayPH, TongSo, MaVT, NgayCN, MaNV, Anh from tailieu
+	where id = ?`;
+	sql = mysql.format(sql, req.params.id);
+	try {
+		results = await queryPromise(sql);
+		res.write(JSON.stringify({TenTL: results[0].TenTL, TenTheLoai: results[0].TenTheLoai, 
+			TenTG: results[0].TenTG, TenNXB: results[0].TenNXB, NamXB: results[0].NamXB, 
+			TenNgonNgu: results[0].TenNgonNgu, NoiDung: results[0].NoiDung, SoTrang: results[0].SoTrang, KhoGiay: results[0].KhoGiay,
+			LanTB: results[0].LanTB, GiaBia: results[0].GiaBia, SoPH: results[0].SoPH, NgayPH: results[0].NgayPH, TongSo: results[0].TongSo,
+		MaVT: results[0].MaVT, NgayCN: results[0].NgayCN, MaNV: results[0].MaNV, Anh: results[0].Anh}));
+	} catch (SQLException) {
+		res.write('0');
+	} 
+	res.end();
+})
+
+
 
