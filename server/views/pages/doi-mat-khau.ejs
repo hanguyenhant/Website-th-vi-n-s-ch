@@ -37,17 +37,14 @@
 		       				<input type="password" class="form-control" required="" id="MatKhauMoi">
 	           			</div>
 	           			<div class="form-group-inline">
-		       				<label>Xác nhận mật khẩu: </label>
-		       				<input type="password" class="form-control" required="" id="XacNhanMatKhau">
+		       				<label>Nhập lại mật khẩu: </label>
+		       				<input type="password" class="form-control" required="" id="NhapLaiMatKhau">
 	           			</div>
 	           			<hr>
-						<button type="button" id="doiMatKhau" class="btn btn-warning" onclick="doiMatKhau();">Đổi mật khẩu</button>
-						
+						<button type="button" id="luu" class="btn btn-warning" onclick="doiMatKhau();">Đổi mật khẩu</button>
 					</div>
 				</div>
 			</form>
-			
-			
 		</div>
 	</div>
 
@@ -55,5 +52,43 @@
 	<br>
 	<!-- Footer -->
 	<% include ../partials/footer %> 
+	<script type="text/javascript"> 
+	window.onload = function(){
+		document.getElementById("TaiKhoan").value = sessionStorage.getItem("username");
+	}
+
+	function doiMatKhau() {
+		var valid = true; // Kiem tra 2 mat khau nhap co giong nhau khong. true => hop le 
+		var matkhaucu = document.getElementById("MatKhauCu").value;
+		var matkhaumoi = document.getElementById("MatKhauMoi").value;
+		var nhaplaimatkhau = document.getElementById("NhapLaiMatKhau").value;  
+		var TenTk = document.getElementById("TaiKhoan").value; 
+		if (matkhaumoi != nhaplaimatkhau) {
+			alert("Mật khẩu không khớp.");
+			document.getElementById("MatKhauMoi").focus();
+			valid = false;
+		} 
+		if (valid) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/doiMatKhau", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText == "1") {
+						alert("Thay đổi mật khẩu thành công.");
+						document.getElementById("MatKhauCu").value = "";
+						document.getElementById("MatKhauMoi").value = "";
+						document.getElementById("NhapLaiMatKhau").value = ""; 
+					}
+					else if (xmlhttp.responseText == "0") {
+						alert("Error!");
+					}
+				}
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinMatKhau = JSON.stringify({"TenTk": TenTk, "MatKhauCu": matkhaucu, "MatKhauMoi": matkhaumoi}); 
+			xmlhttp.send(thongTinMatKhau); 
+		}
+	}
+	</script>
 </body>
 </html>

@@ -18,7 +18,7 @@
 				<script>
 					var el = document.getElementById('menu');
 					var username = sessionStorage.getItem("username");   
-					var menu; 
+					var menu;
 					if (username != undefined && username.substring(0, 2) == "NV") { 
 						menu = `
 			        	<ul class="nav navbar-nav"> 
@@ -44,11 +44,12 @@
 					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Thông tin nhân viên<b class="caret"></b></a>
 						        <ul class="dropdown-menu">
 						          	<li><a href="/doiMatKhau">Đổi mật khẩu</button></li>
-						          	<li><a href="/thongTinCaNhan">Thông tin cá nhân</a></li>
+						          	<li><a href="" id="thongtincanhan1">Thông tin cá nhân</a></li>
 						        </ul>
 							</li>
 					    </ul>
 			        `;  
+
 					}
 					else if (username != undefined && username== "admin") {
 						menu = `
@@ -63,12 +64,12 @@
 						menu = `
 			        	<ul class="nav navbar-nav"> 
 							<li class="active"><a href= "/">Trang chủ</a></li> 
-					        <li><a href="/thongTinMuonSach" >Thông tin mượn sách</a>
+					        <li><a href="" id="thongtinmuonsach" >Thông tin mượn sách</a>
 					        <li class="dropdown"> 
 					         	<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Thông tin độc giả<b class="caret"></b></a>
 						        <ul class="dropdown-menu">
-						          <li><a href="/doiMatKhau">Đổi mật khẩu</a></li>
-						          <li><a href="/thongTinCaNhan">Thông tin cá nhân</a></li>
+						          	<li><a href="/doiMatKhau">Đổi mật khẩu</button></li>
+						          	<li><a href="" id="thongtincanhan2">Thông tin cá nhân</a></li>
 						        </ul>
 							</li>
 						</ul>
@@ -94,6 +95,13 @@
 					}
 					// Tao html trong the co id = "menu"
 					el.insertAdjacentHTML('afterbegin', menu);
+					if (username != undefined && username.substring(0, 2) == "NV") { 
+						document.getElementById("thongtincanhan1").href = "/thongTinCaNhan?username=" + username;
+					}
+					else if (username != undefined && username.substring(0, 2) == "DG") {
+						document.getElementById("thongtincanhan2").href = "/thongTinCaNhan?username=" + username;
+						document.getElementById("thongtinmuonsach").href = "/thongTinMuonSach?username=" + username;
+					}
 				</script>   
 		   		<!-- Xu ly dang nhap -->
 		    	<div class="nav navbar-nav navbar-right"> 

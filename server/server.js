@@ -538,7 +538,10 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 	})
 }) 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 //nha cung cap
 
 // Lay danh sach  nha cung cap
@@ -552,6 +555,7 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 		currentPage = 1;
 	danhSachNhaCungCap = new Array(); 
 	display_danhSachNhaCungCap = new Array();
+<<<<<<< HEAD
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
@@ -603,6 +607,8 @@ app.get('/quanLyMuonSach', async function(req, res) {
 	danhSachMuonSach = new Array(); 
 	display_danhSachMuonSach = new Array();
 
+=======
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
@@ -610,7 +616,10 @@ app.get('/quanLyMuonSach', async function(req, res) {
 		currentPage = +req.query.page;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 	// Hien thi danh sach  nha cung cap
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
 		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap`;
@@ -634,6 +643,7 @@ app.get('/quanLyMuonSach', async function(req, res) {
 					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
 				} 
 		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
+<<<<<<< HEAD
 
 	// Hien thi danh sach muon sach
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
@@ -659,6 +669,8 @@ app.get('/quanLyMuonSach', async function(req, res) {
 				} 
 		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
 
+=======
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 														pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage, 
@@ -670,7 +682,10 @@ app.get('/quanLyMuonSach', async function(req, res) {
 	} 
 });
 
+<<<<<<< HEAD
 */
+=======
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 // Them nha cung cap
 app.post('/themNhaCungCap', json.json(), async function(req, res) { 
 	var sql;
@@ -780,8 +795,59 @@ app.get('/thongTinChiTietNhaCungCap/:id', async function(req, res) {
 	res.end();
 })
 
+// Lay danh sach muon sach
+app.get('/quanLyMuonSach', async function(req, res) {
+	var pageSize = 5,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
 
+	// Hien thi danh sach muon sach
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem phieu muon
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachMuonSach = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
 
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachMuonSach.length>i)
+				{
+					display_danhSachMuonSach.push(danhSachMuonSach[i]);
+				} 
+		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+<<<<<<< HEAD
+
+=======
+// Lay danh sach tra sach
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 app.get('/quanLyTraSach', async function(req, res) {
 	res.render('views/pages/quan-ly-tra-sach');
 });
@@ -791,11 +857,77 @@ app.get('/doiMatKhau', async function(req, res) {
 	res.render('views/pages/doi-mat-khau');
 });
 
-// Thông tin người dùng
-app.get('/thongTinCaNhan', async function(req, res) {
-	res.render('views/pages/thong-tin-ca-nhan');
+app.post('/doiMatKhau', json.json(), function(req, res) {
+	TenTk = req.body.TenTk;
+	MatKhauCu = req.body.MatKhauCu;
+	MatKhauMoi = req.body.MatKhauMoi;
+	sql = "select * from login where TenTk = ? and MatKhau = ?";
+	sql = mysql.format(sql, [TenTk, MatKhauCu]);
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			if (results.length == 0)
+			{
+				res.write('0');
+				res.end();
+			}
+			else 
+			{
+				sql = "update login set MatKhau = ? where TenTk = ?";
+				sql = mysql.format(sql, [MatKhauMoi, TenTk]); 
+				connect.query(sql, function(err, results) {
+					if (err) {
+						res.write('0');
+						res.end();
+					}
+					else {
+						res.write('1');
+						res.end();
+					}
+				})
+			}	
+		}
+	})
 });
 
+// Thông tin người dùng
+app.get('/thongTinCaNhan', async function(req, res) {
+	var TenTk = req.query.username;
+	thongTinCaNhan = new Array();
+
+	sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, docgia where TenTk = MaThe and TenTk = ?`;
+	sql = mysql.format(sql, TenTk); 
+	try { 
+		docgia = await queryPromise(sql);
+		if (docgia.length == 0)
+		{
+			sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, nhanvien where TenTk = MaNV and TenTk = ?`;
+			sql = mysql.format(sql, TenTk); 
+			try { 
+				nhanvien = await queryPromise(sql);
+				thongTinCaNhan.push(nhanvien[0]);
+			}
+			catch(Exception) {
+				res.send('ERROR');
+			}
+		}
+		else
+		{
+			thongTinCaNhan.push(docgia[0]);
+		}
+
+	} catch(Exception) {
+		res.send('ERROR');
+	}
+
+	console.log(thongTinCaNhan);
+	res.render('views/pages/thong-tin-ca-nhan', {thongTinCaNhan: thongTinCaNhan});
+});
+
+<<<<<<< HEAD
 /// đọc gia
 
 
@@ -810,10 +942,60 @@ app.get('/danhSachDocGia', async function(req, res) {
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
+=======
+app.post('/capNhatThongTin', json.json(), function(req, res) {
+	TenTk = req.body.TenTk;
+	DiaChi = req.body.DiaChi;
+	Email = req.body.Email;
+	SoDienThoai = req.body.SoDienThoai;
+
+	if (TenTk.substring(0, 2) == "NV")
+	{
+		console.log('ha');
+		sql = "update nhanvien set DiaChi = ?, Email = ?, SoDienThoai = ? where MaNV = ?";
+	}
+	else //Độc giả
+	{
+		sql = "update docgia set DiaChi = ?, Email = ?, SoDienThoai = ? where MaThe = ?";
+		
+	}
+	sql = mysql.format(sql, [DiaChi, Email, SoDienThoai, TenTk]);
+	connect.query(sql, function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			capNhatThongTin = {
+					'DiaChi': DiaChi,
+					'Email': Email,
+					'SoDienThoai': SoDienThoai,
+			};  
+
+			res.write(JSON.stringify(capNhatThongTin));
+			res.end();
+		}
+	})
+});
+
+//Thông tin mượn sách độc giả
+app.get('/thongTinMuonSach', async function(req, res) {
+	var pageSize = 1,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	MaThe = req.query.username;
+
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 	if (typeof req.query.page != 'undefined') {
 		currentPage = +req.query.page;
 	}
 
+<<<<<<< HEAD
 	// Hien thi danh sachdoc gia
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
 		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, NgayCap, HanSD, MaNV, NgayCN from docgia`;
@@ -824,10 +1006,24 @@ app.get('/danhSachDocGia', async function(req, res) {
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
 		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, MaNV from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+=======
+	// Hien thi danh sach muon sach
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaVach, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaThe = ?`;
+		sql = mysql.format(sql, MaThe)
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem phieu muon
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaVach, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaThe = ? and (MaVach like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?)`;
+		sql = mysql.format(sql, [MaThe, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
 	}
 	try { 
+<<<<<<< HEAD
 		danhSachDocGia = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachDocGia.length/pageSize);
 
@@ -841,11 +1037,28 @@ app.get('/danhSachDocGia', async function(req, res) {
 														pageCount: pageCount, 
 														currentPage: currentPage, 
 														noi_dung_tim_kiem: noi_dung_tim_kiem });
+=======
+		danhSachMuonSach = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachMuonSach.length>i)
+				{
+					display_danhSachMuonSach.push(danhSachMuonSach[i]);
+				} 
+		res.render('views/pages/thong-tin-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem,
+														username: MaThe });
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
 		 
 	} 
 	catch(Exception) {
 		res.send('ERROR');
 	} 
+<<<<<<< HEAD
 });
 
 // Themdoc gia
@@ -969,3 +1182,6 @@ app.get('/thongTinChiTietDocGia/:id', async function(req, res) {
 	} 
 	res.end();
 })
+=======
+});
+>>>>>>> fd413f3c45a9845a4533ff287b28290b472ad963
