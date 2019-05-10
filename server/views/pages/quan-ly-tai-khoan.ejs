@@ -22,9 +22,9 @@
 						</a>					
 					</div> 
 				</div>
-				<form action="/danhSachTaiKhoan" method="get">
+				<form action="/danhSachTaiKhoan" method="get" style="float: right;">
 					<div class="form-group">
-						<div class="col-sm-3 col-sm-offset-2">
+						<div class="col-sm-8">
 							<input type="text" name="TenTk" class="form-control" placeholder="Nhập tên tài khoản..." id="TenTk">
 						</div>
 						<div class="col-sm-1">
@@ -33,91 +33,86 @@
 							</div> 
 						</div>  
 					</div>  
-				</form>
-				<div class="col-sm-2" style="float: right;">
-					<button type="button" class="btn btn-primary" style="text-align: right;">Thêm tài khoản</button>
-				</div> 
+				</form> 
 			</div>
 			<hr>
-			<table class="table table-striped">
-				<thead>
-					<th>STT</th>
-					<th>Tên tài khoản</th>
-					<th>Họ tên</th>
-					<th>Địa chỉ</th>
-					<th>Email</th>
-					<th>Số điện thoại</th>
-					<th>Action</th>
-				</thead>
-				<tbody>
-					<% for (var i = 0; i < danhSachTaiKhoan.length && i < 10; i++) { %>
-						<tr>
-							<td><%= i + 1 %></td>
-							<td><%=danhSachTaiKhoan[i].TenTk%></td>
-							<td><%=danhSachTaiKhoan[i].HoTen%></td>
-							<td><%=danhSachTaiKhoan[i].DiaChi%></td>
-							<td><%=danhSachTaiKhoan[i].Email%></td>
-							<td><%=danhSachTaiKhoan[i].SoDienThoai%></td>
-							<td>
-								<button id="buttonReset" type="button" class="btn btn-info" onclick="openModal('<%=danhSachTaiKhoan[i].TenTk%>');">Reset mật khẩu</button>
-
-							  	<!-- Modal -->
-							 	<div class="modal fade" id="resetMK" role="dialog" style="text-align: left;">
-							    	<div class="modal-dialog modal-lg">
-							    
-							      	<!-- Noi dung cua modal -->
-							      	<div class="modal-content">
-								        <div class="modal-header">
-								          <button type="button" class="close" data-dismiss="modal">&times;</button>
-								          <h4 class="modal-title">Reset mật khẩu</h4>
-								        </div>
-
-								        <!-- Thong tin cua nhan vien -->
-								        <div class="modal-body">  
-											<div class="form-group-inline">
-						           				<label for="ma-nhan-vien">Tên tài khoản: </label>
-						           				<div class="input-group">
-						           					<span class="input-group-addon">
-														<i class="glyphicon glyphicon-user"></i> 
-													</span>
-													<input type="text" class="form-control" required="" id="TenTk1" disabled="" value=" ">
-						           				</div>
-						           			</div>    
-
-						           			<div class="form-group-inline">
-						           				<label for="ma-nhan-vien">Mật khẩu: </label>
-						           				<div class="input-group">
-						           					<span class="input-group-addon">
-														<i class="glyphicon glyphicon-lock"></i> 
-													</span>
-													<input type="password" class="form-control" required id="MatKhau" id="sdt">
-						           				</div>
-						           			</div>  
-
-						           			<div class="form-group-inline">
-						           				<label for="ma-nhan-vien">Nhập lại mật khẩu: </label>
-						           				<div class="input-group">
-						           					<span class="input-group-addon">
-														<i class="glyphicon glyphicon-lock"></i> 
-													</span>
-													<input type="password" class="form-control" required="" id="NhapLaiMatKhau">
-						           				</div>
-						           			</div>    
-							       		</div>
-							      		<div class="modal-footer">  
-								        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="ResetMK();">Lưu</button>
-								        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="huy">Hủy</button> 
-								        </div> 
-							 		</div>
-							 	</div>
-							 	<!-- Ket thuc modal -->
-							</td>
-						</tr> 
-					<% } %> 
-				</tbody>
-			</table>
+			<div id="DSTK">
+				<table class="table table-striped" id="table_dstk">
+					<thead>
+						<th>STT</th>
+						<th>Tên tài khoản</th>
+						<th>Họ tên</th>
+						<th>Địa chỉ</th>
+						<th>Email</th>
+						<th>Số điện thoại</th>
+						<th>Hành động</th>
+					</thead>
+					<tbody>
+						<% for (var i = 0; i < danhSachTaiKhoan.length && i < 10; i++) { %>
+							<tr>
+								<td><%= i + 1 %></td>
+								<td><%=danhSachTaiKhoan[i].TenTk%></td>
+								<td><%=danhSachTaiKhoan[i].HoTen%></td>
+								<td><%=danhSachTaiKhoan[i].DiaChi%></td>
+								<td><%=danhSachTaiKhoan[i].Email%></td>
+								<td><%=danhSachTaiKhoan[i].SoDienThoai%></td>
+								<td>
+									<button id="buttonReset" type="button" class="btn btn-info" onclick="openModal_ResetMK('<%=danhSachTaiKhoan[i].TenTk%>');">Reset mật khẩu</button>
+								  	<!-- Modal -->
+								 	<div class="modal fade" id="resetMK" role="dialog" style="text-align: left;">
+								    	<div class="modal-dialog modal-lg">
+								    
+								      	<!-- Noi dung cua modal -->
+								      	<div class="modal-content">
+									        <div class="modal-header">
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									          <h4 class="modal-title">Reset mật khẩu</h4>
+									        </div>
+									        <!-- Thong tin cua nhan vien -->
+									        <div class="modal-body">  
+												<div class="form-group-inline">
+							           				<label for="ma-nhan-vien">Tên tài khoản: </label>
+							           				<div class="input-group">
+							           					<span class="input-group-addon">
+															<i class="glyphicon glyphicon-user"></i> 
+														</span>
+														<input type="text" class="form-control" required="" id="TenTk1" disabled="" value=" ">
+							           				</div>
+							           			</div>    
+							           			<div class="form-group-inline">
+							           				<label for="ma-nhan-vien">Mật khẩu: </label>
+							           				<div class="input-group">
+							           					<span class="input-group-addon">
+															<i class="glyphicon glyphicon-lock"></i> 
+														</span>
+														<input type="password" class="form-control" required id="MatKhau">
+							           				</div>
+							           			</div>  
+							           			<div class="form-group-inline">
+							           				<label for="ma-nhan-vien">Nhập lại mật khẩu: </label>
+							           				<div class="input-group">
+							           					<span class="input-group-addon">
+															<i class="glyphicon glyphicon-lock"></i> 
+														</span>
+														<input type="password" class="form-control" required="" id="NhapLaiMatKhau">
+							           				</div>
+							           			</div>    
+								       		</div>
+								      		<div class="modal-footer">  
+									        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="ResetMK();">Lưu</button>
+									        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="huy">Hủy</button> 
+									        </div> 
+								 		</div>
+								 	</div>
+								 	<!-- Ket thuc modal -->
+								</td>
+							</tr> 
+						<% } %> 
+					</tbody>
+				</table>
+			</div>
 			<% var url = "/danhSachTaiKhoan" + "?TenTk=" + TenTk;%> 
-				<div class="container" align="right">
+				<div class="container" align="right" id="phantrang">
 					<hr class="mt-2 mb-5">	
 					<%if (pageCount > 1) { %>
 				        <ul class="pagination">
@@ -152,7 +147,7 @@
 	</div>
 	<script type="text/javascript" language="javascript">  
 		document.getElementById("TenTk").value = '<%=TenTk%>';  
-		function openModal(tentk1) {
+		function openModal_ResetMK(tentk1) {
 			$('#resetMK').modal();
 			document.getElementById('TenTk1').value = tentk1;
 		}
@@ -161,9 +156,8 @@
 			var matkhau = document.getElementById("MatKhau").value;
 			var nhaplaimatkhau = document.getElementById("NhapLaiMatKhau").value;  
 			var TenTk = document.getElementById("TenTk1").value; 
-
 			if (matkhau != nhaplaimatkhau) {
-				alert("Mật khẩu bị sai.");
+				alert("Mật khẩu không khớp.");
 				document.getElementById("MatKhau").focus();
 				valid = false;
 			} 
@@ -182,17 +176,16 @@
 							alert("Error!");
 						}
 					}
-
 				}
 				xmlhttp.setRequestHeader('Content-type', 'application/json');
 				var thongTinMatKhau = JSON.stringify({"TenTk": document.getElementById("TenTk1").value, "MatKhau": matkhau}); 
 				xmlhttp.send(thongTinMatKhau); 
 			}
-		}
+		}  
 	</script>
 	<br>
 	<br>
 	<!-- Footer -->
 	<% include ../partials/footer %> 
 </body>
-</html>
+</html> 

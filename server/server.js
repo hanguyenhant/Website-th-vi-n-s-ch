@@ -20,7 +20,8 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '123456'
+	password: '123456',
+	dateStrings: 'date',
 });
 
 connect.connect(function(err) {
@@ -254,6 +255,14 @@ app.post('/themNhanVien', json.json(), async function(req, res) {
 			MaNV = "NV0" + stt;
 		}
 		else MaNV = "NV" + stt; 
+		sql = 'insert into login (TenTk, MatKhau) values(?, ?)';
+		sql = mysql.format(sql, [MaNV, '12345678']);
+		connect.query(sql, function(err) {
+			if (err) {
+				res.write("0");
+				res.end();
+			}
+		})
 		sql = `insert into nhanvien(MaNV, HoTen, DiaChi, Email, SoDienThoai, ChucVu) 
 		values (?, ?, ?, ?, ?, ?)`;
 		sql = mysql.format(sql, [MaNV, req.body.HoTen, req.body.DiaChi, 
@@ -269,14 +278,16 @@ app.post('/themNhanVien', json.json(), async function(req, res) {
 				danhsachnhanvien = [];
 				results = await queryPromise("select * from nhanvien order by id desc");
 				pageCount = Math.ceil(results.length/pageSize);
-				for (var i = 0; i < pageSize; i++) {
-					danhsachnhanvien[i] = results[pageSize - i - 1];
+				soluong = results.length % pageSize; // so luong nhan vien thuoc trang cuoi cung
+				if (soluong == 0) soluong = pageSize;
+				for (var i = 0; i < pageSize && i < soluong; i++) {
+					danhsachnhanvien[soluong - i - 1] = results[i];
 				}
 				dsnv_pagecount = {
 					'danhsachnhanvien': danhsachnhanvien,
 					'pageCount': pageCount
 
-				}; 
+				};  
 				res.write(JSON.stringify(dsnv_pagecount)); 
 				res.end(); 
 			}
@@ -309,8 +320,12 @@ app.post('/suaNhanVien', json.json(), function(req, res) {
 })
 
 // Xoa nhan vien 
-app.post('/xoaNhanVien', json.json(), function(req, res) {
-	var sql = `delete from nhanvien where id = ?`; 
+app.post('/xoaNhanVien', json.json(), async function(req, res) {
+	var sql = "select MaNV from nhanvien where id = ?" ;
+	sql = mysql.format(sql, req.body.id);
+	result = await queryPromise(sql);
+	MaNV = result[0].MaNV;
+	sql = `delete from nhanvien where id = ?`; 
 	sql = mysql.format(sql, req.body.id);  
 	connect.query(sql, async function(err, result) {
 		if (err) {
@@ -318,6 +333,10 @@ app.post('/xoaNhanVien', json.json(), function(req, res) {
 			res.end();
 		}
 		else {
+			// Xoa tai khoan trong bang login 
+			sql = "delete from login where TenTk = ?";
+			sql = mysql.format(sql, MaNV);
+			result_delete = await queryPromise(sql);
 			sql = "select * from nhanvien"; 
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
@@ -361,6 +380,7 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 	var pageSize = 4,
 		pageCount,
 		currentPage = 1;
+	danhsachchuacotaikhoan = new Array();
 	danhSachTaiKhoan = new Array(); 
 	display_danhSachTaiKhoan = new Array();
 	var k = 0;
@@ -390,7 +410,7 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 					if (danhSachTaiKhoan.length>i)
 						{
 							display_danhSachTaiKhoan.push(danhSachTaiKhoan[i]);
-						} 
+						}  
 				res.render('views/pages/quan-ly-tai-khoan', { danhSachTaiKhoan: display_danhSachTaiKhoan, 
 																pageSize: pageSize, 
 																pageCount: pageCount, 
@@ -467,7 +487,7 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 														currentPage: currentPage,
 														TenTk: req.query.TenTk }); 
  	} 
-})
+}) 
 // Xem thong tin cac tai lieu co TenTheLoai = tenTheLoai
 app.get('/theloai/:tenTheLoai', function(req, res) {
 	var pageSize = 8,
@@ -518,6 +538,7 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 	})
 }) 
 
+<<<<<<< HEAD
 
 //nha cung cap
 
@@ -528,6 +549,15 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 		currentPage = 1;
 	danhSachNhaCungCap = new Array(); 
 	display_danhSachNhaCungCap = new Array();
+=======
+// Lay danh sach muon sach
+app.get('/quanLyMuonSach', async function(req, res) {
+	var pageSize = 5,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+>>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
@@ -535,6 +565,7 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 		currentPage = +req.query.page;
 	}
 
+<<<<<<< HEAD
 	// Hien thi danh sach  nha cung cap
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
 		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap`;
@@ -558,6 +589,31 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
 				} 
 		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
+=======
+	// Hien thi danh sach muon sach
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem phieu muon
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachMuonSach = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachMuonSach.length>i)
+				{
+					display_danhSachMuonSach.push(danhSachMuonSach[i]);
+				} 
+		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
+>>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 														pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage, 
@@ -569,6 +625,7 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 	} 
 });
 
+<<<<<<< HEAD
 // Them nha cung cap
 app.post('/themNhaCungCap', json.json(), async function(req, res) { 
 	var sql;
@@ -679,4 +736,20 @@ app.get('/thongTinChiTietNhaCungCap/:id', async function(req, res) {
 })
 
 
+=======
+// Lay danh sach tra sach
+app.get('/quanLyTraSach', async function(req, res) {
+	res.render('views/pages/quan-ly-tra-sach');
+});
+
+// Đổi mật khẩu
+app.get('/doiMatKhau', async function(req, res) {
+	res.render('views/pages/doi-mat-khau');
+});
+
+// Thông tin người dùng
+app.get('/thongTinCaNhan', async function(req, res) {
+	res.render('views/pages/thong-tin-ca-nhan');
+});
+>>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 
