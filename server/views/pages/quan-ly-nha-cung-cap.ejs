@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quản lí nhà cung cấp</title>
+	<% include ../partials/head %>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body style="margin-right: 0 !important; overflow-y: auto;">	
+	<%include ../partials/header%>
+	<div style="min-height: 85%"> 
+		<% include ../partials/anhchay %>
+		<div class="container" style="margin-top: 20px; ">  
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-3">
+						<a href="/danhSachNhaCungCap">
+							<h4 style="color: red;"><b>Danh sách nhà cung cấp</b></h4>
+						</a>
+					</div> 
+				</div> 
+				<form action="/danhSachNhaCungCap" method="get">
+					<div class="form-group">
+						<div class="col-sm-3 col-sm-offset-2">
+							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
+						</div>
+						<div class="col-sm-1">
+							<div class="btn-group"> 
+								<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Tìm kiếm</button>
+							</div> 
+						</div>  
+					</div>					
+				</form>
+				<div class="col-sm-2" style="float: right;">
+					<button type="button" class="btn btn-primary" style="text-align: right;" onclick="openModal();">Thêm nhà cung cấp</button>
+					<!-- Modal -->
+				 	<div class="modal fade" id="addModal" role="dialog">
+				    	<div class="modal-dialog modal-lg">
+				    
+				      	<!-- Noi dung cua modal -->
+				      	<div class="modal-content">
+					        <div class="modal-header">
+					          <button type="button" class="close" data-dismiss="modal" >&times;</button>
+					          <h4 class="modal-title">Thông tin nhà cung cấp</h4>
+					        </div>
+
+					        <!-- Thong tin cua nha cung cap -->
+					        <div class="modal-body">  
+								<div class="form-group-inline">
+			           				<label>Tên nhà cung cấp: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-user"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="HoTen">
+			           				</div>
+			           			</div>   
+
+			           			<div class="form-group-inline">
+			           				<label>Số điện thoại: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-phone"></i> 
+										</span>
+										<input type="text" class="form-control" required id="SoDienThoai" id="sdt">
+			           				</div>
+			           			</div>  
+
+			           			<div class="form-group-inline">
+			           				<label>Địa chỉ: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-home"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="DiaChi">
+			           				</div>
+			           			</div>   
+
+			           			<div class="form-group-inline">
+			           				<label>Email: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-envelope"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="Email">
+			           				</div>
+			           			</div>   
+				       		</div>
+				      		<div class="modal-footer">  
+					        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="themNCC();">Tạo mới</button>
+					        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="huy">Hủy</button> 
+					        </div> 
+				 		</div>
+				 	</div> 
+				</div>
+				<!-- Ket thuc modal -->
+			</div>
+			<br><br>
+			<hr> 
+			<div id="DSNCC">
+				<table class="table table-striped" id="table_dsncc">
+					<thead>
+						<tr>
+							<th>STT</th>
+							<th>Họ tên</th>
+							<th>Địa chỉ</th>
+							<th>Email</th>
+							<th>Số điện thoại</th>
+							<th>Hành động</th>
+						</tr>
+					</thead>
+					<tbody> 
+						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachNhaCungCap.length && j<(danhSachNhaCungCap.length + 4 * currentPage); i++, j++){%>
+							<tr>
+								<td id="<%=danhSachNhaCungCap[i].id%>"><%=j + 1%></td>
+								
+								<td id="HoTen<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].HoTen%></td>
+								<td id="DiaChi<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].DiaChi%></td>
+								<td id="Email<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].Email%></td>
+								<td id="SoDienThoai<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].SoDienThoai%></td>
+								<td>							
+									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhaCungCap(<%=danhSachNhaCungCap[i].id%>);" data-toggle="modal" data-target="#editModal">
+									    <span class="glyphicon glyphicon-wrench"></span>
+									</button>  
+									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal" onclick="layTTNhaCungCap(<%=danhSachNhaCungCap[i].id%>);">
+									    <span class="glyphicon glyphicon-trash"></span>
+									</button> 	 
+								</td>						
+							</tr>	 
+						<%};%>
+					</tbody>
+				</table> 
+			</div>
+			<% var url = "/danhSachNhaCungCap" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;%> 
+			<div class="container" align="right" id="phantrang">
+				<hr class="mt-2 mb-5">	
+				<%if (pageCount > 1) { %>
+			        <ul class="pagination">
+			            <% if (currentPage > 1) { %>
+			                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+			            <% }
+			            var i = 1;
+			            if (currentPage > 5) {
+			                i = currentPage - 4;
+			            } %>
+			            <% if (i !== 1) { %>
+			                <li class="disabled"><a href="#">...</a></li>
+			            <% } %>
+			            <% for (i; i<=pageCount; i++) { %>
+			                <% if (currentPage == i) { %>
+			                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+			                <% } else { %> 
+			                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+			                <% } %>
+			                <% if (i == (currentPage + 4)) { %>
+			                    <li class="disabled"><a href="#">...</a></li>
+			                <% break; } %>
+			            <% } %>
+			            <% if (currentPage != pageCount) { %>
+			                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+			            <% } %>
+			        </ul>
+			    <% } %>	
+			</div>
+			<!-- Modal Sua -->
+		 	<div class="modal fade" id="editModal" role="dialog">
+		    	<div class="modal-dialog modal-lg">
+		    
+			      	<!-- Noi dung cua modal -->
+			      	<div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Thông tin nhà cung cấp</h4>
+				        </div>
+
+				        <!-- Thong tin cua nha cung cap -->
+				        <div class="modal-body">  
+			        		
+							<div class="form-group-inline">
+		           				<label for="ma-nhan-vien">Tên nhà cung cấp: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-user"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="HoTen_Edit">
+		           				</div>
+		           			</div>   
+
+		           			<div class="form-group-inline">
+		           				<label for="ma-nhan-vien">Số điện thoại: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-phone"></i> 
+									</span>
+									<input type="text" class="form-control" required id="SoDienThoai_Edit" id="sdt">
+		           				</div>
+		           			</div>  
+
+		           			<div class="form-group-inline">
+		           				<label for="ma-nhan-vien">Địa chỉ: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-home"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="DiaChi_Edit">
+		           				</div>
+		           			</div>   
+
+		           			<div class="form-group-inline">
+		           				<label for="ma-nhan-vien">Email: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-envelope"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="Email_Edit">
+		           				</div>
+		           			</div>   
+				 		</div>
+				 		<div class="modal-footer">  
+				        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaNCC();">Lưu</button>
+				        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Edit">Close</button> 
+				        </div>
+		 			</div> 
+				</div>
+			</div>	 
+			<!-- Ket thuc Modal Sua -->
+			<!-- Modal Xoa -->
+		 	<div class="modal fade" id="deleteModal" role="dialog">
+		    	<div class="modal-dialog modal-lg">
+		    
+			      	<!-- Noi dung cua modal -->
+			      	<div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Xóa nhà cung cấp</h4>
+				        </div>
+
+				        <!-- Thong tin cua nha cung cap -->
+				        <div class="modal-body">  
+			        	   <p>Bạn có chắc chắn muốn xóa không?</p>
+			 			</div>
+				 		<div class="modal-footer">  
+				        	<button type="button" id="xoa" class="btn btn-primary" style="width: 90px;" onclick="xoaNCC();">OK</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Delete">Cancel</button> 
+				        </div>
+		 			</div> 
+				</div>
+			</div>	 
+			<!-- Ket thuc Modal Xoa --> 
+		</div> 
+	</div>
+	 
+	<script type="text/javascript" language="javascript">  
+		function openModal() {
+			$('#addModal').modal(); 
+			document.getElementById("HoTen").value = '';
+			document.getElementById("DiaChi").value = '';
+			document.getElementById("Email").value = '';
+			document.getElementById("SoDienThoai").value = '';
+		}
+		function themNCC() {     
+			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
+
+			// pattern kiem tra email va so dien thoai 
+			var patternSDT = /^[0-9]{10,}$/;
+			var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+			var sdt = document.getElementById("SoDienThoai").value;
+			var email = document.getElementById("Email").value; 
+
+			if (!patternSDT.test(sdt, "gi")) {
+				alert("Số điện thoại có ít nhất 10 số.");
+				valid = false;
+			}
+
+			if (!patternEmail.test(email)) {
+				alert("Email không đúng định dạng.");
+				valid = false;
+			}
+	 
+			if (valid) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/themNhaCungCap", false); 
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+						if (xmlhttp.responseText != "0") { 
+							// xu ly ajax
+							dsncc = document.getElementById("DSNCC"); 
+							ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
+							danhsachnhacungcap = ketqua.danhsachnhacungcap;
+							pageCount = ketqua.pageCount;
+
+							// Xu ly bang hien thi danh sach nha cung cap
+							hienthi = '<table class="table table-striped" id="table_dsncc">';
+								hienthi += '<thead>';
+									hienthi += '<tr>';
+										hienthi += '<th>STT</th>'; 
+										
+										hienthi += '<th>Họ tên</th>'; 
+										hienthi += '<th>Địa chỉ</th>'; 
+										hienthi += '<th>Email</th>';
+										hienthi += '<th>Số điện thoại</th>'; 
+										hienthi += '<th>Hành động</th>'; 
+									hienthi += '</tr>';
+								hienthi += '</thead>';
+								hienthi += '<body>';
+								for (var i = 0, j=(pageCount - 1)*4; i < danhsachnhacungcap.length && j<(danhsachnhacungcap.length + 4 * pageCount); i++, j++)
+								{
+									hienthi += '<tr>';
+										hienthi += '<td id = ' + danhsachnhacungcap[i].id + '>' + (j + 1) + '</td>';
+										
+										hienthi += '<td id = HoTen' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].HoTen + '</td>';
+										hienthi += '<td id = DiaChi' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].DiaChi + '</td>';
+										hienthi += '<td id = Email' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].Email + '</td>';
+										hienthi += '<td id = SoDienThoai' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].SoDienThoai + '</td>';
+ 
+										hienthi += 
+										'<td>' +							
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhaCungCap(' + danhsachnhacungcap[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
+									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+											'</button>' +  
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhaCungCap(' + danhsachnhacungcap[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+									    		'<span class="glyphicon glyphicon-trash"></span>' + 
+											'</button>' + 											
+										'</td>';				
+									hienthi += '</tr>';
+								}
+								hienthi +='</body>';
+							hienthi += '</table>'; 
+							var url = "/danhSachNhaCungCap" + "?noi_dung_tim_kiem=&page=" + pageCount; 
+					  		
+					  		// Xu ly phan trang
+				    		phantrang = document.getElementById('phantrang');
+				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
+				    		hienthi_phantrang += '<ul class="pagination">';
+				    		hienthi_phantrang += '<li><a href=" ' + "/danhSachNhaCungCap?noi_dung_tim_kiem=" + "&page=1"+ '">' + '&laquo;</a></li>';
+				    		var amount = 0;
+				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';
+				    		 
+				    		for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
+				    			amount += 1;
+				    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
+				    		}   
+				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+				            hienthi_phantrang += '</ul>';
+
+							// Tao html trong the co id = "menu"
+							dsncc.innerHTML = hienthi; 
+							// Tao html trong the co phantrang = "menu"
+							phantrang.innerHTML = hienthi_phantrang; 
+
+							// Thay doi gia tri url 
+							history.pushState(null, '', url); 
+
+							document.getElementById("huy").click(); // dong modal popup
+						}
+						else {
+							alert("Error!");
+						}
+					}
+
+				}
+				xmlhttp.setRequestHeader('Content-type', 'application/json');
+				var thongTinNCC = JSON.stringify({"HoTen": document.getElementById("HoTen").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
+
+				xmlhttp.send(thongTinNCC); 
+			}
+		}
+
+		var id, sothutu;
+		function layTTNhaCungCap(id) {
+			this.id = id;  
+			
+			document.getElementById("HoTen_Edit").value = document.getElementById("HoTen" + id).innerHTML;
+			document.getElementById("SoDienThoai_Edit").value = document.getElementById("SoDienThoai" + id).innerHTML;
+			document.getElementById("DiaChi_Edit").value = document.getElementById("DiaChi" + id).innerHTML;
+			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;     
+			this.sothutu = document.getElementById(id).innerHTML; 
+		}
+
+		function suaNCC() {  
+			var valid = true;  
+			// pattern kiem tra email va so dien thoai 
+			var patternSDT = /^[0-9]{10,}$/;
+			var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+			var sdt = document.getElementById("SoDienThoai_Edit").value;
+			var email = document.getElementById("Email_Edit").value; 
+
+			if (!patternSDT.test(sdt, "gi")) {
+				alert("Số điện thoại có ít nhất 10 số.");
+				valid = false;
+			}
+
+			if (!patternEmail.test(email)) {
+				alert("Email không đúng định dạng.");
+				valid = false;
+			}
+	 
+			if (valid) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/suaNhaCungCap", false); 
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+						if (xmlhttp.responseText != "0") { 
+							// xu ly ajax => thay doi thong tin nha cung cap tren dong tuong ung trong bang hien thi
+							thongtinnhacungcapdasua = JSON.parse(xmlhttp.responseText); 
+							thongtinnhacungcapdasua = thongtinnhacungcapdasua[0];
+							id = thongtinnhacungcapdasua.id; 
+							document.getElementById(id).innerHTML = thongtinnhacungcapdasua.id;
+							
+							document.getElementById("HoTen" + id).innerHTML = thongtinnhacungcapdasua.HoTen;
+							document.getElementById("SoDienThoai" + id).innerHTML = thongtinnhacungcapdasua.SoDienThoai;
+							document.getElementById("DiaChi" + id).innerHTML = thongtinnhacungcapdasua.DiaChi;
+							document.getElementById("Email" + id).innerHTML = thongtinnhacungcapdasua.Email; 
+							document.getElementById("close_Edit").click(); // dong modal popup
+						}
+						else {
+							alert("Error!");
+						}
+					}
+
+				} 
+				xmlhttp.setRequestHeader('Content-type', 'application/json');
+				var thongTinNCC = JSON.stringify({"id": this.id, "HoTen": document.getElementById("HoTen_Edit").value, "SoDienThoai": document.getElementById("SoDienThoai_Edit").value, "DiaChi": document.getElementById("DiaChi_Edit").value, "Email": document.getElementById("Email_Edit").value});
+
+				xmlhttp.send(thongTinNCC); 
+			}
+		} 
+		function xoaNCC() {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/xoaNhaCungCap", false); 
+			// Lay trang hien tai (tren url)
+			var currentPage = location.search.split('page=')[1];
+			console.log("currentPage: " + currentPage);
+
+			// Lay tong so hang cua bang 
+			var totalRowCount = $("#table_dsncc tr").length - 1; 
+			if (totalRowCount == 1) currentPage = 1;
+
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") {   
+						// xu ly ajax
+						dsncc = document.getElementById("DSNCC"); 
+						ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
+						danhsachnhacungcap = ketqua.danhsachnhacungcap;  // Danh sach nha cung cap hien thi tren bang
+						pageCount = ketqua.pageCount; // Tong so trang hien thi
+						if (currentPage == 1) {  // Tro ve trang dau tien => Hien thi lai phan trang tu 1 den 5
+							var url = "/danhSachNhaCungCap" + "?noi_dung_tim_kiem=&page=" + 1;
+
+							// Thay doi gia tri url 
+							history.pushState(null, '', url);  
+
+							// Xu ly phan trang
+							phantrang = document.getElementById('phantrang');
+				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
+				    		hienthi_phantrang += '<ul class="pagination">';
+				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ 1 + '">' + 1 + '</a></li>'; 
+				    		for(var i = 2; i <= 5 && i <= pageCount; i++) { 
+				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhaCungCap?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
+				    		}   
+				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';;
+				    		hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
+				            hienthi_phantrang += '</ul>';
+
+				            phantrang.innerHTML = hienthi_phantrang;
+						}
+
+						// Xu ly bang hien thi danh sach nha cung cap
+						hienthi = '<table class="table table-striped" id="table_dsncc">';
+							hienthi += '<thead>';
+								hienthi += '<tr>';
+									hienthi += '<th>STT</th>'; 
+								
+									hienthi += '<th>Họ tên</th>'; 
+									hienthi += '<th>Địa chỉ</th>'; 
+									hienthi += '<th>Email</th>';
+									hienthi += '<th>Số điện thoại</th>'; 
+									hienthi += '<th>Hành động</th>'; 
+								hienthi += '</tr>';
+							hienthi += '</thead>';
+							hienthi += '<body>';
+							for (var i = 0, j=(currentPage - 1)*4; i < danhsachnhacungcap.length && j<(danhsachnhacungcap.length + 4 * currentPage); i++, j++)
+							{ 
+								hienthi += '<tr>';
+									hienthi += '<td id = ' + danhsachnhacungcap[i].id + '>' + (j + 1) + '</td>';
+									hienthi += '<td id = HoTen' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].HoTen + '</td>';
+									hienthi += '<td id = DiaChi' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].DiaChi + '</td>';
+									hienthi += '<td id = Email' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].Email + '</td>';
+									hienthi += '<td id = SoDienThoai' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].SoDienThoai + '</td>';
+									hienthi += 
+									'<td>' +							
+										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhaCungCap(' + danhsachnhacungcap[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
+									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+											'</button>' +  
+										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhaCungCap(' + danhsachnhacungcap[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
+								    		'<span class="glyphicon glyphicon-trash"></span>' + 
+										'</button>' + 	 
+									'</td>';				
+								hienthi += '</tr>';
+							}
+							hienthi +='</body>';
+						hienthi += '</table>';  
+
+						// Tao html trong the co id = "menu"
+						dsncc.innerHTML = hienthi;  
+						// Dong modal xoa nha cung cap
+						document.getElementById('close_Delete').click();
+					}
+					else {
+						alert("Error!");
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinNCC = JSON.stringify({"id": this.id, "currentPage": currentPage}); 
+			xmlhttp.send(thongTinNCC);  
+		}
+	</script>
+</body>
+</html>

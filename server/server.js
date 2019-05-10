@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '123456'
+	password: ''
 });
 
 connect.connect(function(err) {
@@ -517,3 +517,166 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 		}
 	})
 }) 
+
+
+//nha cung cap
+
+// Lay danh sach  nha cung cap
+app.get('/danhSachNhaCungCap', async function(req, res) {
+	var pageSize = 4,
+		pageCount,
+		currentPage = 1;
+	danhSachNhaCungCap = new Array(); 
+	display_danhSachNhaCungCap = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+	// Hien thi danh sach  nha cung cap
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem  nha cung cap
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap where  HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachNhaCungCap = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachNhaCungCap.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachNhaCungCap.length>i)
+				{
+					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
+				} 
+		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+// Them nha cung cap
+app.post('/themNhaCungCap', json.json(), async function(req, res) { 
+	var sql;
+	
+	try {
+		
+		sql = `insert into nhacungcap( HoTen, DiaChi, Email, SoDienThoai) 
+		values ( ?, ?, ?, ?)`;
+		sql = mysql.format(sql, [ req.body.HoTen, req.body.DiaChi, 
+			req.body.Email, req.body.SoDienThoai]); 
+		connect.query(sql, async function(err, results) {
+			if (err) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				var pageSize = 4,
+					pageCount;
+				danhsachnhacungcap = [];
+				results = await queryPromise("select * from nhacungcap order by id desc");
+				pageCount = Math.ceil(results.length/pageSize);
+				for (var i = 0; i < pageSize; i++) {
+					danhsachnhacungcap[i] = results[pageSize - i - 1];
+				}
+				dsncc_pagecount = {
+					'danhsachnhacungcap': danhsachnhacungcap,
+					'pageCount': pageCount
+
+				}; 
+				res.write(JSON.stringify(dsncc_pagecount)); 
+				res.end(); 
+			}
+		}) 
+	} catch (SQLException) {
+		res.write("0");
+		res.end();
+	} 
+	//console.log(sql);
+})
+ 
+// Sua  nha cung cap 
+app.post('/suaNhaCungCap', json.json(), function(req, res) {
+	var sql = `update nhacungcap set HoTen = ?, SoDienThoai = ?, DiaChi = ?, Email = ? 
+	where id = ?`;
+	sql = mysql.format(sql, [req.body.HoTen, req.body.SoDienThoai, req.body.DiaChi,
+		req.body.Email, req.body.id]); 
+	connect.query(sql, async function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			sql = "select * from nhacungcap where id = ?";
+			sql = mysql.format(sql, req.body.id);
+			danhsachnhacungcap = await queryPromise(sql); 
+			res.write(JSON.stringify(danhsachnhacungcap)); 
+			res.end();
+		}
+	})
+	//console.log(sql);
+})
+
+// Xoa  nha cung cap 
+app.post('/xoaNhaCungCap', json.json(), function(req, res) {
+	var sql = `delete from nhacungcap where id = ?`; 
+	sql = mysql.format(sql, req.body.id);  
+	connect.query(sql, async function(err, result) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			sql = "select * from nhacungcap"; 
+			sql = mysql.format(sql, req.body.id);
+			results = await queryPromise(sql);
+			pageCount = Math.ceil(results.length / 4)
+			page = req.body.currentPage;  
+			danhsachnhacungcap = [];
+			k = 0;
+			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+				danhsachnhacungcap[k] = results[i - 1]; 
+				k++;
+			} 
+			dsncc_pagecount = {
+					'danhsachnhacungcap': danhsachnhacungcap,
+					'pageCount': pageCount
+
+			};  
+			res.write(JSON.stringify(dsncc_pagecount)); 
+			res.end();
+		}
+	})
+})
+  
+// Xem thong tin chi tiet cua  nha cung cap
+app.get('/thongTinChiTietNhaCungCap/:id', async function(req, res) { 
+	var sql = `select  SoDienThoai, DiaChi, Email, HoTen from nhacungcap 
+	where id = ?`;
+	sql = mysql.format(sql, req.params.id);
+	try {
+		results = await queryPromise(sql);
+		res.write(JSON.stringify({ SoDienThoai: results[0].SoDienThoai, 
+			DiaChi: results[0].DiaChi, Email: results[0].Email, HoTen: results[0].HoTen}));
+	} catch (SQLException) {
+		res.write('0');
+	} 
+	res.end();
+})
+
+
+
