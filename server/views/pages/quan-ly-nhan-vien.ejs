@@ -345,13 +345,13 @@
 				    		phantrang = document.getElementById('phantrang');
 				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
 				    		hienthi_phantrang += '<ul class="pagination">';
-				    		hienthi_phantrang += '<li><a href=" ' + url + "&page=1"+ '">' + '&laquo;</a></li>';
+				    		hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page=1"+ '">' + '&laquo;</a></li>';
 				    		var amount = 0;
-				    		hienthi_phantrang += '<li><a disabled>...</a></li>';
+				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';
 				    		 
 				    		for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
 				    			amount += 1;
-				    			hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
+				    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
 				    		}   
 				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
 				            hienthi_phantrang += '</ul>';
@@ -443,6 +443,7 @@
 			xmlhttp.open("POST", "/xoaNhanVien", false); 
 			// Lay trang hien tai (tren url)
 			var currentPage = location.search.split('page=')[1];
+			console.log("currentPage: " + currentPage);
 
 			// Lay tong so hang cua bang 
 			var totalRowCount = $("#table_dsnv tr").length - 1; 
@@ -457,7 +458,7 @@
 						danhsachnhanvien = ketqua.danhsachnhanvien;  // Danh sach nhan vien hien thi tren bang
 						pageCount = ketqua.pageCount; // Tong so trang hien thi
 						if (currentPage == 1) {  // Tro ve trang dau tien => Hien thi lai phan trang tu 1 den 5
-							var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=1";
+							var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=" + 1;
 
 							// Thay doi gia tri url 
 							history.pushState(null, '', url);  
@@ -467,10 +468,10 @@
 				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
 				    		hienthi_phantrang += '<ul class="pagination">';
 				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ 1 + '">' + 1 + '</a></li>'; 
-				    		for(var i = 2; i <= 5; i++) { 
-				    			hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
+				    		for(var i = 2; i <= 5 && i <= pageCount; i++) { 
+				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
 				    		}   
-				    		hienthi_phantrang += '<li><a disabled>...</a></li>';
+				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';;
 				    		hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
