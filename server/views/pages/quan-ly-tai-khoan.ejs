@@ -50,7 +50,7 @@
 					<tbody>
 						<% for (var i = 0; i < danhSachTaiKhoan.length && i < 10; i++) { %>
 							<tr>
-								<td><%= i + 1 %></td>
+								<td><%= i + 1 + (currentPage-1)*pageSize%></td>
 								<td><%=danhSachTaiKhoan[i].TenTk%></td>
 								<td><%=danhSachTaiKhoan[i].HoTen%></td>
 								<td><%=danhSachTaiKhoan[i].DiaChi%></td>

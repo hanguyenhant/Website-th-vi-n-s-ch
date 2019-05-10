@@ -860,5 +860,54 @@ app.post('/capNhatThongTin', json.json(), function(req, res) {
 	})
 });
 
+//Thông tin mượn sách độc giả
+app.get('/thongTinMuonSach', async function(req, res) {
+	var pageSize = 1,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	MaThe = req.query.username;
 
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
 
+	// Hien thi danh sach muon sach
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaVach, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaThe = ?`;
+		sql = mysql.format(sql, MaThe)
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem phieu muon
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaVach, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaThe = ? and (MaVach like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?)`;
+		sql = mysql.format(sql, [MaThe, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachMuonSach = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachMuonSach.length>i)
+				{
+					display_danhSachMuonSach.push(danhSachMuonSach[i]);
+				} 
+		res.render('views/pages/thong-tin-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem,
+														username: MaThe });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});

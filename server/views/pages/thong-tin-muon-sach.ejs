@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Thông tin mượn sách</title>
+	<% include ../partials/head %>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html, body{
+			height: 100%
+		}
+	</style>
+</head>
+<body style="margin-right: 0 !important; overflow-y: auto;">	
+	<%include ../partials/header%>
+	<div style="min-height: 85%"> 
+		<% include ../partials/anhchay %>
+		<div class="container" style="margin-top: 20px; ">  
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-5">
+						<a href="/thongTinMuonSach">
+							<h4 style="color: red;"><b>Thông tin mượn sách</b></h4>
+						</a>
+					</div> 
+				</div> 
+				<form action="/thongTinMuonSach" method="get">
+					<div class="form-group">
+						<div class="col-sm-3 col-sm-offset-2">
+							<input style="display: none;" name="username" value="<%=username%>">
+							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
+						</div>
+						<div class="col-sm-2">
+							<div class="btn-group"> 
+								<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Tìm kiếm</button>
+							</div> 
+						</div>  
+					</div>					
+				</form>
+			</div>
+			<hr> 
+			<div id="danh_sach_muon_sach">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>STT</th>
+							<th>Mã vạch</th>
+							<th>Ngày mượn</th>
+							<th>Thời hạn mượn</th>
+							<th>Tiền cọc</th>
+						</tr>
+					</thead>
+					<tbody> 
+						<%for (var i=0; i<danhSachMuonSach.length; i++){%>
+							<tr>
+								<td><%=i + 1 + (currentPage-1)*pageSize%></td>
+								<td><%=danhSachMuonSach[i].MaVach%></td>
+								<td><%=danhSachMuonSach[i].NgayMuon%></td>
+								<td><%=danhSachMuonSach[i].ThoiHanMuon%></td>
+								<td><%=danhSachMuonSach[i].TienCoc%></td>
+							</tr>	 
+						<%};%>
+					</tbody>
+				</table>
+				<hr>
+				<p>Tổng số sách mượn: </p>
+				<p>Tổng số tiền cọc: </p>
+				<% var url = "/thongTinMuonSach" + "?username=" + username + "&noi_dung_tim_kiem=" + noi_dung_tim_kiem;
+				var i = 1;%> 
+				<div class="container" align="right">
+					<hr class="mt-2 mb-5">	
+					<%if (pageCount > 1) { %>
+				        <ul class="pagination">
+				            <% if (currentPage > 1) { %>
+				                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+				            <% }
+				            
+				            if (currentPage > 5) {
+				                i = currentPage - 4;
+				            } %>
+				            <% if (i !== 1) { %>
+				                <li class="disabled"><a href="#">...</a></li>
+				            <% } %>
+				            <% for (i; i<=pageCount; i++) { %>
+				                <% if (currentPage == i) { %>
+				                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+				                <% } else { %> 
+				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+				                <% } %>
+				                <% if (i == (currentPage + 4)) { %>
+				                    <li class="disabled"><a href="#">...</a></li>
+				                <% break; } %>
+				            <% } %>
+				            <% if (currentPage != pageCount) { %>
+				                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+				            <% } %>
+				        </ul>
+				    <% } %>	
+			</div>
+		</div>	 
+	</div>
+</body>
+</html>
