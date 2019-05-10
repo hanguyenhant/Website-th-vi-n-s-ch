@@ -36,316 +36,311 @@
 					</div>					
 				</form>
 				<div class="col-sm-2" style="float: right;">
-					<button type="button" class="btn btn-primary" style="text-align: right;" onclick="openModal();">Thêm độc giả</button>
+					<button type="button" class="btn btn-primary" style="text-align: right;" data-toggle="modal" data-target="#myModal">Thêm độc giả</button>
 					<!-- Modal -->
-				 	<div class="modal fade" id="addModal" role="dialog">
+				 	<div class="modal fade" id="myModal" role="dialog">
 				    	<div class="modal-dialog modal-lg">
 				    
 				      	<!-- Noi dung cua modal -->
 				      	<div class="modal-content">
 					        <div class="modal-header">
-					          <button type="button" class="close" data-dismiss="modal" >&times;</button>
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
 					          <h4 class="modal-title">Thông tin độc giả</h4>
 					        </div>
 
 					        <!-- Thong tin cua doc gia -->
 					        <div class="modal-body">  
 								<div class="form-group-inline">
-			           				<label>Tên độc giả: </label>
+			           				<label for="ma-the">Tên độc giả: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-user"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="HoTen">
+										<input type="text" class="form-control" required="" id="HoTen" name="HoTen">
 			           				</div>
 			           			</div>   
 
 			           			<div class="form-group-inline">
-			           				<label>Số điện thoại: </label>
+			           				<label for="ma-the">Số điện thoại: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-phone"></i> 
 										</span>
-										<input type="text" class="form-control" required id="SoDienThoai" id="sdt">
+										<input type="text" class="form-control" required id="SoDienThoai" id="sdt" name="SoDienThoai">
 			           				</div>
 			           			</div>  
 
 			           			<div class="form-group-inline">
-			           				<label>Địa chỉ: </label>
+			           				<label for="ma-the">Địa chỉ: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-home"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="DiaChi">
+										<input type="text" class="form-control" required="" id="DiaChi" name="DiaChi">
 			           				</div>
 			           			</div>   
 
 			           			<div class="form-group-inline">
-			           				<label>Email: </label>
+			           				<label for="ma-the">Email: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-edgelope"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="Email">
-			           				</div>
-			           			</div> 
-								<div class="form-group-inline">
-			           				<label>Ngay Cấp: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="NgayCap">
-			           				</div>
-			           			</div> 
-								<div class="form-group-inline">
-			           				<label>Hạn SD: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="HanSD">
-			           				</div>
-			           			</div> 
-								<div class="form-group-inline">
-			           				<label>Mã NV: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="MaNV">
-			           				</div>
-			           			</div> 
-								<div class="form-group-inline">
-			           				<label>Ngay CN: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="NgayCN">
+										<input type="text" class="form-control" required="" id="Email" name="Email">
 			           				</div>
 			           			</div> 
 
-
-
+									<div class="form-group-inline">
+			           				<label for="ma-the">MaNV: </label>
+			           				<div class="input-group"> 
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-edgelope"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="MaNV" name="MaNV">
+			           				</div>
+			           			</div>  
+								
+								
+								<div class="form-group-inline">
+			           				<label for="ma-the">NgayCap: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-edgelope"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="NgayCap" name="NgayCap">
+			           				</div>
+			           			</div>  
+								<div class="form-group-inline">
+			           				<label for="ma-the">HanSD: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-edgelope"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="HanSD" name="HanSD">
+			           				</div>
+			           			</div>  
+								<div class="form-group-inline">
+			           				<label for="ma-the">NgayCN: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-edgelope"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="NgayCN" name="NgayCN">
+			           				</div>
+			           			</div>  
 								
 				       		</div>
-							
-							
-							
 				      		<div class="modal-footer">  
-					        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="themDG();" >Tạo mới</button>
-					        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="huy">Hủy</button> 
-					        </div> 
+					        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="themDG();">Tạo mới</button>
+					        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close">Close</button> 
+					        </div>  
 				 		</div>
-				 	</div> 
+				 	</div>
+				 	<!-- Ket thuc modal -->
 				</div>
-				<!-- Ket thuc modal -->
 			</div>
 			<br><br>
 			<hr> 
 			<div id="DSDG">
-				<table class="table table-striped" id="table_dsdg">
+				<table class="table table-striped">
 					<thead>
 						<tr>
 							<th>STT</th>
-							<th>Mã thẻ</th>
+							<th>Mã Thẻ</th>
 							<th>Họ tên</th>
 							<th>Địa chỉ</th>
 							<th>Email</th>
 							<th>Số điện thoại</th>
-							<th>Mã NV</th>
+							<th> Mã NV </th>
 							<th>Hành động</th>
 						</tr>
 					</thead>
 					<tbody> 
-						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachDocGia.length && j<(danhSachDocGia.length + 4 * currentPage); i++, j++){%>
+						<%for (var i=0; i<danhSachDocGia.length; i++){%>
 							<tr>
-								<td id="<%=danhSachDocGia[i].id%>"><%=j + 1%></td>
-								<td id="MaThe<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].MaThe%></td>
-								<td id="HoTen<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].HoTen%></td>
-								<td id="DiaChi<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].DiaChi%></td>
-								<td id="Email<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].Email%></td>
-								<td id="SoDienThoai<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].SoDienThoai%></td>
-								<td id="MaNV<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].MaNV%></td>
+								<td><%=i+1%></td>
+								<td><%=danhSachDocGia[i].MaThe%></td>
+								<td><%=danhSachDocGia[i].HoTen%></td>
+								<td><%=danhSachDocGia[i].DiaChi%></td>
+								<td><%=danhSachDocGia[i].Email%></td>
+								<td><%=danhSachDocGia[i].SoDienThoai%></td>
+								<td><%=danhSachDocGia[i].MaNV%></td>
 								<td>							
-									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(<%=danhSachDocGia[i].id%>);" data-toggle="modal" data-target="#editModal">
+									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(<%=danhSachDocGia[i].id%>, '<%=danhSachDocGia[i].MaThe%>', '<%=danhSachDocGia[i].HoTen%>', '<%=danhSachDocGia[i].DiaChi%>', '<%=danhSachDocGia[i].Email%>', '<%=danhSachDocGia[i].SoDienThoai%>', '<%=danhSachDocGia[i].MaDG%>', '<%=danhSachDocGia[i].NgayCap%>', '<%=danhSachDocGia[i].HanSD%>', '<%=danhSachDocGia[i].NgayCN%>');" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  
-									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal" onclick="layTTDocGia(<%=danhSachDocGia[i].id%>);">
+									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal">
 									    <span class="glyphicon glyphicon-trash"></span>
-									</button> 	 
+									</button>			
+									<!-- Modal -->
+								 	<div class="modal fade" id="deleteModal" role="dialog">
+								    	<div class="modal-dialog modal-lg">
+								    
+								      	<!-- Noi dung cua modal -->
+								      	<div class="modal-content">
+									        <div class="modal-header">
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									          <h4 class="modal-title">Xoá đôc giả</h4>
+									        </div>
+
+									        <!-- Thong tin cua doc gia -->
+									        <div class="modal-body">  
+								        		<p>Bạn có chắc chắn muốn xóa không?</p>
+									       	</div>
+								      		<div class="modal-footer">  
+									        	<button type="button" id="xoa" class="btn btn-primary" style="width: 90px;" onclick="xoaDG();">OK</button>
+									        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Delete">Cancel</button> 
+									        </div>  
+								 		</div>
+								 	</div>
+								 	<!-- Ket thuc Modal -->										
 								</td>						
 							</tr>	 
 						<%};%>
 					</tbody>
-				</table> 
+				</table>
+				<% var url = "/danhSachDocGia" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;%> 
+				<div class="container" align="right">
+					<hr class="mt-2 mb-5">	
+					<%if (pageCount > 1) { %>
+				        <ul class="pagination">
+				            <% if (currentPage > 1) { %>
+				                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
+				            <% }
+				            var i = 1;
+				            if (currentPage > 5) {
+				                i = currentPage - 4;
+				            } %>
+				            <% if (i !== 1) { %>
+				                <li class="disabled"><a href="#">...</a></li>
+				            <% } %>
+				            <% for (i; i<=pageCount; i++) { %>
+				                <% if (currentPage == i) { %>
+				                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
+				                <% } else { %> 
+				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
+				                <% } %>
+				                <% if (i == (currentPage + 4)) { %>
+				                    <li class="disabled"><a href="#">...</a></li>
+				                <% break; } %>
+				            <% } %>
+				            <% if (currentPage != pageCount) { %>
+				                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
+				            <% } %>
+				        </ul>
+				    <% } %>	
 			</div>
-			<% var url = "/danhSachDocGia" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;%> 
-			<div class="container" align="right" id="phantrang">
-				<hr class="mt-2 mb-5">	
-				<%if (pageCount > 1) { %>
-			        <ul class="pagination">
-			            <% if (currentPage > 1) { %>
-			                <li><a href=<%=url + "&page=1"%>>&laquo;</a></li>
-			            <% }
-			            var i = 1;
-			            if (currentPage > 5) {
-			                i = currentPage - 4;
-			            } %>
-			            <% if (i !== 1) { %>
-			                <li class="disabled"><a href="#">...</a></li>
-			            <% } %>
-			            <% for (i; i<=pageCount; i++) { %>
-			                <% if (currentPage == i) { %>
-			                    <li class="active"><span><%= i %> <span class="sr-only">(current)</span></span></li>
-			                <% } else { %> 
-			                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
-			                <% } %>
-			                <% if (i == (currentPage + 4)) { %>
-			                    <li class="disabled"><a href="#">...</a></li>
-			                <% break; } %>
-			            <% } %>
-			            <% if (currentPage != pageCount) { %>
-			                <li><a href=<%=url+"&page="+ pageCount %>>&raquo;</a></li>
-			            <% } %>
-			        </ul>
-			    <% } %>	
-			</div>
-			<!-- Modal Sua -->
+			<!-- Modal -->
 		 	<div class="modal fade" id="editModal" role="dialog">
 		    	<div class="modal-dialog modal-lg">
 		    
-			      	<!-- Noi dung cua modal -->
-			      	<div class="modal-content">
-				        <div class="modal-header">
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
-				          <h4 class="modal-title">Thông tin độc giả</h4>
-				        </div>
+		      	<!-- Noi dung cua modal -->
+		      	<div class="modal-content">
+			        <div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			          <h4 class="modal-title">Thông tin độc giả</h4>
+			        </div>
 
-				        <!-- Thong tin cua doc gia -->
-				        <div class="modal-body">  
-			        		<div class="form-group-inline">
-			       				<label for="ma-nhan-vien">Mã thẻ: </label>
-			       				<div class="input-group">
-			       					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-user"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="MaThe" disabled="">
-			       				</div>
-		           			</div>   
-							<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Tên độc giả: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-user"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="HoTen_Edit">
-		           				</div>
-		           			</div>   
+			        <!-- Thong tin cua doc gia -->
+			        <div class="modal-body">  
+		        		<div class="form-group-inline">
+		       				<label for="ma-the">Mã Thẻ: </label>
+		       				<div class="input-group">
+		       					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-user"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="MaThe" disabled="">
+		       				</div>
+	           			</div>   
+						<div class="form-group-inline">
+	           				<label for="ma-the">Tên độc giả: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-user"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="HoTen_Edit">
+	           				</div>
+	           			</div>   
 
-		           			<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Số điện thoại: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-phone"></i> 
-									</span>
-									<input type="text" class="form-control" required id="SoDienThoai_Edit" id="sdt">
-		           				</div>
-		           			</div>  
+	           			<div class="form-group-inline">
+	           				<label for="ma-the">Số điện thoại: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-phone"></i> 
+								</span>
+								<input type="text" class="form-control" required id="SoDienThoai_Edit" id="sdt">
+	           				</div>
+	           			</div>  
 
-		           			<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Địa chỉ: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-home"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="DiaChi_Edit">
-		           				</div>
-		           			</div>   
+	           			<div class="form-group-inline">
+	           				<label for="ma-the">Địa chỉ: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-home"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="DiaChi_Edit">
+	           				</div>
+	           			</div>   
 
-		           			<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Email: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-envelope"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="Email_Edit">
-		           				</div>
-		           			</div>   
-							
-							<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">NgayCap: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-envelope"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="NgayCap_Edit">
-		           				</div>
-		           			</div>   
-							<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">HanSD: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-envelope"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="HanSD_Edit">
-		           				</div>
-		           			</div>   
-							<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">MaNV: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-envelope"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="MaNV_Edit">
-		           				</div>
-		           			</div>   
-							<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">NgayCN: </label>
-		           				<div class="input-group">
-		           					<span class="input-group-addon">
-										<i class="glyphicon glyphicon-envelope"></i> 
-									</span>
-									<input type="text" class="form-control" required="" id="NgayCN_Edit">
-		           				</div>
-		           			</div>   
-							
-				 		</div>
-				 		<div class="modal-footer">  
-				        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaDG();">Lưu</button>
-				        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Edit">Close</button> 
-				        </div>
-		 			</div> 
-				</div>
-			</div>	 
-			<!-- Ket thuc Modal Sua -->
-			<!-- Modal Xoa -->
-		 	<div class="modal fade" id="deleteModal" role="dialog">
-		    	<div class="modal-dialog modal-lg">
-		    
-			      	<!-- Noi dung cua modal -->
-			      	<div class="modal-content">
-				        <div class="modal-header">
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
-				          <h4 class="modal-title">Xóa độc giả</h4>
-				        </div>
-
-				        <!-- Thong tin cua doc gia -->
-				        <div class="modal-body">  
-			        	   <p>Bạn có chắc chắn muốn xóa không?</p>
-			 			</div>
-				 		<div class="modal-footer">  
-				        	<button type="button" id="xoa" class="btn btn-primary" style="width: 90px;" onclick="xoaDG();">OK</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Delete">Cancel</button> 
-				        </div>
-		 			</div> 
-				</div>
-			</div>	 
-			<!-- Ket thuc Modal Xoa --> 
-		</div> 
+	           			<div class="form-group-inline">
+	           				<label for="ma-the">Email: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-edgelope"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="Email_Edit">
+	           				</div>
+	           			</div>
+						
+						<div class="form-group-inline">
+	           				<label for="ma-the">NgayCap: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-edgelope"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="NgayCap_Edit">
+	           				</div>
+	           			</div>   
+						
+                        <div class="form-group-inline">
+	           				<label for="ma-the">HanSD: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-edgelope"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="HanSD_Edit">
+	           				</div>
+	           			</div> 
+						
+                       <div class="form-group-inline">
+	           				<label for="ma-the">MaNV: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-edgelope"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="MaNV_Edit">
+	           				</div>
+	           			</div>   
+                       <div class="form-group-inline">
+	           				<label for="ma-the">NgayCN: </label>
+	           				<div class="input-group">
+	           					<span class="input-group-addon">
+									<i class="glyphicon glyphicon-edgelope"></i> 
+								</span>
+								<input type="text" class="form-control" required="" id="NgayCN_Edit">
+	           				</div>
+	           			</div>     						
+						
+			       	</div>
+		      		<div class="modal-footer">  
+			        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaDG();">Lưu</button>
+			        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Edit">Close</button> 
+			        </div>  
+		 		</div>
+		 	</div>
+		 	<!-- Ket thuc Modal -->	
+		</div>	 
 	</div>
-	 
 	<script type="text/javascript" language="javascript">  
 		function openModal() {
 			$('#addModal').modal(); 
@@ -357,8 +352,6 @@
 			document.getElementById("HanSD").value = '';
 			document.getElementById("MaNV").value = '';
 			document.getElementById("NgayCN").value = '';
-			
-			
 		}
 		function themDG() {     
 			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop le
@@ -401,9 +394,11 @@
 										hienthi += '<th>Địa chỉ</th>'; 
 										hienthi += '<th>Email</th>';
 										hienthi += '<th>Số điện thoại</th>'; 
-										hienthi += '<th>Mã NV</th>';
-						
-										hienthi += '<th>Hành động</th>'; 
+										//hienthi += '<th>Ngày cấp</th>';
+									//	hienthi += '<th>Han SD</th>';
+										hienthi += '<th>Ma NV</th>';
+									//	hienthi += '<th> Ngày CN</th>';
+										//hienthi += '<th>Hành động</th>'; 
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
@@ -416,8 +411,12 @@
 										hienthi += '<td id = DiaChi' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].DiaChi + '</td>';
 										hienthi += '<td id = Email' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].Email + '</td>';
 										hienthi += '<td id = SoDienThoai' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].SoDienThoai + '</td>';
+                                        //hienthi += '<td id = NgayCap' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].NgayCap + '</td>';
+										//hienthi += '<td id = HanSD' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].HanSD + '</td>';
 										hienthi += '<td id = MaNV' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].MaNV + '</td>';
+										//hienthi += '<td id = NgayCN' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].NgayCN + '</td>';
  
+										
 										hienthi += 
 										'<td>' +							
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(' + danhsachdocgia[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
@@ -478,12 +477,13 @@
 			document.getElementById("HoTen_Edit").value = document.getElementById("HoTen" + id).innerHTML;
 			document.getElementById("SoDienThoai_Edit").value = document.getElementById("SoDienThoai" + id).innerHTML;
 			document.getElementById("DiaChi_Edit").value = document.getElementById("DiaChi" + id).innerHTML;
-			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;
-            document.getElementById("NgayCap_Edit").value = document.getElementById("NgayCap" + id).innerHTML;
+			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;     
+			document.getElementById("NgayCap_Edit").value = document.getElementById("NgayCap" + id).innerHTML;  
 			document.getElementById("HanSD_Edit").value = document.getElementById("HanSD" + id).innerHTML;
 			document.getElementById("MaNV_Edit").value = document.getElementById("MaNV" + id).innerHTML;
-			document.getElementById("NgayCN_Edit").value = document.getElementById("NgayCN" + id).innerHTML;			
+            document.getElementById("NgayCN_Edit").value = document.getElementById("NgayCN" + id).innerHTML;     			
 			this.sothutu = document.getElementById(id).innerHTML; 
+			
 		}
 
 		function suaDG() {  
@@ -506,24 +506,24 @@
 	 
 			if (valid) {
 				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.open("POST", "/suaNhanVien", false); 
+				xmlhttp.open("POST", "/suaDocGia", false); 
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
 							// xu ly ajax => thay doi thong tin doc gia tren dong tuong ung trong bang hien thi
-							thongtindocgiadasua = JSON.parse(xmlhttp.responseText); 
-							thongtindocgiadasua = thongtindocgiadasua[0];
-							id = thongtindocgiadasua.id; 
-							document.getElementById(id).innerHTML = thongtindocgiadasua.id;
-							document.getElementById("MaThe" + id).innerHTML = thongtindocgiadasua.MaThe;
-							document.getElementById("HoTen" + id).innerHTML = thongtindocgiadasua.HoTen;
-							document.getElementById("SoDienThoai" + id).innerHTML = thongtindocgiadasua.SoDienThoai;
-							document.getElementById("DiaChi" + id).innerHTML = thongtindocgiadasua.DiaChi;
-							document.getElementById("Email" + id).innerHTML = thongtindocgiadasua.Email; 
-							document.getElementById("NgayCap" + id).innerHTML = thongtindocgiadasua.NgayCap;
-							document.getElementById("HanSD" + id).innerHTML = thongtindocgiadasua.HanSD;
-							document.getElementById("MaNV" + id).innerHTML = thongtindocgiadasua.MaNV;
-							document.getElementById("NgayCN" + id).innerHTML = thongtindocgiadasua.NgayCN; 
+							thongtinnhadgiendasua = JSON.parse(xmlhttp.responseText); 
+							thongtinnhadgiendasua = thongtinnhadgiendasua[0];
+							id = thongtinnhadgiendasua.id; 
+							document.getElementById(id).innerHTML = thongtinnhadgiendasua.id;
+							document.getElementById("MaThe" + id).innerHTML = thongtinnhadgiendasua.MaThe;
+							document.getElementById("HoTen" + id).innerHTML = thongtinnhadgiendasua.HoTen;
+							document.getElementById("SoDienThoai" + id).innerHTML = thongtinnhadgiendasua.SoDienThoai;
+							document.getElementById("DiaChi" + id).innerHTML = thongtinnhadgiendasua.DiaChi;
+							document.getElementById("Email" + id).innerHTML = thongtinnhadgiendasua.Email; 
+							document.getElementById("NgayCap" + id).innerHTML = thongtinnhadgiendasua.NgayCap; 
+							document.getElementById("HanSD" + id).innerHTML = thongtinnhadgiendasua.HanSD; 
+							document.getElementById("MaNV" + id).innerHTML = thongtinnhadgiendasua.MaNV; 
+							document.getElementById("NgayCN" + id).innerHTML = thongtinnhadgiendasua.NgayCN; 
 							document.getElementById("close_Edit").click(); // dong modal popup
 						}
 						else {
@@ -583,12 +583,16 @@
 							hienthi += '<thead>';
 								hienthi += '<tr>';
 									hienthi += '<th>STT</th>'; 
-									hienthi += '<th>Mã Thẻ</th>'; 
+									hienthi += '<th>Mã thẻ</th>'; 
 									hienthi += '<th>Họ tên</th>'; 
 									hienthi += '<th>Địa chỉ</th>'; 
 									hienthi += '<th>Email</th>';
-									hienthi += '<th>Số điện thoại</th>'; 
-									hienthi += '<th>Ma NV</th>'; 
+									hienthi += '<th>Số điện thoại</th>';
+									//hienthi += '<th>Ngay Cap</th>';
+									//hienthi += '<th>Hạn SD</th>';
+									hienthi += '<th>Mã NV</th>';
+									//hienthi += '<th>Ngày CN</th>';
+									
 									hienthi += '<th>Hành động</th>'; 
 								hienthi += '</tr>';
 							hienthi += '</thead>';
@@ -597,13 +601,15 @@
 							{ 
 								hienthi += '<tr>';
 									hienthi += '<td id = ' + danhsachdocgia[i].id + '>' + (j + 1) + '</td>';
-									hienthi +=  '<td id = MaThe' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].MaThe + '</td>';
+									hienthi +=  '<td id = MaDG' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].MaDG + '</td>';
 									hienthi += '<td id = HoTen' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].HoTen + '</td>';
 									hienthi += '<td id = DiaChi' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].DiaChi + '</td>';
 									hienthi += '<td id = Email' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].Email + '</td>';
 									hienthi += '<td id = SoDienThoai' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].SoDienThoai + '</td>';
+								//	hienthi += '<td id = NgayCap' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].NgayCap + '</td>';
+								//	hienthi += '<td id = HanSD' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].HanSD + '</td>';
 									hienthi += '<td id = MaNV' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].MaNV + '</td>';
-									
+								//	hienthi += '<td id = NgayCN' + danhsachdocgia[i].id + '>' + danhsachdocgia[i].NgayCN + '</td>';
 									hienthi += 
 									'<td>' +							
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(' + danhsachdocgia[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +

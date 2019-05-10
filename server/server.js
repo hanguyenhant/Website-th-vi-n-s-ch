@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '123456',
+	password: '',
 	dateStrings: 'date',
 });
 
@@ -538,9 +538,12 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 	})
 }) 
 
-<<<<<<< HEAD
 
 //nha cung cap
+
+// Lay danh sach  nha cung cap
+
+
 
 // Lay danh sach  nha cung cap
 app.get('/danhSachNhaCungCap', async function(req, res) {
@@ -549,15 +552,6 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 		currentPage = 1;
 	danhSachNhaCungCap = new Array(); 
 	display_danhSachNhaCungCap = new Array();
-=======
-// Lay danh sach muon sach
-app.get('/quanLyMuonSach', async function(req, res) {
-	var pageSize = 5,
-		pageCount,
-		currentPage = 1;
-	danhSachMuonSach = new Array(); 
-	display_danhSachMuonSach = new Array();
->>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
@@ -565,7 +559,58 @@ app.get('/quanLyMuonSach', async function(req, res) {
 		currentPage = +req.query.page;
 	}
 
-<<<<<<< HEAD
+	// Hien thi danh sach  nha cung cap
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem  nha cung cap
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select HoTen, DiaChi, Email, SoDienThoai from nhacungcap where  HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachNhaCungCap = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachNhaCungCap.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachNhaCungCap.length>i)
+				{
+					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
+				} 
+		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+
+// Lay danh sach muon sach
+/*
+app.get('/quanLyMuonSach', async function(req, res) {
+	var pageSize = 5,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+
 	// Hien thi danh sach  nha cung cap
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
 		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap`;
@@ -589,7 +634,7 @@ app.get('/quanLyMuonSach', async function(req, res) {
 					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
 				} 
 		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
-=======
+
 	// Hien thi danh sach muon sach
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
 		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
@@ -613,7 +658,7 @@ app.get('/quanLyMuonSach', async function(req, res) {
 					display_danhSachMuonSach.push(danhSachMuonSach[i]);
 				} 
 		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
->>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
+
 														pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage, 
@@ -625,7 +670,7 @@ app.get('/quanLyMuonSach', async function(req, res) {
 	} 
 });
 
-<<<<<<< HEAD
+*/
 // Them nha cung cap
 app.post('/themNhaCungCap', json.json(), async function(req, res) { 
 	var sql;
@@ -736,8 +781,7 @@ app.get('/thongTinChiTietNhaCungCap/:id', async function(req, res) {
 })
 
 
-=======
-// Lay danh sach tra sach
+
 app.get('/quanLyTraSach', async function(req, res) {
 	res.render('views/pages/quan-ly-tra-sach');
 });
@@ -751,5 +795,177 @@ app.get('/doiMatKhau', async function(req, res) {
 app.get('/thongTinCaNhan', async function(req, res) {
 	res.render('views/pages/thong-tin-ca-nhan');
 });
->>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 
+/// đọc gia
+
+
+
+// Lay danh sachdoc gia
+app.get('/danhSachDocGia', async function(req, res) {
+	var pageSize = 4,
+		pageCount,
+		currentPage = 1;
+	danhSachDocGia = new Array(); 
+	display_danhSachDocGia = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
+
+	// Hien thi danh sachdoc gia
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, NgayCap, HanSD, MaNV, NgayCN from docgia`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiemdoc gia
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, MaNV from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachDocGia = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachDocGia.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachDocGia.length>i)
+				{
+					display_danhSachDocGia.push(danhSachDocGia[i]);
+				} 
+		res.render('views/pages/quan-ly-doc-gia', { danhSachDocGia: display_danhSachDocGia, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
+// Themdoc gia
+app.post('/themDocGia', json.json(), async function(req, res) { 
+	var sql;
+	sql = "select MaThe from docgia where id = (select max(id) from docgia)";
+	try {
+		MaThe = await queryPromise(sql);
+		MaThe = MaThe[0].MaThe;
+		stt = MaThe.substring(2); 
+		stt = parseInt(stt) + 1;
+		if (stt.toString().length == 1) {
+			MaThe = "DG00" + stt;
+		}
+		else if (stt.toString().length == 2) {
+			MaThe = "DG0" + stt;
+		}
+		else MaThe = "DG" + stt; 
+		sql = `insert into docgia(MaThe, HoTen, DiaChi, Email, SoDienThoai, NgayCap, HanSD, MaNV, NgayCN) 
+		values (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+		sql = mysql.format(sql, [MaThe, req.body.HoTen, req.body.DiaChi, 
+			req.body.Email, req.body.SoDienThoai,
+			req.body.NgayCap,req.body.HanSD,req.body.MaNV,req.body.NgayCN]); 
+		connect.query(sql, async function(err, results) {
+			if (err) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				var pageSize = 4,
+					pageCount;
+				danhsachdocgia = [];
+				results = await queryPromise("select * from docgia order by id desc");
+				pageCount = Math.ceil(results.length/pageSize);
+				for (var i = 0; i < pageSize; i++) {
+					danhsachdocgia[i] = results[pageSize - i - 1];
+				}
+				dsdg_pagecount = {
+					'danhsachdocgia': danhsachdocgia,
+					'pageCount': pageCount
+
+				}; 
+				res.write(JSON.stringify(dsdg_pagecount)); 
+				res.end(); 
+			}
+		}) 
+	} catch (SQLException) {
+		res.write("0");
+		res.end();
+	} 
+})
+ 
+// Suadoc gia 
+app.post('/suaDocGia', json.json(), function(req, res) {
+	var sql = `update docgia set HoTen = ?, DiaChi = ?, Email = ? , SoDienThoai = ?, 
+	NgayCap = ?, HanSD = ?, MaNV = ?,  NgayCN = ?,
+	where id = ?`;
+	sql = mysql.format(sql, [req.body.HoTen, req.body.DiaChi,
+		req.body.Email, req.body.SoDienThoai, req.body.NgayCap, req.body.HanSD
+		, req.body.MaNV, req.body.NgayCN,req.body.id]); 
+	connect.query(sql, async function(err, results) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			sql = "select * from docgia where id = ?";
+			sql = mysql.format(sql, req.body.id);
+			danhsachdocgia = await queryPromise(sql); 
+			res.write(JSON.stringify(danhsachdocgia)); 
+			res.end();
+		}
+	})
+})
+
+// Xoadoc gia 
+app.post('/xoaDocGia', json.json(), function(req, res) {
+	var sql = `delete from docgia where id = ?`; 
+	sql = mysql.format(sql, req.body.id);  
+	connect.query(sql, async function(err, result) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			sql = "select * from docgia"; 
+			sql = mysql.format(sql, req.body.id);
+			results = await queryPromise(sql);
+			pageCount = Math.ceil(results.length / 4)
+			page = req.body.currentPage;  
+			danhsachdocgia = [];
+			k = 0;
+			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+				danhsachdocgia[k] = results[i - 1]; 
+				k++;
+			} 
+			dsdg_pagecount = {
+					'danhsachdocgia': danhsachdocgia,
+					'pageCount': pageCount
+
+			};  
+			res.write(JSON.stringify(dsdg_pagecount)); 
+			res.end();
+		}
+	})
+})
+  
+// Xem thong tin chi tiet cuadoc gia
+app.get('/thongTinChiTietDocGia/:id', async function(req, res) { 
+	var sql = `select MaThe, SoDienThoai, DiaChi, Email, HoTen, NgayCap, HanSD, MaNV, NgayCN from docgia 
+	where id = ?`;
+	sql = mysql.format(sql, req.params.id);
+	try {
+		results = await queryPromise(sql);
+		res.write(JSON.stringify({MaThe: results[0].MaThe, SoDienThoai: results[0].SoDienThoai, 
+			DiaChi: results[0].DiaChi, Email: results[0].Email, HoTen: results[0].HoTen, 
+			NgayCap: results[0].NgayCap,HanSD: results[0].HanSD, MaNV: results[0].MaNV,
+			NgayCN: results[0].NgayCN}));
+	} catch (SQLException) {
+		res.write('0');
+	} 
+	res.end();
+})
