@@ -323,7 +323,7 @@ app.post('/xoaNhanVien', json.json(), function(req, res) {
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
 			pageCount = Math.ceil(results.length / 4)
-			page = Math.ceil(req.body.sothutu / 4);  
+			page = req.body.currentPage;
 			danhsachnhanvien = [];
 			k = 0;
 			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
@@ -334,7 +334,7 @@ app.post('/xoaNhanVien', json.json(), function(req, res) {
 					'danhsachnhanvien': danhsachnhanvien,
 					'pageCount': pageCount
 
-			}; 
+			};  
 			res.write(JSON.stringify(dsnv_pagecount)); 
 			res.end();
 		}
