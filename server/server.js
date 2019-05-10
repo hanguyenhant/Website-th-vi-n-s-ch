@@ -538,8 +538,6 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 	})
 }) 
 
-<<<<<<< HEAD
-
 //nha cung cap
 
 // Lay danh sach  nha cung cap
@@ -549,15 +547,6 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 		currentPage = 1;
 	danhSachNhaCungCap = new Array(); 
 	display_danhSachNhaCungCap = new Array();
-=======
-// Lay danh sach muon sach
-app.get('/quanLyMuonSach', async function(req, res) {
-	var pageSize = 5,
-		pageCount,
-		currentPage = 1;
-	danhSachMuonSach = new Array(); 
-	display_danhSachMuonSach = new Array();
->>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
@@ -565,7 +554,6 @@ app.get('/quanLyMuonSach', async function(req, res) {
 		currentPage = +req.query.page;
 	}
 
-<<<<<<< HEAD
 	// Hien thi danh sach  nha cung cap
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
 		sql = `select id, HoTen, DiaChi, Email, SoDienThoai from nhacungcap`;
@@ -589,31 +577,6 @@ app.get('/quanLyMuonSach', async function(req, res) {
 					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
 				} 
 		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
-=======
-	// Hien thi danh sach muon sach
-	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
-		noi_dung_tim_kiem = '';
-	}
-	else //Tim kiem phieu muon
-	{
-		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
-		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
-								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
-		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
-	}
-	try { 
-		danhSachMuonSach = await queryPromise(sql);
-		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
-
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
-			if (danhSachMuonSach.length>i)
-				{
-					display_danhSachMuonSach.push(danhSachMuonSach[i]);
-				} 
-		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
->>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 														pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage, 
@@ -625,7 +588,6 @@ app.get('/quanLyMuonSach', async function(req, res) {
 	} 
 });
 
-<<<<<<< HEAD
 // Them nha cung cap
 app.post('/themNhaCungCap', json.json(), async function(req, res) { 
 	var sql;
@@ -735,8 +697,54 @@ app.get('/thongTinChiTietNhaCungCap/:id', async function(req, res) {
 	res.end();
 })
 
+// Lay danh sach muon sach
+app.get('/quanLyMuonSach', async function(req, res) {
+	var pageSize = 5,
+		pageCount,
+		currentPage = 1;
+	danhSachMuonSach = new Array(); 
+	display_danhSachMuonSach = new Array();
+	var k = 0;
+	var sql; 
+	var noi_dung_tim_kiem;
+	if (typeof req.query.page != 'undefined') {
+		currentPage = +req.query.page;
+	}
 
-=======
+	// Hien thi danh sach muon sach
+	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
+		noi_dung_tim_kiem = '';
+	}
+	else //Tim kiem phieu muon
+	{
+		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
+		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
+		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+	}
+	try { 
+		danhSachMuonSach = await queryPromise(sql);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
+
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+			if (danhSachMuonSach.length>i)
+				{
+					display_danhSachMuonSach.push(danhSachMuonSach[i]);
+				} 
+		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
+														pageSize: pageSize, 
+														pageCount: pageCount, 
+														currentPage: currentPage, 
+														noi_dung_tim_kiem: noi_dung_tim_kiem });
+		 
+	} 
+	catch(Exception) {
+		res.send('ERROR');
+	} 
+});
+
 // Lay danh sach tra sach
 app.get('/quanLyTraSach', async function(req, res) {
 	res.render('views/pages/quan-ly-tra-sach');
@@ -851,7 +859,6 @@ app.post('/capNhatThongTin', json.json(), function(req, res) {
 		}
 	})
 });
->>>>>>> be34bb1e8bf255e5d9aad2b401afeb23036b4bc8
 
 
 
