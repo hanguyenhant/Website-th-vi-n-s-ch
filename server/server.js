@@ -1102,8 +1102,8 @@ app.get('/danhSachTaiLieu', async function(req, res) {
 
 	// Hien thi danh sach tai lieu
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = "select id, TenTL, TenTheLoai,TenTG, TenNXB, NamXB, GiaBia from tailieu";
-		//console.log(sql);
+		sql = `select id, TenTL, TenTheLoai,TenTG, TenNXB, NamXB, GiaBia from tailieu`;
+		
 		noi_dung_tim_kiem = '';
 	}
 	else
@@ -1227,7 +1227,7 @@ app.post('/suaTaiLieu', json.json(), function(req, res) {
 
 // Xoa tai lieu
 app.post('/xoaTaiLieu', json.json(), async function(req, res) {
-	var sql = "select id from tailieu where id = ?" ;
+	var sql = `select id from tailieu where id = ?` ;
 	sql = mysql.format(sql, req.body.id);
 	result = await queryPromise(sql);
 	id = result[0].id;
