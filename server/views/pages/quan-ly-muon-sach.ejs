@@ -39,7 +39,7 @@
 					<button type="button" class="btn btn-primary" style="text-align: right;" data-toggle="modal" data-target="#myModal">Thêm phiếu mượn</button>
 					<!-- Modal -->
 				 	<div class="modal fade" id="myModal" role="dialog">
-				    	<div class="modal-dialog modal-lg">
+				    	<div class="modal-dialog modal-lg" style="width: 900px;">
 				    
 				      	<!-- Noi dung cua modal -->
 				      	<div class="modal-content">
@@ -50,11 +50,13 @@
 
 					        <!-- Thong tin phieu muon -->
 					        <div class="modal-body">
-					        	<div class="form-inline"> <!-- Date input -->
-							        <label>Ngày mượn</label>
-							        <input id="NgayMuon" name="date" placeholder="yyyy-mm-dd" type="text"/>
-							        <label>Thời hạn mượn</label>
-							        <input id="ThoiHanMuon" type="text"/>
+					        	<div class="form-group">
+							        <label for="ThoiHanMuon" style="float: left;">Thời hạn mượn&nbsp;</label>
+							        <select id="ThoiHanMuon" class="col-sm-2">
+							        	<option value="3 tháng">3 tháng</option>
+							        	<option value="6 tháng">6 tháng</option>
+							        	<option value="3 tháng">1 năm</option>
+							        </select> 
 							    </div>
 							    <hr>
 							    <div class="form-group">
@@ -65,11 +67,12 @@
 										<div class="panel-body">
 											<div class="form-inline">
 							       				<label>Mã độc giả: </label>
-							       				<input type="text" class="form-control" required="" id="MaDocGia">
+							       				<input type="text" class="form-control" required="" id="MaThe" onkeypress="layTTDocGia(event);">
+							       				<p id="check_DocGia" style="color: red;"></p>
 						           			</div>
 										    <div class="form-group-inline">
 							       				<label >Tên độc giả: </label>
-							       				<input type="text" class="form-control" required="" id="TenDocGia" disabled="">
+							       				<input type="text" class="form-control" required="" id="HoTen" disabled="">
 						           			</div>
 						           			<div class="form-group-inline">
 							       				<label>Email: </label>
@@ -89,18 +92,15 @@
 										<div class="panel-body">
 											<div class="form-inline">
 							       				<label>Mã vạch: </label>
-							       				<input type="text" class="form-control" required="" id="MaVach">
-												<table class="table table-striped">
-													<thead>
-														<tr>
-															<th>STT</th>
-															<th>Mã vạch</th>
-															<th>Tên sách</th>
-															<th>Số lượng</th>
-														</tr>
+							       				<input type="text" class="form-control" required="" id="MaVach" onkeypress="sachMuon(event);">
+							       				<p id="check_Sach" style="color: red;"></p>
+												<table class="table table-striped" id="table_dssach">
+													<thead> 
+														<th>STT</th>
+														<th>Mã vạch</th>
+														<th>Tên sách</th>  
 													</thead>
-													<tbody>
-														
+													<tbody id="sachmuon"> 
 													</tbody>
 												</table>
 						           			</div>
@@ -124,17 +124,15 @@
 			<br><br>
 			<hr> 
 			<div id="danh_sach_muon_sach">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>STT</th>
-							<th>Mã vạch</th>
-							<th>Mã thẻ</th>
-							<th>Ngày mượn</th>
-							<th>Thời hạn mượn</th>
-							<th>Tiền cọc</th>
-							<th>Hành động</th>
-						</tr>
+				<table class="table table-striped" id="danhsachsachmuon">
+					<thead> 
+						<th>STT</th>
+						<th>Mã vạch</th>
+						<th>Mã thẻ</th>
+						<th>Ngày mượn</th>
+						<th>Thời hạn mượn</th>
+						<th>Tiền cọc</th>
+						<th>Hành động</th> 
 					</thead>
 					<tbody> 
 						<%for (var i=0; i<danhSachMuonSach.length; i++){%>
@@ -148,46 +146,22 @@
 								<td>
 									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(<%=danhSachMuonSach[i].id%>, '<%=danhSachMuonSach[i].MaVach%>', '<%=danhSachMuonSach[i].MaThe%>', '<%=danhSachMuonSach[i].NgayMuon%>', '<%=danhSachMuonSach[i].ThoiHanMuon%>', '<%=danhSachMuonSach[i].TienCoc%>');" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
-									</button>  
-									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal">
-									    <span class="glyphicon glyphicon-trash"></span>
-									</button>			
-									<!-- Modal -->
-								 	<div class="modal fade" id="deleteModal" role="dialog">
-								    	<div class="modal-dialog modal-lg">
-								    
-								      	<!-- Noi dung cua modal -->
-								      	<div class="modal-content">
-									        <div class="modal-header">
-									          <button type="button" class="close" data-dismiss="modal">&times;</button>
-									          <h4 class="modal-title">Xoá phiếu mượn</h4>
-									        </div>
-
-									        <!-- Thong tin cua nhan vien -->
-									        <div class="modal-body">  
-								        		<p>Bạn có chắc chắn muốn xóa không?</p>
-									       	</div>
-								      		<div class="modal-footer">  
-									        	<button type="button" id="xoa" class="btn btn-primary" style="width: 90px;" onclick="xoaPhieuMuon();">OK</button>
-									        	<button type="button" class="btn btn-default" data-dismiss="modal" style="width: 90px;" id="close_Delete">Cancel</button> 
-									        </div>  
-								 		</div>
-								 	</div>
-								 	<!-- Ket thuc Modal -->			
-													
-																		
-								</td>
-
+									</button>  								
+								</td> 
 							</tr>	 
 						<%};%>
 					</tbody>
 				</table>
 				<hr>
-				<p>Tổng số sách mượn: </p>
-				<p>Tổng số tiền cọc: </p>
+				<label>Tổng số sách mượn: <%=danhSachMuonSach.length%></label>
+				<br>
+				<label>Tổng số tiền cọc: <%=danhSachMuonSach.reduce(function(TienCoc, curr){
+									    TienCoc += curr.TienCoc;
+									    return TienCoc;
+									    }, 0) %></label>
 				<% var url = "/quanLyMuonSach" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;
 				var i = 1;%> 
-				<div class="container" align="right">
+				<div class="container" align="right" id="phantrang">
 					<hr class="mt-2 mb-5">	
 					<%if (pageCount > 1) { %>
 				        <ul class="pagination">
@@ -207,7 +181,7 @@
 				                <% } else { %> 
 				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
 				                <% } %>
-				                <% if (i == (currentPage + 4)) { %>
+				                <% if (i == (currentPage + 4) && pageCount!=5) { %>
 				                    <li class="disabled"><a href="#">...</a></li>
 				                <% break; } %>
 				            <% } %>
@@ -217,9 +191,9 @@
 				        </ul>
 				    <% } %>	
 			</div>
-			<!-- Modal -->
+			<!-- Modal Sua-->
 		 	<div class="modal fade" id="editModal" role="dialog">
-		    	<div class="modal-dialog modal-lg">
+		    	<div class="modal-dialog modal-lg" style="width: 900px;">
 		    
 		      	<!-- Noi dung cua modal -->
 		      	<div class="modal-content">
@@ -245,11 +219,11 @@
 								<div class="panel-body">
 									<div class="form-inline">
 					       				<label>Mã độc giả: </label>
-					       				<input type="text" class="form-control" required="" id="MaDocGia_Edit">
+					       				<input type="text" class="form-control" required="" id="MaThe_Edit" onkeypress="layTTDocGia(event);">  
 				           			</div>
 								    <div class="form-group-inline">
 					       				<label >Tên độc giả: </label>
-					       				<input type="text" class="form-control" required="" id="TenDocGia" disabled="">
+					       				<input type="text" class="form-control" required="" id="HoTen" disabled="">
 				           			</div>
 				           			<div class="form-group-inline">
 					       				<label>Email: </label>
@@ -271,13 +245,10 @@
 					       				<label>Mã vạch: </label>
 					       				<input type="text" class="form-control" required="" id="MaVach_Edit">
 										<table class="table table-striped">
-											<thead>
-												<tr>
-													<th>STT</th>
-													<th>Mã vạch</th>
-													<th>Tên sách</th>
-													<th>Số lượng</th>
-												</tr>
+											<thead> 
+												<th>STT</th>
+												<th>Mã vạch</th>
+												<th>Tên sách</th>  
 											</thead>
 											<tbody>
 												
@@ -298,7 +269,7 @@
 			        </div>  
 		 		</div>
 		 	</div>
-		 	<!-- Ket thuc Modal -->	
+		 	<!-- Ket thuc Modal Sua-->	
 		</div>	 
 	</div>
 </body>
@@ -314,5 +285,84 @@
 	    };
 	    date_input.datepicker(options);
 	})
+	var MaThe;
+	function layTTDocGia(event) {
+		if (event.which == 13 || event.keyCode == 13) { 
+			MaThe = document.getElementById("MaThe").value;
+			if (MaThe.trim() == "") document.getElementById("check_DocGia").innerHTML = "";
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/layTTDocGia", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") { 
+						thongtindocgia = JSON.parse(xmlhttp.responseText)[0]; 
+						document.getElementById("check_DocGia").innerHTML = "";
+						document.getElementById("HoTen").value = thongtindocgia.HoTen;
+						document.getElementById("Email").value = thongtindocgia.Email;
+						document.getElementById("SoDienThoai").value = thongtindocgia.SoDienThoai;
+					}
+					else {
+						document.getElementById("check_DocGia").innerHTML = "Không tìm thấy thông tin độc giả";
+						document.getElementById("HoTen").value = '';
+						document.getElementById("Email").value = '';
+						document.getElementById("SoDienThoai").value = '';
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinDG = JSON.stringify({"MaThe": MaThe}); 
+			xmlhttp.send(thongTinDG); 
+		}
+	}
+	var TongTienCoc = 0;
+	var danhSachMaVach = [];
+	function sachMuon() {  
+		if (event.which == 13 || event.keyCode == 13) {  
+			tr = document.getElementById("sachmuon");
+			MaVach = document.getElementById("MaVach").value;
+			if (MaVach.trim() == "") document.getElementById("check_Sach").innerHTML = ""; 
+			if (danhSachMaVach.indexOf(MaVach) >= 0) {
+				document.getElementById("check_Sach").innerHTML = "Trùng mã vạch";
+			}
+			else {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/layTTSachMuon", false); 
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+						if (xmlhttp.responseText != "0") { 
+							danhSachMaVach.push(MaVach);
+							// Lay tong so hang cua bang 
+							var totalRowCount = $("#table_dssach tr").length - 1; 
+							thongtinsachmuon= JSON.parse(xmlhttp.responseText)[0];  
+							list = `
+								<tr>
+									<td>` + (totalRowCount +1) +`</td>
+									<td>` + thongtinsachmuon.MaVach + `</td>
+									<td>` + thongtinsachmuon.tenTL +`</td> 
+								</tr>
+							`;
+							document.getElementById("TongSoSachMuon").value = totalRowCount + 1;
+							TongTienCoc += thongtinsachmuon.GiaBia;
+							// Tinh tong so tien dat coc
+							document.getElementById("TongTienCoc").value = TongTienCoc;
+
+							// Tao html trong the co id = "sachmuon"
+							tr.insertAdjacentHTML('beforebegin', list);
+							document.getElementById("check_Sach").innerHTML = "";
+						}
+						else {
+							document.getElementById("check_Sach").innerHTML = "Không tìm thấy thông tin sách";
+						}
+					}
+
+				}
+				xmlhttp.setRequestHeader('Content-type', 'application/json');
+				var thongTinDG = JSON.stringify({"MaVach": MaVach}); 
+				xmlhttp.send(thongTinDG);  
+			}  
+		}
+	}
+ 
 </script>
 </html>

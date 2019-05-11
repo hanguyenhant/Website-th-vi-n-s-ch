@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
-	password: '',
+	password: '123456',
 	dateStrings: 'date',
 });
 
@@ -1254,7 +1254,48 @@ app.get('/thongTinChiTietTaiLieu/:id', async function(req, res) {
 		res.write('0');
 	} 
 	res.end();
+}) 
+
+// Lay thong tin doc gia
+app.post("/layTTDocGia", json.json(), function(req, res) { 
+	sql = "select HoTen, Email, SoDienThoai from docgia where MaThe = ?"; 
+	sql = mysql.format(sql, req.body.MaThe); 
+	connect.query(sql, function (err, result) {
+		if (err) {
+			res.write("0");
+			res.end();
+		}
+		else {
+			if (result.length == 0) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				res.write(JSON.stringify(result)); 
+				res.end();
+			}
+		}
+	})
 })
 
-
-
+// Lay thong tin sach muon
+app.post("/layTTSachMuon", json.json(), function(req, res) { 
+	sql = "select tenTL, MaVach, GiaBia from tailieu, tailieuchitiet where MaVach = ? and TaiLieuId = tailieu.id"; 
+	sql = mysql.format(sql, req.body.MaVach); 
+	connect.query(sql, function (err, result) {
+		if (err) {
+			res.write("0");
+			res.end();
+		}
+		else {
+			if (result.length == 0) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				res.write(JSON.stringify(result)); 
+				res.end();
+			}
+		}
+	})
+})
