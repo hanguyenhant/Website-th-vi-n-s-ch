@@ -713,13 +713,13 @@ app.get('/quanLyMuonSach', async function(req, res) {
 
 	// Hien thi danh sach muon sach
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
+		sql = `select id, MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
 		noi_dung_tim_kiem = '';
 	}
 	else //Tim kiem phieu muon
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
+		sql = `select id, MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
 								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
@@ -744,6 +744,89 @@ app.get('/quanLyMuonSach', async function(req, res) {
 		res.send('ERROR');
 	} 
 });
+
+// Lay thong tin doc gia
+app.post("/layTTDocGia", json.json(), function(req, res) { 
+	sql = "select HoTen, Email, SoDienThoai from docgia where MaThe = ?"; 
+	sql = mysql.format(sql, req.body.MaThe); 
+	connect.query(sql, function (err, result) {
+		if (err) {
+			res.write("0");
+			res.end();
+		}
+		else {
+			if (result.length == 0) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				res.write(JSON.stringify(result)); 
+				res.end();
+			}
+		}
+	})
+})
+
+// Lay thong tin sach muon
+app.post("/layTTSachMuon", json.json(), function(req, res) { 
+	sql = "select tenTL, MaVach, GiaBia from tailieu, tailieuchitiet where MaVach = ? and TaiLieuId = tailieu.id"; 
+	sql = mysql.format(sql, req.body.MaVach); 
+	connect.query(sql, function (err, result) {
+		if (err) {
+			res.write("0");
+			res.end();
+		}
+		else {
+			if (result.length == 0) { 
+				res.write("0");
+				res.end();
+			}
+			else {
+				res.write(JSON.stringify(result)); 
+				res.end();
+			}
+		}
+	})
+})
+
+// Them phieu muon
+app.post("/themPhieuMuon", json.json(), async function(req, res) { 
+	MaThe = req.body.MaThe;
+	ThoiHanMuon = req.body.ThoiHanMuon;
+	MaNV_Muon = req.body.MaNV_Muon;
+	TienCoc = req.body.TienCoc; 
+	danhsachmavach = req.body.DanhSachMaVach;
+	currentDate = new Date();
+	NgayMuon = currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + (currentDate.getDate());
+	for (var i = 0; i < danhsachmavach.length; i++) {
+		sql = "insert into muon_tra(MaVach, MaThe, NgayMuon, ThoiHanMuon, MaNV_Muon, TienCoc, TrangThai) values(?, ?, ?, ?, ?, ?, ?)";
+		sql = mysql.format(sql, [danhsachmavach[i], MaThe, NgayMuon , ThoiHanMuon, MaNV_Muon, TienCoc, "Mượn"]);
+		try {
+			result = await queryPromise(sql);
+		} catch(e) {
+			res.write("0");
+			res.end();
+		}
+	}
+	var pageSize = 5,
+			pageCount;
+		danhsachmuonsach = [];
+	results = await queryPromise(`select id, MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" order by id desc`);
+	pageCount = Math.ceil(results.length/pageSize);
+	soluong = results.length % pageSize; // so luong nhan vien thuoc trang cuoi cung
+	if (soluong == 0) soluong = pageSize;
+	for (var i = 0; i < pageSize && i < soluong; i++) {
+		danhsachmuonsach[soluong - i - 1] = results[i];
+	}
+	ds_pagecount = {
+		'danhsachmuonsach': danhsachmuonsach,
+		'pageCount': pageCount 
+	};   
+	res.write(JSON.stringify(ds_pagecount)); 
+	res.end(); 
+	 
+ 
+})
 
 // Lay danh sach tra sach
 app.get('/quanLyTraSach', async function(req, res) {
@@ -1255,47 +1338,3 @@ app.get('/thongTinChiTietTaiLieu/:id', async function(req, res) {
 	} 
 	res.end();
 }) 
-
-// Lay thong tin doc gia
-app.post("/layTTDocGia", json.json(), function(req, res) { 
-	sql = "select HoTen, Email, SoDienThoai from docgia where MaThe = ?"; 
-	sql = mysql.format(sql, req.body.MaThe); 
-	connect.query(sql, function (err, result) {
-		if (err) {
-			res.write("0");
-			res.end();
-		}
-		else {
-			if (result.length == 0) { 
-				res.write("0");
-				res.end();
-			}
-			else {
-				res.write(JSON.stringify(result)); 
-				res.end();
-			}
-		}
-	})
-})
-
-// Lay thong tin sach muon
-app.post("/layTTSachMuon", json.json(), function(req, res) { 
-	sql = "select tenTL, MaVach, GiaBia from tailieu, tailieuchitiet where MaVach = ? and TaiLieuId = tailieu.id"; 
-	sql = mysql.format(sql, req.body.MaVach); 
-	connect.query(sql, function (err, result) {
-		if (err) {
-			res.write("0");
-			res.end();
-		}
-		else {
-			if (result.length == 0) { 
-				res.write("0");
-				res.end();
-			}
-			else {
-				res.write(JSON.stringify(result)); 
-				res.end();
-			}
-		}
-	})
-})

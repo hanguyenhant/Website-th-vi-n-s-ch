@@ -36,9 +36,9 @@
 					</div>					
 				</form>
 				<div class="col-sm-2" style="float: right;">
-					<button type="button" class="btn btn-primary" style="text-align: right;" data-toggle="modal" data-target="#myModal">Thêm phiếu mượn</button>
+					<button type="button" class="btn btn-primary" style="text-align: right;" onclick="openModal_ThemPhieuMuon();">Thêm phiếu mượn</button>
 					<!-- Modal -->
-				 	<div class="modal fade" id="myModal" role="dialog">
+				 	<div class="modal fade" id="addModal" role="dialog">
 				    	<div class="modal-dialog modal-lg" style="width: 900px;">
 				    
 				      	<!-- Noi dung cua modal -->
@@ -52,10 +52,10 @@
 					        <div class="modal-body">
 					        	<div class="form-group">
 							        <label for="ThoiHanMuon" style="float: left;">Thời hạn mượn&nbsp;</label>
-							        <select id="ThoiHanMuon" class="col-sm-2">
+							        <select id="ThoiHanMuon" class="col-sm-2" onchange="thoiHanMuon(this);">
 							        	<option value="3 tháng">3 tháng</option>
 							        	<option value="6 tháng">6 tháng</option>
-							        	<option value="3 tháng">1 năm</option>
+							        	<option value="1 năm">1 năm</option>
 							        </select> 
 							    </div>
 							    <hr>
@@ -286,8 +286,22 @@
 	    date_input.datepicker(options);
 	})
 	var MaThe;
+	function openModal_ThemPhieuMuon() {
+		$("#addModal").modal();
+		document.getElementById("MaThe").value = '';
+		document.getElementById("HoTen").value = '';
+		document.getElementById("Email").value = '';
+		document.getElementById("SoDienThoai").value = '';
+		document.getElementById("MaVach").value = ''; 
+		document.getElementById("TongSoSachMuon").value = '';
+		document.getElementById("TongTienCoc").value = '';
+		table = document.getElementById("table_dssach"); 
+	 	for(var i = 1; i<table.rows.length;){
+            table.deleteRow(i);
+        }
+	}
 	function layTTDocGia(event) {
-		if (event.which == 13 || event.keyCode == 13) { 
+		if (event.keyCode == 13) { // nhan phim enter
 			MaThe = document.getElementById("MaThe").value;
 			if (MaThe.trim() == "") document.getElementById("check_DocGia").innerHTML = "";
 			var xmlhttp = new XMLHttpRequest();
@@ -318,7 +332,7 @@
 	var TongTienCoc = 0;
 	var danhSachMaVach = [];
 	function sachMuon() {  
-		if (event.which == 13 || event.keyCode == 13) {  
+		if (event.keyCode == 13) { // nhan phim enter 
 			tr = document.getElementById("sachmuon");
 			MaVach = document.getElementById("MaVach").value;
 			if (MaVach.trim() == "") document.getElementById("check_Sach").innerHTML = ""; 
@@ -344,8 +358,16 @@
 							`;
 							document.getElementById("TongSoSachMuon").value = totalRowCount + 1;
 							TongTienCoc += thongtinsachmuon.GiaBia;
+							var TongTienCoc1 = TongTienCoc;
+							ThoiHanMuon = document.getElementById("ThoiHanMuon").value;
+							if (ThoiHanMuon == "3 tháng") {
+								TongTienCoc1 = Math.ceil(TongTienCoc1 / 2); 
+							}
+							else if (ThoiHanMuon == "6 tháng") {
+								TongTienCoc1 = Math.ceil(3 * TongTienCoc1 / 4); 
+							} 
 							// Tinh tong so tien dat coc
-							document.getElementById("TongTienCoc").value = TongTienCoc;
+							document.getElementById("TongTienCoc").value = TongTienCoc1;
 
 							// Tao html trong the co id = "sachmuon"
 							tr.insertAdjacentHTML('beforebegin', list);
@@ -363,6 +385,121 @@
 			}  
 		}
 	}
- 
+
+	function themPhieuMuon() {
+		var check = true;
+		if(document.getElementById('HoTen').value.trim() == '') {
+			document.getElementById("check_DocGia").innerHTML = "Vui lòng điền mã độc giả";
+			check = false;
+		}
+		// Lay tong so hang cua bang 
+		var totalRowCount = $("#table_dssach tr").length - 1; 
+		if(totalRowCount == 0) {
+			document.getElementById("check_Sach").innerHTML = "Vui lòng điền các mã vạch";
+			check = false;
+		}
+		if (check) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/themPhieuMuon", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") {     
+						danhSachMuonSach = JSON.parse(xmlhttp.responseText);
+						document.getElementById("close").click(); 
+				        // xu ly ajax 
+						ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
+						danhsachmuonsach = ketqua.danhsachmuonsach;
+						pageCount = ketqua.pageCount;
+
+						// Xu ly bang hien thi danh sach nhan vien
+						hienthi = '<table class="table table-striped" id="table_dssach">';
+							hienthi += '<thead>'; 
+								hienthi += '<th>STT</th>'; 
+								hienthi += '<th>Mã vạch</th>'; 
+								hienthi += '<th>Mã thẻ</th>';   
+								hienthi += '<th>Ngày mượn</th>';
+								hienthi += '<th>Thời hạn mượn</th>';
+								hienthi += '<th>Tiền cọc</th>';
+								hienthi += '<th>Hành động</th>';
+							hienthi += '</thead>';
+							hienthi += '<body>';
+							for (var i = 0, j=(pageCount - 1)*4; i < danhsachmuonsach.length && j<(danhsachmuonsach.length + 4 * pageCount); i++, j++)
+							{
+								hienthi += '<tr>';
+									hienthi += '<td>' + (j + 1) + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].MaVach + '</td>';
+									hienthi += '<td>' + danhsachmuonsach[i].MaThe + '</td>'; 
+									hienthi +=  '<td>' + danhsachmuonsach[i].NgayMuon + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].ThoiHanMuon + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].TienCoc + '</td>';
+									hienthi += 
+									'<td>' +							
+										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(' + danhsachmuonsach[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
+								    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+										'</button>' +   							
+									'</td>';				
+								hienthi += '</tr>';
+							}
+							hienthi +='</body>';
+						hienthi += '</table>'; 
+
+						// Thay doi url den trang cuoi cung
+						var url = "/quanLyMuonSach" + "?noi_dung_tim_kiem=&page=" + pageCount; 
+				  		
+				  		// Xu ly phan trang
+			    		phantrang = document.getElementById('phantrang');
+			    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
+			    		hienthi_phantrang += '<ul class="pagination">';
+			    		hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page=1"+ '">' + '&laquo;</a></li>';
+			    		 
+			    		if (pageCount > 5)  { 
+			    			var amount = 0;
+			    			hienthi_phantrang += '<li><a disabled>...</a></li>';
+			    			for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
+			    			amount += 1;
+			    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
+			    			}   
+			    		} 
+			    		else {
+			    			for(var i = 1; i < pageCount; i++) { 
+			    				hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>'; 
+			    			}
+			    		}
+			    		hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+			            hienthi_phantrang += '</ul>';
+
+						// Tao html trong the co id = "menu"
+						document.getElementById('danhsachsachmuon').innerHTML = hienthi; 
+						// Tao html trong the co phantrang = "menu"
+						phantrang.innerHTML = hienthi_phantrang; 
+
+						// Thay doi gia tri url 
+						history.pushState(null, '', url);  
+					}
+					else {
+						alert("Error!");
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinPhieuMuon = JSON.stringify({"MaThe": MaThe, "DanhSachMaVach": danhSachMaVach, "ThoiHanMuon": document.getElementById('ThoiHanMuon').value, "MaNV_Muon": sessionStorage.getItem('username'), "TienCoc": document.getElementById("TongTienCoc").value}); 
+			 
+			xmlhttp.send(thongTinPhieuMuon);  
+		}
+	}
+	function thoiHanMuon() { 
+		TongTienCoc1 = TongTienCoc;
+		ThoiHanMuon = document.getElementById("ThoiHanMuon").value;
+		if (ThoiHanMuon == "3 tháng") {
+			TongTienCoc1 = Math.ceil(TongTienCoc1 / 2); 
+		}
+		else if (ThoiHanMuon == "6 tháng") {
+			TongTienCoc1 = Math.ceil(3 * TongTienCoc1 / 4); 
+		}  
+		// Tinh tong so tien dat coc
+		document.getElementById("TongTienCoc").value = TongTienCoc1;
+
+	}
 </script>
 </html>
