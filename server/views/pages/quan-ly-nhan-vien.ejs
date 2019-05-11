@@ -498,12 +498,19 @@
 							if (currentPage > 5) { 
 								hienthi_phantrang += '<li><a disabled>...</a></li>'; 
 				    		}  
-				    		for(var i = parseInt(currentPage) - 4; i < parseInt(currentPage) - 1 ; i++) { 
-				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ (i + 1) + '">' + (i + 1) + '</a></li>'; 
-							}
+				    		if (currentPage >= 5) {
+				    			for(var i = parseInt(currentPage) - 4; i <= parseInt(currentPage) - 1 ; i++) { 
+					    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ (i) + '">' + (i) + '</a></li>'; 
+								}
+				    		}
+				    		else {
+				    			for(var i = 1; i <= parseInt(currentPage) - 1 ; i++) { 
+					    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ (i) + '">' + (i) + '</a></li>'; 
+								}
+				    		}
 							hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ currentPage + '">' + currentPage + '</a></li>'; 
 							 
-							if (parseInt(parseInt(pageCount) - parseInt(currentPage)) >= 0) {
+							if (parseInt(parseInt(pageCount) - parseInt(currentPage)) > 0) {
 								var j = 1;
 								for(var i = parseInt(currentPage) + 1; j <= 4 && i <= parseInt(pageCount); i++) { 
 									j++;
