@@ -127,24 +127,28 @@
 				<table class="table table-striped" id="danhsachsachmuon">
 					<thead> 
 						<th>STT</th>
-						<th>Mã vạch</th>
 						<th>Mã thẻ</th>
-						<th>Ngày mượn</th>
+						<th>Ngày mượn</th> 
 						<th>Thời hạn mượn</th>
-						<th>Tiền cọc</th>
+						<th>Mã NV cho mượn</th>
+						<th>Mã NV trả</th>
+						<th>Tổng số sách</th>
+						<th>Tổng tiền cọc</th>
 						<th>Hành động</th> 
 					</thead>
 					<tbody> 
 						<%for (var i=0; i<danhSachMuonSach.length; i++){%>
 							<tr>
 								<td><%=i+1%></td>
-								<td><%=danhSachMuonSach[i].MaVach%></td>
 								<td><%=danhSachMuonSach[i].MaThe%></td>
 								<td><%=danhSachMuonSach[i].NgayMuon%></td>
 								<td><%=danhSachMuonSach[i].ThoiHanMuon%></td>
-								<td><%=danhSachMuonSach[i].TienCoc%></td>
+								<td><%=danhSachMuonSach[i].MaNV_Muon%></td>
+								<td><%=danhSachMuonSach[i].MaNV_Tra%></td>
+								<td><%=danhSachMuonSach[i].TongSoSach%></td>
+								<td><%=danhSachMuonSach[i].TongTienCoc%></td>
 								<td>
-									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(<%=danhSachMuonSach[i].id%>, '<%=danhSachMuonSach[i].MaVach%>', '<%=danhSachMuonSach[i].MaThe%>', '<%=danhSachMuonSach[i].NgayMuon%>', '<%=danhSachMuonSach[i].ThoiHanMuon%>', '<%=danhSachMuonSach[i].TienCoc%>');" data-toggle="modal" data-target="#editModal">
+									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(<%=danhSachMuonSach[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  								
 								</td> 
@@ -153,14 +157,11 @@
 					</tbody>
 				</table>
 				<hr>
-				<label>Tổng số sách mượn: <%=danhSachMuonSach.length%></label>
+				<label id="label_TongSoSach">Tổng số sách mượn: <%=TongSoSach%></label> quyển
 				<br>
-				<label>Tổng số tiền cọc: <%=danhSachMuonSach.reduce(function(TienCoc, curr){
-									    TienCoc += curr.TienCoc;
-									    return TienCoc;
-									    }, 0) %></label>
-				<% var url = "/quanLyMuonSach" + "?noi_dung_tim_kiem=" + noi_dung_tim_kiem;
-				var i = 1;%> 
+				<label id="label_TongTienCoc">Tổng tiền đặt cọc: <%=TongTienCoc%></label> VNĐ
+				<% var url = "/quanLyMuonSach" + "?noi_dung_tim_kiem=" +noi_dung_tim_kiem; 
+				var i = 1;%>  
 				<div class="container" align="right" id="phantrang">
 					<hr class="mt-2 mb-5">	
 					<%if (pageCount > 1) { %>
@@ -259,7 +260,7 @@
 							</div>
 							<label>Tổng số sách mượn: </label>
 							<input type="text" class="form-control" required="" id="TongSoSachMuon_Edit" disabled="">
-							<label>Tổng tiền cọc: </label>
+							<label>Tổng tiền đặt cọc: </label>
 							<input type="text" class="form-control" required="" id="TongTienCoc_Edit" disabled="">
 						</div>   
 			       	</div>
@@ -286,7 +287,7 @@
 	    date_input.datepicker(options);
 	})
 	var MaThe;
-	function openModal_ThemPhieuMuon() {
+	function openModal_ThemPhieuMuon() { 
 		$("#addModal").modal();
 		document.getElementById("MaThe").value = '';
 		document.getElementById("HoTen").value = '';
@@ -411,15 +412,17 @@
 						danhsachmuonsach = ketqua.danhsachmuonsach;
 						pageCount = ketqua.pageCount;
 
-						// Xu ly bang hien thi danh sach nhan vien
+						// Xu ly bang hien thi danh sach muon tra
 						hienthi = '<table class="table table-striped" id="table_dssach">';
 							hienthi += '<thead>'; 
 								hienthi += '<th>STT</th>'; 
-								hienthi += '<th>Mã vạch</th>'; 
-								hienthi += '<th>Mã thẻ</th>';   
-								hienthi += '<th>Ngày mượn</th>';
+								hienthi += '<th>Mã thẻ</th>'; 
+								hienthi += '<th>Ngày mượn</th>';   
 								hienthi += '<th>Thời hạn mượn</th>';
-								hienthi += '<th>Tiền cọc</th>';
+								hienthi += '<th>Mã NV cho mượn</th>';
+								hienthi += '<th>Mã NV trả</th>';
+								hienthi += '<th>Tổng số sách</th>';
+								hienthi += '<th>Tổng tiền đặt cọc</th>';
 								hienthi += '<th>Hành động</th>';
 							hienthi += '</thead>';
 							hienthi += '<body>';
@@ -427,11 +430,16 @@
 							{
 								hienthi += '<tr>';
 									hienthi += '<td>' + (j + 1) + '</td>';
-									hienthi +=  '<td>' + danhsachmuonsach[i].MaVach + '</td>';
-									hienthi += '<td>' + danhsachmuonsach[i].MaThe + '</td>'; 
-									hienthi +=  '<td>' + danhsachmuonsach[i].NgayMuon + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].MaThe + '</td>';
+									hienthi += '<td>' + danhsachmuonsach[i].NgayMuon + '</td>'; 
 									hienthi +=  '<td>' + danhsachmuonsach[i].ThoiHanMuon + '</td>';
-									hienthi +=  '<td>' + danhsachmuonsach[i].TienCoc + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].MaNV_Muon + '</td>';
+									if (danhsachmuonsach[i].MaNV_Tra) {
+										hienthi +=  '<td>' + danhsachmuonsach[i].MaNV_Muon + '</td>';
+									}
+									else hienthi +=  '<td></td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].TongSoSach + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].TongTienCoc + '</td>';
 									hienthi += 
 									'<td>' +							
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(' + danhsachmuonsach[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
@@ -442,6 +450,9 @@
 							}
 							hienthi +='</body>';
 						hienthi += '</table>'; 
+
+						// Tao html trong the co id = "menu"
+						document.getElementById('danhsachsachmuon').innerHTML = hienthi; 
 
 						// Thay doi url den trang cuoi cung
 						var url = "/quanLyMuonSach" + "?noi_dung_tim_kiem=&page=" + pageCount; 
@@ -457,24 +468,24 @@
 			    			hienthi_phantrang += '<li><a disabled>...</a></li>';
 			    			for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
 			    			amount += 1;
-			    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
+			    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
 			    			}   
 			    		} 
 			    		else {
 			    			for(var i = 1; i < pageCount; i++) { 
-			    				hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>'; 
+			    				hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>'; 
 			    			}
 			    		}
-			    		hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
-			            hienthi_phantrang += '</ul>';
+			    		hienthi_phantrang += '<li class="active"><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+			            hienthi_phantrang += '</ul>'; 
 
-						// Tao html trong the co id = "menu"
-						document.getElementById('danhsachsachmuon').innerHTML = hienthi; 
 						// Tao html trong the co phantrang = "menu"
 						phantrang.innerHTML = hienthi_phantrang; 
 
 						// Thay doi gia tri url 
 						history.pushState(null, '', url);  
+						document.getElementById("label_TongSoSach").innerHTML = "Tổng số sách mượn:" + ketqua.TongSoSach + " quyển";
+						document.getElementById("label_TongTienCoc").innerHTML = "Tổng tiền đặt cọc: " +ketqua.TongTienCoc + " VNĐ";
 					}
 					else {
 						alert("Error!");
@@ -483,11 +494,14 @@
 
 			}
 			xmlhttp.setRequestHeader('Content-type', 'application/json');
-			var thongTinPhieuMuon = JSON.stringify({"MaThe": MaThe, "DanhSachMaVach": danhSachMaVach, "ThoiHanMuon": document.getElementById('ThoiHanMuon').value, "MaNV_Muon": sessionStorage.getItem('username'), "TienCoc": document.getElementById("TongTienCoc").value}); 
+			var thongTinPhieuMuon = JSON.stringify({"MaThe": MaThe, "DanhSachMaVach": danhSachMaVach, "ThoiHanMuon": document.getElementById('ThoiHanMuon').value, "MaNV_Muon": sessionStorage.getItem('username'),"TongTienCoc": document.getElementById("TongTienCoc").value}); 
+			console.log(thongTinPhieuMuon);
 			 
 			xmlhttp.send(thongTinPhieuMuon);  
 		}
 	}
+
+	// Thay doi thoi han muon
 	function thoiHanMuon() { 
 		TongTienCoc1 = TongTienCoc;
 		ThoiHanMuon = document.getElementById("ThoiHanMuon").value;
@@ -498,8 +512,12 @@
 			TongTienCoc1 = Math.ceil(3 * TongTienCoc1 / 4); 
 		}  
 		// Tinh tong so tien dat coc
-		document.getElementById("TongTienCoc").value = TongTienCoc1;
-
+		document.getElementById("TongTienCoc").value = TongTienCoc1; 
+	}
+ 
+	// Sua thong tin phieu muon
+	function LayTTPhieuMuon(id) { 
+		
 	}
 </script>
 </html>

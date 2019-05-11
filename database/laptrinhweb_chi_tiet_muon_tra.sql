@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.24, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: laptrinhweb
+-- Host: localhost    Database: laptrinhweb1
 -- ------------------------------------------------------
--- Server version	5.7.24-log
+-- Server version	5.7.17-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,32 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `nhanvien`
+-- Table structure for table `chi_tiet_muon_tra`
 --
 
-DROP TABLE IF EXISTS `nhanvien`;
+DROP TABLE IF EXISTS `chi_tiet_muon_tra`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nhanvien` (
+CREATE TABLE `chi_tiet_muon_tra` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `MaNV` varchar(45) NOT NULL,
-  `HoTen` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `DiaChi` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `Email` varchar(45) NOT NULL,
-  `SoDienThoai` varchar(45) NOT NULL,
-  `ChucVu` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `IdPhieuMuonTra` int(11) NOT NULL,
+  `MaVach` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `nhanvien`
+-- Dumping data for table `chi_tiet_muon_tra`
 --
 
-LOCK TABLES `nhanvien` WRITE;
-/*!40000 ALTER TABLE `nhanvien` DISABLE KEYS */;
-INSERT INTO `nhanvien` VALUES (1,'NV001','Hà Thị Huệ','Hà Nội','hue.hathi@hust.edu.vn','02422153287','Nhân viên'),(2,'NV002','Hoàng Ngọc Chi','Hải Phòng','chi.hoangngoc@hust.edu.vn','02438694227','Nhân viên'),(3,'NV003','Nguyễn Ngọc Sơn','Bắc Giang','son.nguyenngoc@hust.edu.vn','02439916007','Nhân viên'),(4,'NV004','Nguyễn Thị Thu Thủy','Hưng Yên','thuy.nguyenthithu1@hust.edu.vn','02439916005','Nhân viên'),(5,'NV005','Hồ Thị Oanh','Nghệ An','oanhht@gmail.com','0908287599','Nhân viên');
-/*!40000 ALTER TABLE `nhanvien` ENABLE KEYS */;
+LOCK TABLES `chi_tiet_muon_tra` WRITE;
+/*!40000 ALTER TABLE `chi_tiet_muon_tra` DISABLE KEYS */;
+INSERT INTO `chi_tiet_muon_tra` VALUES (13,1,'TLCT00001'),(14,1,'TLCT00002'),(15,1,'TLCT00003'),(16,2,'TLCT00001'),(20,2,'TLCT00005'),(23,3,'TLCT00001'),(24,3,'TLCT00003'),(25,3,'TLCT00005'),(26,4,'TLCT00001'),(27,4,'TLCT00003'),(28,4,'TLCT00002'),(29,5,'TLCT00004'),(30,5,'TLCT00005'),(31,5,'TLCT00002'),(32,5,'TLCT00001');
+/*!40000 ALTER TABLE `chi_tiet_muon_tra` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-12 12:47:06
+-- Dump completed on 2019-05-11 19:15:05

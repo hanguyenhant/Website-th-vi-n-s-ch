@@ -17,7 +17,7 @@ app.use(express.static('public'));
 // Ket noi nodejs voi mysql
 const mysql = require("mysql"); 
 var connect = mysql.createConnection({
-	database: 'laptrinhweb',
+	database: 'laptrinhweb1',
 	host: 'localhost',
 	user: 'root',
 	password: '123456',
@@ -707,26 +707,41 @@ app.get('/quanLyMuonSach', async function(req, res) {
 	var k = 0;
 	var sql; 
 	var noi_dung_tim_kiem;
+	var TongSoSach, TongTienCoc;
 	if (typeof req.query.page != 'undefined') {
-		currentPage = +req.query.page;
+		currentPage = req.query.page; 
 	}
 
 	// Hien thi danh sach muon sach
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select id, MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn"`;
+		sql = `select id, MaThe, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon, 
+		 ThoiHanMuon, MaNV_Muon, MaNV_Tra, TongSoSach, TongTienCoc from phieu_muon_tra where TrangThai = "Mượn"`;
 		noi_dung_tim_kiem = '';
+		danhSachMuonSach = await queryPromise(sql); 
+		TongSoSach = danhSachMuonSach.reduce(function(TongSoSach, curr){
+										TongSoSach += curr.TongSoSach;
+									    return TongSoSach;
+									    }, 0); 
+		TongTienCoc = danhSachMuonSach.reduce(function(TongTienCoc, curr){
+									    TongTienCoc += curr.TongTienCoc;
+									    return TongTienCoc;
+									    }, 0); 
 	}
 	else //Tim kiem phieu muon
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select id, MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaVach like ? or MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?`;
+		sql = `select id, MaThe, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon, 
+		 ThoiHanMuon, MaNV_Muon, MaNV_Tra, TongSoSach, TongTienCoc from phieu_muon_tra 
+		 where TrangThai = "Mượn" and MaThe like ? or NgayMuon like ? or ThoiHanMuon like ? 
+		 or MaNV_Muon like ? or MaNV_Tra like ? or TongTienCoc like ? or TongSoSach like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
-								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+								noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
 	}
 	try { 
 		danhSachMuonSach = await queryPromise(sql);
-		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
+		pageCount = Math.ceil(danhSachMuonSach.length/pageSize); 
 
 		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
 			if (danhSachMuonSach.length>i)
@@ -737,7 +752,9 @@ app.get('/quanLyMuonSach', async function(req, res) {
 														pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage, 
-														noi_dung_tim_kiem: noi_dung_tim_kiem });
+														noi_dung_tim_kiem: noi_dung_tim_kiem,
+														TongSoSach: TongSoSach,
+														TongTienCoc: TongTienCoc });
 		 
 	} 
 	catch(Exception) {
@@ -791,16 +808,33 @@ app.post("/layTTSachMuon", json.json(), function(req, res) {
 
 // Them phieu muon
 app.post("/themPhieuMuon", json.json(), async function(req, res) { 
+	var NgayMuon = (new Date()).getFullYear() + "-" + ((new Date()).getMonth() + 1) + "-" + ((new Date()).getDate()) + 
+	" " + (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds();
 	MaThe = req.body.MaThe;
 	ThoiHanMuon = req.body.ThoiHanMuon;
 	MaNV_Muon = req.body.MaNV_Muon;
-	TienCoc = req.body.TienCoc; 
-	danhsachmavach = req.body.DanhSachMaVach;
-	currentDate = new Date();
-	NgayMuon = currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + (currentDate.getDate());
+	TongTienCoc = req.body.TongTienCoc;  
+	danhsachmavach = req.body.DanhSachMaVach; 
+
+	sql = "insert into phieu_muon_tra(MaThe, NgayMuon, ThoiHanMuon, MaNV_Muon, TongSoSach, TongTienCoc, TrangThai) values(?, ?, ?, ?, ?, ?, ?)";
+	sql = mysql.format(sql, [MaThe, NgayMuon , ThoiHanMuon, MaNV_Muon, danhsachmavach.length, TongTienCoc, "Mượn"]);
+	try { 
+		result = await queryPromise(sql); 
+	} catch(e) {
+		res.write("0");
+		res.end();
+	}
+	sql = "select max(id) as id from phieu_muon_tra";
+	try {
+		IdPhieuMuonTra = await queryPromise(sql);
+		IdPhieuMuonTra = IdPhieuMuonTra[0].id;
+	} catch(e) {
+		res.write("0");
+		res.end();
+	}
 	for (var i = 0; i < danhsachmavach.length; i++) {
-		sql = "insert into muon_tra(MaVach, MaThe, NgayMuon, ThoiHanMuon, MaNV_Muon, TienCoc, TrangThai) values(?, ?, ?, ?, ?, ?, ?)";
-		sql = mysql.format(sql, [danhsachmavach[i], MaThe, NgayMuon , ThoiHanMuon, MaNV_Muon, TienCoc, "Mượn"]);
+		sql = "insert into chi_tiet_muon_tra(IdPhieuMuonTra, MaVach) values(?, ?)";
+		sql = mysql.format(sql, [IdPhieuMuonTra, danhsachmavach[i]]);
 		try {
 			result = await queryPromise(sql);
 		} catch(e) {
@@ -811,7 +845,17 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 	var pageSize = 5,
 			pageCount;
 		danhsachmuonsach = [];
-	results = await queryPromise(`select id, MaVach, MaThe, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" order by id desc`);
+	results = await queryPromise(`select id, MaThe, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon, 
+		 ThoiHanMuon, MaNV_Muon, MaNV_Tra, TongSoSach, TongTienCoc from phieu_muon_tra where TrangThai = "Mượn"
+		  order by id desc`);
+	TongSoSach = results.reduce(function(TongSoSach, curr){
+									TongSoSach += curr.TongSoSach;
+								    return TongSoSach;
+								    }, 0); 
+	TongTienCoc = results.reduce(function(TongTienCoc, curr){
+									    TongTienCoc += curr.TongTienCoc;
+									    return TongTienCoc;
+									    }, 0); 
 	pageCount = Math.ceil(results.length/pageSize);
 	soluong = results.length % pageSize; // so luong nhan vien thuoc trang cuoi cung
 	if (soluong == 0) soluong = pageSize;
@@ -820,8 +864,10 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 	}
 	ds_pagecount = {
 		'danhsachmuonsach': danhsachmuonsach,
-		'pageCount': pageCount 
-	};   
+		'pageCount': pageCount,
+		'TongSoSach': TongSoSach,
+		'TongTienCoc': TongTienCoc 
+	};    
 	res.write(JSON.stringify(ds_pagecount)); 
 	res.end(); 
 	 
