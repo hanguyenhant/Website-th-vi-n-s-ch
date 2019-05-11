@@ -20,7 +20,7 @@ var connect = mysql.createConnection({
 	database: 'laptrinhweb1',
 	host: 'localhost',
 	user: 'root',
-	password: '123456',
+	password: '',
 	dateStrings: 'date',
 });
 
@@ -1045,6 +1045,9 @@ app.get('/thongTinMuonSach', async function(req, res) {
 	} 
 });
 
+
+
+
 // Lay danh sachdoc gia
 app.get('/danhSachDocGia', async function(req, res) {
 	var pageSize = 4,
@@ -1058,16 +1061,16 @@ app.get('/danhSachDocGia', async function(req, res) {
 	if (typeof req.query.page != 'undefined') {
 		currentPage = +req.query.page;
 	}
-
+  //date_format(NgayMuon, '%Y-%m-%d %H-%i-%s') as NgayMuon
 	// Hien thi danh sachdoc gia
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, NgayCap, HanSD, MaNV, NgayCN from docgia`;
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d ') as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia`;
 		noi_dung_tim_kiem = '';
 	}
 	else //Tim kiemdoc gia
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai, MaNV from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d ') as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
 								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
@@ -1123,7 +1126,7 @@ app.post('/themDocGia', json.json(), async function(req, res) {
 				var pageSize = 4,
 					pageCount;
 				danhsachdocgia = [];
-				results = await queryPromise("select * from docgia order by id desc");
+				results = await queryPromise("select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d  as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia order by id desc");
 				pageCount = Math.ceil(results.length/pageSize);
 				for (var i = 0; i < pageSize; i++) {
 					danhsachdocgia[i] = results[pageSize - i - 1];
@@ -1146,7 +1149,7 @@ app.post('/themDocGia', json.json(), async function(req, res) {
 // Suadoc gia 
 app.post('/suaDocGia', json.json(), function(req, res) {
 	var sql = `update docgia set HoTen = ?, DiaChi = ?, Email = ? , SoDienThoai = ?, 
-	NgayCap = ?, HanSD = ?, MaNV = ?,  NgayCN = ?,
+	NgayCap = ?, HanSD = ?, MaNV = ?,  NgayCN = ?
 	where id = ?`;
 	sql = mysql.format(sql, [req.body.HoTen, req.body.DiaChi,
 		req.body.Email, req.body.SoDienThoai, req.body.NgayCap, req.body.HanSD
@@ -1157,13 +1160,14 @@ app.post('/suaDocGia', json.json(), function(req, res) {
 			res.end();
 		}
 		else {
-			sql = "select * from docgia where id = ?";
+			sql = "select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d') as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d') as NgayCN from docgia where id = ?";
 			sql = mysql.format(sql, req.body.id);
 			danhsachdocgia = await queryPromise(sql); 
 			res.write(JSON.stringify(danhsachdocgia)); 
 			res.end();
 		}
 	})
+	//console.log(sql);
 })
 
 // Xoadoc gia 
@@ -1200,8 +1204,8 @@ app.post('/xoaDocGia', json.json(), function(req, res) {
   
 // Xem thong tin chi tiet cuadoc gia
 app.get('/thongTinChiTietDocGia/:id', async function(req, res) { 
-	var sql = `select MaThe, SoDienThoai, DiaChi, Email, HoTen, NgayCap, HanSD, MaNV, NgayCN from docgia 
-	where id = ?`;
+	var sql = `select  MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d') as NgayCap ,  date_format(HanSD, '%Y-%m-%d') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d') as NgayCN
+ from docgia where id = ?`;
 	sql = mysql.format(sql, req.params.id);
 	try {
 		results = await queryPromise(sql);
@@ -1215,6 +1219,8 @@ app.get('/thongTinChiTietDocGia/:id', async function(req, res) {
 	res.end();
 })
 
+
+/*end*/
 // Lay danh sach tai lieu
 app.get('/danhSachTaiLieu', async function(req, res) {
 	var pageSize = 10,

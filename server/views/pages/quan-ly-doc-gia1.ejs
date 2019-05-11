@@ -151,7 +151,9 @@
 							<th>Địa chỉ</th>
 							<th>Email</th>
 							<th>Số điện thoại</th>
+							<th> Ngay Cấp </th>
 							<th> Mã NV </th>
+							
 							<th>Hành động</th>
 						</tr>
 					</thead>
@@ -164,7 +166,10 @@
 								<td><%=danhSachDocGia[i].DiaChi%></td>
 								<td><%=danhSachDocGia[i].Email%></td>
 								<td><%=danhSachDocGia[i].SoDienThoai%></td>
+								<td><%=danhSachDocGia[i].NgayCap%></td>
 								<td><%=danhSachDocGia[i].MaNV%></td>
+								
+								
 								<td>							
 									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(<%=danhSachDocGia[i].id%>, '<%=danhSachDocGia[i].MaThe%>', '<%=danhSachDocGia[i].HoTen%>', '<%=danhSachDocGia[i].DiaChi%>', '<%=danhSachDocGia[i].Email%>', '<%=danhSachDocGia[i].SoDienThoai%>', '<%=danhSachDocGia[i].MaDG%>', '<%=danhSachDocGia[i].NgayCap%>', '<%=danhSachDocGia[i].HanSD%>', '<%=danhSachDocGia[i].NgayCN%>');" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>

@@ -154,7 +154,10 @@
 							<th>Địa chỉ</th>
 							<th>Email</th>
 							<th>Số điện thoại</th>
+							<th>Ngày Cấp</th>
+							<th>Hạn SD </th>
 							<th>Mã NV</th>
+							<th> Ngày CN</th>
 							<th>Hành động</th>
 						</tr>
 					</thead>
@@ -167,7 +170,11 @@
 								<td id="DiaChi<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].DiaChi%></td>
 								<td id="Email<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].Email%></td>
 								<td id="SoDienThoai<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].SoDienThoai%></td>
+								<td id="NgayCap<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].NgayCap%></td>
+								<td id="HanSD<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].HanSD%></td>
 								<td id="MaNV<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].MaNV%></td>
+								<td id="NgayCN<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].NgayCN%></td>
+								
 								<td>							
 									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(<%=danhSachDocGia[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
@@ -506,7 +513,7 @@
 	 
 			if (valid) {
 				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.open("POST", "/suaNhanVien", false); 
+				xmlhttp.open("POST", "/suaDocGia", false); 
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
