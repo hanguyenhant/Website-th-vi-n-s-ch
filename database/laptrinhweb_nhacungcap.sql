@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `nhacungcap`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nhacungcap` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `HoTen` varchar(45) CHARACTER SET utf8 NOT NULL,
+  `NhaCungCap` varchar(45) CHARACTER SET utf8 NOT NULL,
   `DiaChi` varchar(45) CHARACTER SET utf8 NOT NULL,
   `SoDienThoai` varchar(45) NOT NULL,
   `Email` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-11 15:27:50
+-- Dump completed on 2019-05-11 23:23:37

@@ -56,7 +56,7 @@
 			           					<span class="input-group-addon">
 											<i class="glyphicon glyphicon-user"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="HoTen">
+										<input type="text" class="form-control" required="" id="NhaCungCap">
 			           				</div>
 			           			</div>   
 
@@ -106,7 +106,7 @@
 					<thead>
 						<tr>
 							<th>STT</th>
-							<th>Họ tên</th>
+							<th>Nhà cung cấp</th>
 							<th>Địa chỉ</th>
 							<th>Email</th>
 							<th>Số điện thoại</th>
@@ -118,7 +118,7 @@
 							<tr>
 								<td id="<%=danhSachNhaCungCap[i].id%>"><%=j + 1%></td>
 								
-								<td id="HoTen<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].HoTen%></td>
+								<td id="NhaCungCap<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].NhaCungCap%></td>
 								<td id="DiaChi<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].DiaChi%></td>
 								<td id="Email<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].Email%></td>
 								<td id="SoDienThoai<%=danhSachNhaCungCap[i].id%>"><%=danhSachNhaCungCap[i].SoDienThoai%></td>
@@ -181,17 +181,17 @@
 				        <div class="modal-body">  
 			        		
 							<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Tên nhà cung cấp: </label>
+		           				<label>Tên nhà cung cấp: </label>
 		           				<div class="input-group">
 		           					<span class="input-group-addon">
 										<i class="glyphicon glyphicon-user"></i> 
 									</span>
-									<input type="text" class="form-control" required="" id="HoTen_Edit">
+									<input type="text" class="form-control" required="" id="NhaCungCap_Edit">
 		           				</div>
 		           			</div>   
 
 		           			<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Số điện thoại: </label>
+		           				<label>Số điện thoại: </label>
 		           				<div class="input-group">
 		           					<span class="input-group-addon">
 										<i class="glyphicon glyphicon-phone"></i> 
@@ -201,7 +201,7 @@
 		           			</div>  
 
 		           			<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Địa chỉ: </label>
+		           				<label>Địa chỉ: </label>
 		           				<div class="input-group">
 		           					<span class="input-group-addon">
 										<i class="glyphicon glyphicon-home"></i> 
@@ -211,7 +211,7 @@
 		           			</div>   
 
 		           			<div class="form-group-inline">
-		           				<label for="ma-nhan-vien">Email: </label>
+		           				<label>Email: </label>
 		           				<div class="input-group">
 		           					<span class="input-group-addon">
 										<i class="glyphicon glyphicon-envelope"></i> 
@@ -257,7 +257,7 @@
 	<script type="text/javascript" language="javascript">  
 		function openModal() {
 			$('#addModal').modal(); 
-			document.getElementById("HoTen").value = '';
+			document.getElementById("NhaCungCap").value = '';
 			document.getElementById("DiaChi").value = '';
 			document.getElementById("Email").value = '';
 			document.getElementById("SoDienThoai").value = '';
@@ -298,8 +298,7 @@
 								hienthi += '<thead>';
 									hienthi += '<tr>';
 										hienthi += '<th>STT</th>'; 
-										
-										hienthi += '<th>Họ tên</th>'; 
+										hienthi += '<th>Nhà cung cấp</th>'; 
 										hienthi += '<th>Địa chỉ</th>'; 
 										hienthi += '<th>Email</th>';
 										hienthi += '<th>Số điện thoại</th>'; 
@@ -311,8 +310,7 @@
 								{
 									hienthi += '<tr>';
 										hienthi += '<td id = ' + danhsachnhacungcap[i].id + '>' + (j + 1) + '</td>';
-										
-										hienthi += '<td id = HoTen' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].HoTen + '</td>';
+										hienthi += '<td id = NhaCungCap' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].NhaCungCap + '</td>';
 										hienthi += '<td id = DiaChi' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].DiaChi + '</td>';
 										hienthi += '<td id = Email' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].Email + '</td>';
 										hienthi += '<td id = SoDienThoai' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].SoDienThoai + '</td>';
@@ -337,14 +335,20 @@
 				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
 				    		hienthi_phantrang += '<ul class="pagination">';
 				    		hienthi_phantrang += '<li><a href=" ' + "/danhSachNhaCungCap?noi_dung_tim_kiem=" + "&page=1"+ '">' + '&laquo;</a></li>';
-				    		var amount = 0;
-				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';
-				    		 
-				    		for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
+				    		if (pageCount > 5)  { 
+				    			var amount = 0;
+				    			hienthi_phantrang += '<li><a disabled>...</a></li>';
+				    			for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
 				    			amount += 1;
-				    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
-				    		}   
-				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+				    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + "/danhSachNhaCungCap?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
+				    			}   
+				    		} 
+				    		else {
+				    			for(var i = 1; i < pageCount; i++) { 
+				    				hienthi_phantrang += '<li><a href=" ' + "/danhSachNhaCungCap?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>'; 
+				    			}
+				    		}
+				    		hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhaCungCap?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
 							// Tao html trong the co id = "menu"
@@ -364,7 +368,7 @@
 
 				}
 				xmlhttp.setRequestHeader('Content-type', 'application/json');
-				var thongTinNCC = JSON.stringify({"HoTen": document.getElementById("HoTen").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
+				var thongTinNCC = JSON.stringify({"NhaCungCap": document.getElementById("NhaCungCap").value, "SoDienThoai": document.getElementById("SoDienThoai").value, "DiaChi": document.getElementById("DiaChi").value, "Email": document.getElementById("Email").value});
 
 				xmlhttp.send(thongTinNCC); 
 			}
@@ -374,7 +378,7 @@
 		function layTTNhaCungCap(id) {
 			this.id = id;  
 			
-			document.getElementById("HoTen_Edit").value = document.getElementById("HoTen" + id).innerHTML;
+			document.getElementById("NhaCungCap_Edit").value = document.getElementById("NhaCungCap" + id).innerHTML;
 			document.getElementById("SoDienThoai_Edit").value = document.getElementById("SoDienThoai" + id).innerHTML;
 			document.getElementById("DiaChi_Edit").value = document.getElementById("DiaChi" + id).innerHTML;
 			document.getElementById("Email_Edit").value = document.getElementById("Email" + id).innerHTML;     
@@ -411,7 +415,7 @@
 							id = thongtinnhacungcapdasua.id; 
 							document.getElementById(id).innerHTML = thongtinnhacungcapdasua.id;
 							
-							document.getElementById("HoTen" + id).innerHTML = thongtinnhacungcapdasua.HoTen;
+							document.getElementById("NhaCungCap" + id).innerHTML = thongtinnhacungcapdasua.NhaCungCap;
 							document.getElementById("SoDienThoai" + id).innerHTML = thongtinnhacungcapdasua.SoDienThoai;
 							document.getElementById("DiaChi" + id).innerHTML = thongtinnhacungcapdasua.DiaChi;
 							document.getElementById("Email" + id).innerHTML = thongtinnhacungcapdasua.Email; 
@@ -424,7 +428,7 @@
 
 				} 
 				xmlhttp.setRequestHeader('Content-type', 'application/json');
-				var thongTinNCC = JSON.stringify({"id": this.id, "HoTen": document.getElementById("HoTen_Edit").value, "SoDienThoai": document.getElementById("SoDienThoai_Edit").value, "DiaChi": document.getElementById("DiaChi_Edit").value, "Email": document.getElementById("Email_Edit").value});
+				var thongTinNCC = JSON.stringify({"id": this.id, "NhaCungCap": document.getElementById("NhaCungCap_Edit").value, "SoDienThoai": document.getElementById("SoDienThoai_Edit").value, "DiaChi": document.getElementById("DiaChi_Edit").value, "Email": document.getElementById("Email_Edit").value});
 
 				xmlhttp.send(thongTinNCC); 
 			}
@@ -473,9 +477,8 @@
 						hienthi = '<table class="table table-striped" id="table_dsncc">';
 							hienthi += '<thead>';
 								hienthi += '<tr>';
-									hienthi += '<th>STT</th>'; 
-								
-									hienthi += '<th>Họ tên</th>'; 
+									hienthi += '<th>STT</th>';
+									hienthi += '<th>Nhà cung cấp</th>'; 
 									hienthi += '<th>Địa chỉ</th>'; 
 									hienthi += '<th>Email</th>';
 									hienthi += '<th>Số điện thoại</th>'; 
@@ -487,7 +490,7 @@
 							{ 
 								hienthi += '<tr>';
 									hienthi += '<td id = ' + danhsachnhacungcap[i].id + '>' + (j + 1) + '</td>';
-									hienthi += '<td id = HoTen' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].HoTen + '</td>';
+									hienthi += '<td id = NhaCungCap' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].NhaCungCap + '</td>';
 									hienthi += '<td id = DiaChi' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].DiaChi + '</td>';
 									hienthi += '<td id = Email' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].Email + '</td>';
 									hienthi += '<td id = SoDienThoai' + danhsachnhacungcap[i].id + '>' + danhsachnhacungcap[i].SoDienThoai + '</td>';
@@ -514,7 +517,6 @@
 						alert("Error!");
 					}
 				}
-
 			}
 			xmlhttp.setRequestHeader('Content-type', 'application/json');
 			var thongTinNCC = JSON.stringify({"id": this.id, "currentPage": currentPage}); 

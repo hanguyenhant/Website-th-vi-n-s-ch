@@ -45,7 +45,7 @@
 				      	<div class="modal-content">
 					        <div class="modal-header">
 					          <button type="button" class="close" data-dismiss="modal" >&times;</button>
-					          <h4 class="modal-title">Thông tin tài liệu</h4>
+					          <h4 class="modal-title">Thêm tài liệu mới</h4>
 					        </div>
 
 					        <!-- Thong tin cua tai lieu -->
@@ -54,7 +54,7 @@
 			           				<label>Tên tài liệu: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class=""></i> 
+											<i class="glyphicon glyphicon-book"></i> 
 										</span>
 										<input type="text" class="form-control" required="" id="TenTL">
 			           				</div>
@@ -64,7 +64,7 @@
 			           				<label>Tên thể loại: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class=""></i> 
+											<i class="glyphicon glyphicon-book"></i> 
 										</span>
 										<input type="text" class="form-control" required id="TenTheLoai" id="ttl">
 			           				</div>
@@ -74,21 +74,142 @@
 			           				<label>Tên tác giả: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class=""></i> 
+											<i class="glyphicon glyphicon-user"></i> 
 										</span>
 										<input type="text" class="form-control" required="" id="TenTG">
 			           				</div>
-			           			</div>   
-
+			           			</div>
 			           			<div class="form-group-inline">
-			           				<label>Giá Bìa: </label>
+			           				<label>Tên nhà xuất bản: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-user"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="TenNXB">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Năm xuất bản: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-calendar"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="NamXB">
+			           				</div>
+			           			</div>     
+			           			<div class="form-group-inline">
+			           				<label>Tên ngôn ngữ: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-font"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="TenNgonNgu">
+			           				</div>
+			           			</div>
+			           			<div class="form-group">
+			           				<label>Nội dung: </label>
+									<textarea class="form-control" rows="6" id="NoiDung" required=""></textarea>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Số trang: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="SoTrang">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Khổ giấy: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="KhoGiay">
+			           				</div>
+			           			</div>  
+								<div class="form-group-inline">
+			           				<label>Lần tái bản: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="LanTB">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Giá bìa: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
 										</span>
 										<input type="text" class="form-control" required="" id="GiaBia">
 			           				</div>
-			           			</div>   
+			           			</div> 
+			           			<div class="form-group-inline">
+			           				<label>Số phát hành: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="SoPH">
+			           				</div>
+			           			</div> 
+			           			<div class="form-group-inline">
+			           				<label>Ngày phát hành: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-calendar"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="NgayPH" name="date" placeholder="yyyy-mm-dd">
+			           				</div>
+
+			           			</div> 
+			           			<div class="form-group-inline">
+			           				<label>Tổng số: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="TongSo">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Mã vị trí: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-book"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="MaVT">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Ngày cập nhật: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-calendar"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="NgayCN" name="date" placeholder="yyyy-mm-dd">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>Mã nhân viên cập nhật: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-user"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="MaNV">
+			           				</div>
+			           			</div>
+			           			<div class="form-group-inline">
+			           				<label>File ảnh: </label>
+			           				<div class="input-group">
+			           					<span class="input-group-addon">
+											<i class="glyphicon glyphicon-picture"></i> 
+										</span>
+										<input type="text" class="form-control" required="" id="Anh">
+			           				</div>
+			           			</div>
 				       		</div>
 				      		<div class="modal-footer">  
 					        	<button type="button" id="taomoi" class="btn btn-primary" style="width: 90px;" onclick="themTL();">Tạo mới</button>
@@ -124,7 +245,7 @@
 								<td id="TenTG<%=danhSachTaiLieu[i].id%>"><%=danhSachTaiLieu[i].TenTG%></td>
 								<td id="GiaBia<%=danhSachTaiLieu[i].id%>"><%=danhSachTaiLieu[i].GiaBia%></td>
 								<td>							
-									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(<%=danhSachTaiLieu[i].id%>);" data-toggle="modal" data-target="#editModal">
+									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu('<%=danhSachTaiLieu[i].id%>','<%=danhSachTaiLieu[i].TenNXB%>','<%=danhSachTaiLieu[i].NamXB%>','<%=danhSachTaiLieu[i].TenNgonNgu%>','<%=danhSachTaiLieu[i].NoiDung%>','<%=danhSachTaiLieu[i].SoTrang%>','<%=danhSachTaiLieu[i].KhoGiay%>','<%=danhSachTaiLieu[i].LanTB%>','<%=danhSachTaiLieu[i].SoPH%>','<%=danhSachTaiLieu[i].NgayPH%>','<%=danhSachTaiLieu[i].TongSo%>','<%=danhSachTaiLieu[i].MaVT%>','<%=danhSachTaiLieu[i].NgayCN%>','<%=danhSachTaiLieu[i].MaNV%>','<%=danhSachTaiLieu[i].Anh%>');" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  
 									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal" onclick="layTTtailieu(<%=danhSachTaiLieu[i].id%>);">
@@ -175,58 +296,170 @@
 			      	<div class="modal-content">
 				        <div class="modal-header">
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
-				          <h4 class="modal-title">Thông tin tài liệu</h4>
+				          <h4 class="modal-title">Sửa thông tin tài liệu</h4>
 				        </div>
 
 				        <!-- Thong tin cua tai lieu -->
 				        <div class="modal-body">  
 			        		<div class="form-group-inline">
-			       				<label for="ma-tai-lieu">Mã tài liệu: </label>
-			       				<div class="input-group">
-			       					<span class="input-group-addon">
-										<i class=""></i> 
+		           				<label>Tên tài liệu: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
 									</span>
-									<input type="text" class="form-control" required="" id="MaTL" disabled="">
-			       				</div>
+									<input type="text" class="form-control" required="" id="TenTL_Edit">
+		           				</div>
+		           			</div>   
+
 		           			<div class="form-group-inline">
-			           				<label>Tên tài liệu: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class=""></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="TenTL_Edit">
-			           				</div>
-			           			</div>   
+		           				<label>Tên thể loại: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required id="TenTheLoai_Edit" id="ttl">
+		           				</div>
+		           			</div>  
 
-			           			<div class="form-group-inline">
-			           				<label>Tên Thể loại: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class=""></i> 
-										</span>
-										<input type="text" class="form-control" required id="TenTheLoai_Edit">
-			           				</div>
-			           			</div>  
-
-			           			<div class="form-group-inline">
-			           				<label>Tên tác giả: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class=""></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="TenTG_Edit">
-			           				</div>
-			           			</div>   
-
-			           			<div class="form-group-inline">
-			           				<label>Giá Bìa: </label>
-			           				<div class="input-group">
-			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
-										</span>
-										<input type="text" class="form-control" required="" id="GiaBia_Edit">
-			           				</div>
-			           			</div>    
+		           			<div class="form-group-inline">
+		           				<label>Tên tác giả: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-user"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="TenTG_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Tên nhà xuất bản: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-user"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="TenNXB_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Năm xuất bản: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-calendar"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="NamXB_Edit">
+		           				</div>
+		           			</div>     
+		           			<div class="form-group-inline">
+		           				<label>Tên ngôn ngữ: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-font"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="TenNgonNgu_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Nội dung: </label>
+								<textarea class="form-control" rows="6" id="NoiDung_Edit" required=""></textarea>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Số trang: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="SoTrang_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Khổ giấy: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="KhoGiay_Edit">
+		           				</div>
+		           			</div>  
+							<div class="form-group-inline">
+		           				<label>Lần tái bản: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="LanTB_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Giá bìa: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="GiaBia_Edit">
+		           				</div>
+		           			</div> 
+		           			<div class="form-group-inline">
+		           				<label>Số phát hành: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="SoPH_Edit">
+		           				</div>
+		           			</div> 
+		           			<div class="form-group-inline">
+		           				<label>Ngày phát hành: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-calendar"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="NgayPH_Edit" name="date" placeholder="yyyy-mm-dd">
+		           				</div>
+		           			</div> 
+		           			<div class="form-group-inline">
+		           				<label>Tổng số: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="TongSo_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Mã vị trí: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-book"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="MaVT_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Ngày cập nhật: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-calendar"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="NgayCN_Edit" name="date" placeholder="yyyy-mm-dd">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>Mã nhân viên cập nhật: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-user"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="MaNV_Edit">
+		           				</div>
+		           			</div>
+		           			<div class="form-group-inline">
+		           				<label>File ảnh: </label>
+		           				<div class="input-group">
+		           					<span class="input-group-addon">
+										<i class="glyphicon glyphicon-picture"></i> 
+									</span>
+									<input type="text" class="form-control" required="" id="Anh_Edit">
+		           				</div>
+		           			</div>  
 				 		</div>
 				 		<div class="modal-footer">  
 				        	<button type="button" id="luu" class="btn btn-primary" style="width: 90px;" onclick="suaTL();">Lưu</button>
@@ -247,7 +480,7 @@
 				          <h4 class="modal-title">Xóa tài liệu</h4>
 				        </div>
 
-				        <!-- Thong tin cua tai lieu -->
+				        <!-- Thong tin cua nhan vien -->
 				        <div class="modal-body">  
 			        	   <p>Bạn có chắc chắn muốn xóa không?</p>
 			 			</div>
@@ -263,16 +496,109 @@
 	</div>
 	 
 	<script type="text/javascript" language="javascript">  
+		$(document).ready(function(){
+		    var date_input=$('input[name="date"]'); //our date input has the name "date"
+		    var container=$('.bootstrap form').length>0 ? $('.bootstrap form').parent() : "body";
+		    var options={
+		    	format: 'yyyy-mm-dd',
+		        container: container,
+		        todayHighlight: true,
+		        autoclose: true,
+		    };
+		    date_input.datepicker(options);
+		})
+
 		function openModal() {
 			$('#addModal').modal(); 
 			document.getElementById("TenTL").value = '';
 			document.getElementById("TenTheLoai").value = '';
 			document.getElementById("TenTG").value = '';
+			document.getElementById("TenNXB").value = '';
+			document.getElementById("NamXB").value = '';
+			document.getElementById("TenNgonNgu").value = '';
+			document.getElementById("NoiDung").value = '';
+			document.getElementById("SoTrang").value = '';
+			document.getElementById("KhoGiay").value = '';
+			document.getElementById("LanTB").value = '';
 			document.getElementById("GiaBia").value = '';
+			document.getElementById("SoPH").value = '';
+			document.getElementById("NgayPH").value = '';
+			document.getElementById("TongSo").value = '';
+			document.getElementById("MaVT").value = '';
+			document.getElementById("NgayCN").value = '';
+			document.getElementById("MaNV").value = '';
+			document.getElementById("Anh").value = '';
 		}
+
+		var id, sothutu;
+
+		function layTTtailieu(id, TenNXB, NamXB, TenNgonNgu, NoiDung, SoTrang, KhoGiay, LanTB, SoPH, NgayPH, TongSo, MaVT, NgayCN, MaNV, Anh) {
+			this.id = id;
+			document.getElementById("TenTL_Edit").value = document.getElementById("TenTL" + id).innerHTML;
+			document.getElementById("TenTheLoai_Edit").value = document.getElementById("TenTheLoai" + id).innerHTML;
+			document.getElementById("TenTG_Edit").value = document.getElementById("TenTG" + id).innerHTML;
+			document.getElementById("TenNXB_Edit").value = TenNXB;
+			document.getElementById("NamXB_Edit").value = NamXB;
+			document.getElementById("TenNgonNgu_Edit").value = TenNgonNgu;
+			document.getElementById("NoiDung_Edit").value = NoiDung;
+			document.getElementById("SoTrang_Edit").value = SoTrang;
+			document.getElementById("KhoGiay_Edit").value = KhoGiay;
+			document.getElementById("LanTB_Edit").value = LanTB;
+			document.getElementById("GiaBia_Edit").value = document.getElementById("GiaBia" + id).innerHTML;
+			document.getElementById("SoPH_Edit").value = SoPH;
+			document.getElementById("NgayPH_Edit").value = NgayPH;
+			document.getElementById("TongSo_Edit").value = TongSo;
+			document.getElementById("MaVT_Edit").value = MaVT;
+			document.getElementById("NgayCN_Edit").value = NgayCN;
+			document.getElementById("MaNV_Edit").value = MaNV;
+			document.getElementById("Anh_Edit").value = Anh;
+			this.sothutu = document.getElementById(id).innerHTML;
+		}
+
 		function themTL() {     
 			var valid = true; // Kiem tra thong tin trong form co hop le: true => hop l
-	 
+
+	 		// pattern kiem tra
+			var patternSo = /^[0-9]/;
+			var patternAnh= /\.(gif|jpg|jpeg|tiff|png)$/;
+
+			var NamXB = document.getElementById("NamXB").value;
+			var SoTrang = document.getElementById("SoTrang").value;
+			var GiaBia = document.getElementById("GiaBia").value;
+			var SoPH = document.getElementById("SoPH").value;
+			var TongSo = document.getElementById("TongSo").value;
+			var Anh = document.getElementById("Anh").value;
+
+			if (!patternSo.test(NamXB)) {
+				alert("Năm xuất bản phải là số!");
+				valid = false;
+			}
+
+			if (!patternSo.test(SoTrang)) {
+				alert("Số trang phải là số!");
+				valid = false;
+			}
+
+			if (!patternSo.test(GiaBia)) {
+				alert("Giá bìa phải là số!");
+				valid = false;
+			}
+
+			if (!patternSo.test(SoPH)) {
+				alert("Số phát hành phải là số!");
+				valid = false;
+			}
+
+			if (!patternSo.test(TongSo)) {
+				alert("Tổng số sách phải là số!");
+				valid = false;
+			}
+
+			if (!patternAnh.test(Anh)) {
+				alert("Hãy nhập đúng tên file ảnh!");
+				valid = false;
+			}
+
 			if (valid) {
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.open("POST", "/themTaiLieu", false); 
@@ -292,7 +618,7 @@
 										hienthi += '<th>STT</th>'; 
 										hienthi += '<th>Mã tài liệu</th>'; 
 										hienthi += '<th>Tên tài liệu</th>'; 
-										hienthi += '<th>Tên Thể loại</th>'; 
+										hienthi += '<th>Tên thể loại</th>'; 
 										hienthi += '<th>Tên tác giả</th>';
 										hienthi += '<th>Giá bìa</th>'; 
 										hienthi += '<th>Hành động</th>'; 
@@ -311,7 +637,7 @@
  
 										hienthi += 
 										'<td>' +							
-											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ',' + danhsachtailieu[i].TenNXB + ','+ danhsachtailieu[i].NamXB + ',' + danhsachtailieu[i].TenNgonNgu + ',' + danhsachtailieu[i].NoiDung + ',' + danhsachtailieu[i].SoTrang + ',' + danhsachtailieu[i].KhoGiay + ',' + danhsachtailieu[i].LanTB + ',' + danhsachtailieu[i].SoPH + ',' + danhsachtailieu[i].NgayPH + ',' + danhsachtailieu[i].TongSo + ',' + danhsachtailieu[i].MaVT + ',' + danhsachtailieu[i].NgayCN + ',' + danhsachtailieu[i].MaNV + ',' + danhsachtailieu[i].Anh + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
 											'</button>' +  
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonDelete" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
@@ -365,21 +691,10 @@
 
 				}
 				xmlhttp.setRequestHeader('Content-type', 'application/json');
-				var thongTinTL = JSON.stringify({"TenTL": document.getElementById("TenTL").value, "TenTheLoai": document.getElementById("TenTheLoai").value, "TenTG": document.getElementById("TenTG").value, "GiaBia": document.getElementById("GiaBia").value});
+				var thongTinTL = JSON.stringify({"TenTL": document.getElementById("TenTL").value, "TenTheLoai": document.getElementById("TenTheLoai").value, "TenTG": document.getElementById("TenTG").value, "TenNXB": document.getElementById("TenNXB").value, "NamXB": document.getElementById("NamXB").value,"TenNgonNgu": document.getElementById("TenNgonNgu").value, "NoiDung": document.getElementById("NoiDung").value,"SoTrang": document.getElementById("SoTrang").value, "KhoGiay": document.getElementById("KhoGiay").value,"LanTB": document.getElementById("LanTB").value, "GiaBia": document.getElementById("GiaBia").value,"SoPH": document.getElementById("SoPH").value, "NgayPH": document.getElementById("NgayPH").value, "TongSo": document.getElementById("TongSo").value, "MaVT": document.getElementById("MaVT").value, "NgayCN": document.getElementById("NgayCN").value, "MaNV": document.getElementById("MaNV").value, "Anh": document.getElementById("Anh").value});
 
 				xmlhttp.send(thongTinTL); 
 			}
-		}
-
-		var id, sothutu;
-		function layTTtailieu(id) {
-			this.id = id;  
-			document.getElementById("id").value = document.getElementById("id" + id).innerHTML ;
-			document.getElementById("TenTL_Edit").value = document.getElementById("TenTL" + id).innerHTML;
-			document.getElementById("TenTheLoai_Edit").value = document.getElementById("TenTheLoai" + id).innerHTML;
-			document.getElementById("TenTG_Edit").value = document.getElementById("TenTG" + id).innerHTML;
-			document.getElementById("GiaBia_Edit").value = document.getElementById("GiaBia" + id).innerHTML;     
-			this.sothutu = document.getElementById(id).innerHTML; 
 		}
 
 		function suaTL() {  
