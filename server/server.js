@@ -869,9 +869,42 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 		'TongTienCoc': TongTienCoc 
 	};    
 	res.write(JSON.stringify(ds_pagecount)); 
-	res.end(); 
-	 
- 
+	res.end();  
+})
+
+// Lay thong tin chi tiet cua phieu muon
+app.post("/layTTPhieuMuon", json.json(), async function(req, res) {  
+	sql = `select docgia.MaThe, HoTen, Email, SoDienThoai, date_format(NgayMuon, '%Y-%m-%d') as NgayMuon, ThoiHanMuon, 
+		TongSoSach, TongTienCoc  
+		from phieu_muon_tra, docgia where phieu_muon_tra.MaThe = docgia.MaThe 
+		and phieu_muon_tra.id = ?`; 
+	sql = mysql.format(sql, req.body.id); 
+	try {  
+		thongtindocgia = await queryPromise(sql); 
+		sql = `select tailieuchitiet.MaVach, TenTL from phieu_muon_tra, tailieuchitiet, tailieu, chi_tiet_muon_tra  
+			where phieu_muon_tra.id = chi_tiet_muon_tra.IdPhieuMuonTra and chi_tiet_muon_tra.MaVach = tailieuchitiet.MaVach
+			and tailieu.id = tailieuchitiet.TaiLieuId and phieu_muon_tra.id = ?`; 
+		sql = mysql.format(sql, req.body.id); 
+		danhsachmuonsach = await queryPromise(sql);
+
+		thongtinchitiet = {
+			'danhsachmuonsach': danhsachmuonsach,
+			'NgayMuon': thongtindocgia[0].NgayMuon,
+			'ThoiHanMuon': thongtindocgia[0].ThoiHanMuon,
+			'TongSoSach': thongtindocgia[0].TongSoSach,
+			'TongTienCoc': thongtindocgia[0].TongTienCoc,
+			'MaThe': thongtindocgia[0].MaThe,
+			'HoTen': thongtindocgia[0].HoTen,
+			'Email': thongtindocgia[0].Email,
+			'SoDienThoai': thongtindocgia[0].SoDienThoai 
+		};   
+
+		res.write(JSON.stringify(thongtinchitiet)); 
+		res.end();  
+	} catch(e) {
+		res.write("0");
+		res.end();
+	}
 })
 
 // Lay danh sach tra sach

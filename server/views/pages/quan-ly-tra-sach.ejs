@@ -23,21 +23,18 @@
 						</a>
 					<!-- </div>  -->
 				</div> 
-				<form action="/quanLyTraSach" method="get">
-					<div class="form-inline">
-				        <label>Mã Độc giả</label>
-				        <input id="MaDocGia" name="MaDocGia" placeholder="Nhập mã độc giả" type="text"/>
-				    </div>				
-				</form>
+				<div class="form-inline">
+			        <label>Mã phiếu mượn</label>
+			        <input id="MaPhieu" name="MaPhieu" placeholder="Nhập mã phiếu mượn" type="text" onkeypress="layTTPhieuMuon(event);"/>
+		       		<p id="check_MaPhieu" style="color: red;"></p>
+			    </div> 
 			<!-- </div> -->
 				<hr>
 				<div class="form-inline">
 			        <label>Ngày mượn</label>
 			        <input id="NgayMuon" name="date" placeholder="yyyy-mm-dd" type="text" disabled="" />
 			        <label>Thời hạn mượn</label>
-			        <input id="ThoiHanMuon" type="text" disabled=""/>
-			        <label>Ngày trả</label>
-			        <input id="NgayTra" name="date" placeholder="yyyy-mm-dd" type="text"/>
+			        <input id="ThoiHanMuon" type="text" disabled=""/> 
 			    </div>
 				<hr> 
 			    
@@ -46,14 +43,14 @@
 						<div class="panel-heading">
 							Thông tin độc giả
 						</div>
-						<div class="panel-body">
+						<div class="panel-body"> 
 							<div class="form-inline">
 			       				<label>Mã độc giả: </label>
-			       				<input type="text" class="form-control" required="" id="MaDocGia" disabled="">
+			       				<input type="text" class="form-control" required="" id="MaThe" onkeypress="layTTDocGia(event);">  
 		           			</div>
 						    <div class="form-group-inline">
 			       				<label >Tên độc giả: </label>
-			       				<input type="text" class="form-control" required="" id="TenDocGia" disabled="">
+			       				<input type="text" class="form-control" required="" id="HoTen" disabled="">
 		           			</div>
 		           			<div class="form-group-inline">
 			       				<label>Email: </label>
@@ -77,11 +74,10 @@
 										<tr>
 											<th>STT</th>
 											<th>Mã vạch</th>
-											<th>Tên sách</th>
-											<th>Số lượng</th>
+											<th>Tên sách</th> 
 										</tr>
 									</thead>
-									<tbody>
+									<tbody id="table_Detail">
 										
 									</tbody>
 								</table>
@@ -94,7 +90,7 @@
 					<input type="text" class="form-control" required="" id="TongTienCoc" disabled="">
 				</div>
 				<hr>
-				<button type="submit" id="trasach" class="btn btn-warning" onclick="xacNhanTraSach();">Xác nhận trả sách</button>
+				<button type="button" id="trasach" class="btn btn-warning" onclick="xacNhanTraSach();">Xác nhận trả sách</button>
 			<hr> 
 			
 		</div>	 
@@ -112,5 +108,57 @@
 	    };
 	    date_input.datepicker(options);
 	})
+	// Xem chi tiet thong tin phieu muon
+	function layTTPhieuMuon() { 
+		/* 	Lay thong tin cua doc gia
+			Lay thong tin danh sach sach da muon cua doc gia */
+		var id;
+		if (event.keyCode == 13) { // nhan phim enter
+			id = document.getElementById("MaPhieu").value;
+			if (id.trim() == "") document.getElementById("check_MaPhieu").innerHTML = "";
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/layTTPhieuMuon", false); 
+				xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") { 
+						ketqua = JSON.parse(xmlhttp.responseText);   
+
+						document.getElementById("NgayMuon").value = ketqua.NgayMuon;
+						document.getElementById("ThoiHanMuon").value = ketqua.ThoiHanMuon;
+						document.getElementById("MaThe").value = ketqua.MaThe;
+						document.getElementById("HoTen").value = ketqua.HoTen;
+						document.getElementById("Email").value = ketqua.Email;
+						document.getElementById("SoDienThoai").value = ketqua.SoDienThoai;
+						document.getElementById("TongSoSachMuon").value = ketqua.TongSoSach;
+						document.getElementById("TongTienCoc").value = ketqua.TongTienCoc + " VNĐ";
+
+						danhsachmuonsach = ketqua.danhsachmuonsach;
+						hienthi = '';
+						for (var i = 0; i < danhsachmuonsach.length; i++)
+						{
+							hienthi += '<tr>';
+								hienthi += '<td>' + (i + 1) + '</td>';
+								hienthi +=  '<td>' + danhsachmuonsach[i].MaVach + '</td>';
+								hienthi += '<td>' + danhsachmuonsach[i].TenTL + '</td>';  
+							hienthi += '</tr>';
+						}
+						document.getElementById('table_Detail').innerHTML = hienthi;
+					}
+					else {
+						document.getElementById("check_MaPhieu").innerHTML = "Không tìm thấy thông tin phiếu mượn";
+						document.getElementById("HoTen").value = '';
+						document.getElementById("Email").value = '';
+						document.getElementById("SoDienThoai").value = '';
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinPhieuMuon = JSON.stringify({"id": id}); 
+
+			xmlhttp.send(thongTinPhieuMuon); 
+		}
+	}
+	 
 </script>
 </html>
