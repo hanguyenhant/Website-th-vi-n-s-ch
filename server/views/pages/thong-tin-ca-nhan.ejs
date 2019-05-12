@@ -13,7 +13,7 @@
 	<%include ../partials/header%>
 	<div style="min-height: 85%">  
 		<% include ../partials/anhchay %>
-		<div class="container" style="margin-top: 20px; ">  
+		<div class="container" style="margin-top: 20px; " id="noidung">  
 			<form action="/thongTinCaNhan" method="post">
 				<a href="/thongTinCaNhan">
 					<h4 style="color: red;"><b>Thông tin cá nhân</b></h4>
@@ -55,51 +55,55 @@
 	<% include ../partials/footer %> 
 
 	<script type="text/javascript"> 
-	window.onload = function(){
-		document.getElementById("MaTaiKhoan").value = sessionStorage.getItem("username");
-	}
-
-	function capNhatThongTin() {
-		var valid = true;  
-		// pattern kiem tra email va so dien thoai 
-		var patternSDT = /^[0-9]{10,}$/;
-		var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-		var MaTaiKhoan = document.getElementById("MaTaiKhoan").value;
-		var SoDienThoai = document.getElementById("SoDienThoai").value;
-		var Email = document.getElementById("Email").value; 
-		var DiaChi = document.getElementById("DiaChi").value; 
-
-		if (!patternSDT.test(SoDienThoai, "gi")) {
-			alert("Số điện thoại có ít nhất 10 số.");
-			valid = false;
+		if (sessionStorage.getItem('username') == undefined) {
+			html = ejs.render(`<%include ../partials/theloai%>`);
+			document.getElementById('noidung').innerHTML = html; 
+		}
+		window.onload = function(){
+			document.getElementById("MaTaiKhoan").value = sessionStorage.getItem("username");
 		}
 
-		if (!patternEmail.test(Email)) {
-			alert("Email không đúng định dạng.");
-			valid = false;
-		} 
-		if (valid) {
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.open("POST", "/capNhatThongTin", false); 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
-					if (xmlhttp.responseText != "0") {
-						alert("Cập nhật thông tin thành công.");
-						ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
-						document.getElementById("DiaChi").value = ketqua.DiaChi;
-						document.getElementById("Email").value = ketqua.Email;
-						document.getElementById("SoDienThoai").value = ketqua.SoDienThoai; 
-					}
-					else if (xmlhttp.responseText == "0") {
-						alert("Error!");
+		function capNhatThongTin() {
+			var valid = true;  
+			// pattern kiem tra email va so dien thoai 
+			var patternSDT = /^[0-9]{10,}$/;
+			var patternEmail= /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+			var MaTaiKhoan = document.getElementById("MaTaiKhoan").value;
+			var SoDienThoai = document.getElementById("SoDienThoai").value;
+			var Email = document.getElementById("Email").value; 
+			var DiaChi = document.getElementById("DiaChi").value; 
+
+			if (!patternSDT.test(SoDienThoai, "gi")) {
+				alert("Số điện thoại có ít nhất 10 số.");
+				valid = false;
+			}
+
+			if (!patternEmail.test(Email)) {
+				alert("Email không đúng định dạng.");
+				valid = false;
+			} 
+			if (valid) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/capNhatThongTin", false); 
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+						if (xmlhttp.responseText != "0") {
+							alert("Cập nhật thông tin thành công.");
+							ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
+							document.getElementById("DiaChi").value = ketqua.DiaChi;
+							document.getElementById("Email").value = ketqua.Email;
+							document.getElementById("SoDienThoai").value = ketqua.SoDienThoai; 
+						}
+						else if (xmlhttp.responseText == "0") {
+							alert("Error!");
+						}
 					}
 				}
+				xmlhttp.setRequestHeader('Content-type', 'application/json');
+				var thongTinCaNhan = JSON.stringify({"TenTk": MaTaiKhoan, "DiaChi": DiaChi, "Email": Email, "SoDienThoai": SoDienThoai}); 
+				xmlhttp.send(thongTinCaNhan); 
 			}
-			xmlhttp.setRequestHeader('Content-type', 'application/json');
-			var thongTinCaNhan = JSON.stringify({"TenTk": MaTaiKhoan, "DiaChi": DiaChi, "Email": Email, "SoDienThoai": SoDienThoai}); 
-			xmlhttp.send(thongTinCaNhan); 
 		}
-	}
 	</script>
 </body>
 </html>

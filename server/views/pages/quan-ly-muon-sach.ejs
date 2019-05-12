@@ -14,7 +14,7 @@
 	<%include ../partials/header%>
 	<div style="min-height: 85%"> 
 		<% include ../partials/anhchay %>
-		<div class="container" style="margin-top: 20px; ">  
+		<div class="container" style="margin-top: 20px; " id="noidung">  
 			<div class="row">
 				<div class="form-group">
 					<div class="col-sm-3">
@@ -144,7 +144,7 @@
 								<td><%=danhSachMuonSach[i].ThoiHanMuon%></td>
 								<td><%=danhSachMuonSach[i].MaNV_Muon%></td> 
 								<td><%=danhSachMuonSach[i].TongSoSach%></td>
-								<td><%=danhSachMuonSach[i].TongTienCoc%></td>
+								<td><%=danhSachMuonSach[i].TongTienCoc%>VNĐ</td>
 								<td>
 									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(<%=danhSachMuonSach[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-list"></span>
@@ -268,8 +268,20 @@
 		 	<!-- Ket thuc Modal Sua-->	
 		</div>	 
 	</div>
+</div>
+</div>
+</div>
+<br>
+<br>
+<div id="footer1"></div>
 </body>
 <script type="text/javascript">
+	if (sessionStorage.getItem('username') == undefined) {
+			html = ejs.render(`<%include ../partials/theloai%>`);
+			document.getElementById('noidung').innerHTML = html;
+			html = ejs.render(`<%include ../partials/footer%>`);
+			document.getElementById('footer1').innerHTML = html;
+		}
 	$(document).ready(function(){
 	    var date_input=$('input[name="date"]'); //our date input has the name "date"
 	    var container=$('.bootstrap form').length>0 ? $('.bootstrap form').parent() : "body";
@@ -433,7 +445,7 @@
 									hienthi +=  '<td>' + danhsachmuonsach[i].ThoiHanMuon + '</td>';
 									hienthi +=  '<td>' + danhsachmuonsach[i].MaNV_Muon + '</td>'; 
 									hienthi +=  '<td>' + danhsachmuonsach[i].TongSoSach + '</td>';
-									hienthi +=  '<td>' + danhsachmuonsach[i].TongTienCoc + '</td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].TongTienCoc + 'VNĐ</td>';
 									hienthi += 
 									'<td>' +							
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(' + danhsachmuonsach[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
@@ -469,14 +481,12 @@
 			    				hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>'; 
 			    			}
 			    		}
-			    		hienthi_phantrang += '<li class="active"><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+			    		if (pageCount > currentPage) {
+			    			hienthi_phantrang += '<li class="active"><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+			    		}
 			            hienthi_phantrang += '</ul>'; 
 
-						if (pageCount == 1) {
-							// Tao html trong the co phantrang = "phantrang"
-							phantrang.innerHTML = '';
-						}
-						else {
+						if (pageCount > 1) {
 							// Tao html trong the co phantrang = "phantrang"
 							phantrang.innerHTML = hienthi_phantrang; 
 						}
@@ -492,8 +502,7 @@
 
 			}
 			xmlhttp.setRequestHeader('Content-type', 'application/json');
-			var thongTinPhieuMuon = JSON.stringify({"MaThe": MaThe, "DanhSachMaVach": danhSachMaVach, "ThoiHanMuon": document.getElementById('ThoiHanMuon').value, "MaNV_Muon": sessionStorage.getItem('username'),"TongTienCoc": document.getElementById("TongTienCoc").value}); 
-			console.log(thongTinPhieuMuon);
+			var thongTinPhieuMuon = JSON.stringify({"MaThe": MaThe, "DanhSachMaVach": danhSachMaVach, "ThoiHanMuon": document.getElementById('ThoiHanMuon').value, "MaNV_Muon": sessionStorage.getItem('username'),"TongTienCoc": document.getElementById("TongTienCoc").value});  
 			 
 			xmlhttp.send(thongTinPhieuMuon);  
 		}

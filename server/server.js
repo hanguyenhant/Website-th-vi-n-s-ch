@@ -17,7 +17,7 @@ app.use(express.static('public'));
 // Ket noi nodejs voi mysql
 const mysql = require("mysql"); 
 var connect = mysql.createConnection({
-	database: 'laptrinhweb1',
+	database: 'laptrinhweb',
 	host: 'localhost',
 	user: 'root',
 	password: '123456',
@@ -111,11 +111,13 @@ app.get('/theloai/:tenTheLoai', function(req, res) {
 
 		pageCount = Math.ceil(results.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++) {
 			if (results.length>i)
-				{
-					books_currentpage.push(results[i]);
-				} 
+			{
+				books_currentpage.push(results[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/theloai', { so_ket_qua: results.length,
 											ket_qua_tim_kiem: books_currentpage, 
 											the_loai: req.params.tenTheLoai,  
@@ -174,11 +176,13 @@ app.get('/search', function(req, res) {
 
 		pageCount = Math.ceil(results.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 			if (results.length>i)
-				{
-					books_currentpage.push(results[i]);
-				}
+			{
+				books_currentpage.push(results[i]);
+			}
+			else break;
+		}
 		
 		res.render('views/pages/search', { 	so_ket_qua: results.length,
 											ket_qua_tim_kiem: books_currentpage, 
@@ -222,11 +226,13 @@ app.get('/danhSachNhanVien', async function(req, res) {
 		danhSachNhanVien = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachNhanVien.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 			if (danhSachNhanVien.length>i)
-				{
-					display_danhSachNhanVien.push(danhSachNhanVien[i]);
-				} 
+			{
+				display_danhSachNhanVien.push(danhSachNhanVien[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/quan-ly-nhan-vien', { danhSachNhanVien: display_danhSachNhanVien, 
 														pageSize: pageSize, 
 														pageCount: pageCount, 
@@ -384,13 +390,14 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 	danhsachchuacotaikhoan = new Array();
 	danhSachTaiKhoan = new Array(); 
 	display_danhSachTaiKhoan = new Array();
+	noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
 	var k = 0;
 	var sql; 
 	if (typeof req.query.page != 'undefined') {
 		currentPage = +req.query.page;
 	}
 	// Hien thi danh sach tai khoan
-	if (req.query.TenTk == undefined || req.query.TenTk.trim() == "") { 
+	if (noi_dung_tim_kiem == undefined || noi_dung_tim_kiem.trim() == "") { 
 		sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, docgia where TenTk = MaThe`;
 		try { 
 			docgia = await queryPromise(sql);
@@ -407,11 +414,13 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 				} 
 				pageCount = Math.ceil(danhSachTaiKhoan.length/pageSize);
 
-				for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+				for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 					if (danhSachTaiKhoan.length>i)
-						{
-							display_danhSachTaiKhoan.push(danhSachTaiKhoan[i]);
-						}  
+					{
+						display_danhSachTaiKhoan.push(danhSachTaiKhoan[i]);
+					}  
+					else break;
+				}
 				res.render('views/pages/quan-ly-tai-khoan', { danhSachTaiKhoan: display_danhSachTaiKhoan, 
 																pageSize: pageSize, 
 																pageCount: pageCount, 
@@ -427,12 +436,13 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 	// Tim kiem tai khoan
 	else {
 		var TenTk = [];
-		var noi_dung_tim_kiem = "%" + req.query.TenTk + "%";
+		var noi_dung_tim_kiem1 = "%" + noi_dung_tim_kiem + "%";
 		sql = `select distinct TenTk from login, docgia where (TenTk like ? or docgia.HoTen like ? or docgia.DiaChi like ? or
 				docgia.Email like ? or docgia.SoDienThoai like ?) and docgia.MaThe = login.TenTk`;
+		  
 		try {
-			sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
-				noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+			sql = mysql.format(sql, [noi_dung_tim_kiem1, noi_dung_tim_kiem1, noi_dung_tim_kiem1, 
+				noi_dung_tim_kiem1, noi_dung_tim_kiem1]);  
 			results = await queryPromise(sql);
 			for (var i = 0; i < results.length; i++) {
 				TenTk.push(results[i]);
@@ -443,8 +453,8 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 		sql = `select distinct TenTk from login, nhanvien where (TenTk like ? or nhanvien.HoTen like ? or nhanvien.DiaChi like ? or
 				nhanvien.Email like ? or nhanvien.SoDienThoai like ?) and nhanvien.MaNV = login.TenTk`;
 		try {
-			sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
-				noi_dung_tim_kiem, noi_dung_tim_kiem]);  
+			sql = mysql.format(sql, [noi_dung_tim_kiem1, noi_dung_tim_kiem1, noi_dung_tim_kiem1, 
+				noi_dung_tim_kiem1, noi_dung_tim_kiem1]);  
 			results = await queryPromise(sql);
 			for (var i = 0; i < results.length; i++) {
 				TenTk.push(results[i]);
@@ -477,16 +487,18 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 			} 
 		}
 		pageCount = Math.ceil(danhSachTaiKhoan.length/pageSize);
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
-				if (danhSachTaiKhoan.length>i)
-					{
-						display_danhSachTaiKhoan.push(danhSachTaiKhoan[i]);
-					} 
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
+			if (danhSachTaiKhoan.length>i)
+			{
+				display_danhSachTaiKhoan.push(danhSachTaiKhoan[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/quan-ly-tai-khoan', { 	danhSachTaiKhoan: display_danhSachTaiKhoan,
 													  	pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage,
-														TenTk: req.query.TenTk }); 
+														TenTk: noi_dung_tim_kiem }); 
  	} 
 }) 
 // Xem thong tin cac tai lieu co TenTheLoai = tenTheLoai
@@ -507,11 +519,13 @@ app.get('/theloai/:tenTheLoai', function(req, res) {
 
 		pageCount = Math.ceil(results.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize && i < results.length; i++){
 			if (results.length>i)
-				{
-					books_currentpage.push(results[i]);
-				} 
+			{
+				books_currentpage.push(results[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/theloai', { so_ket_qua: results.length,
 											ket_qua_tim_kiem: books_currentpage, 
 											the_loai: req.params.tenTheLoai,  
@@ -564,7 +578,7 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 	else //Tim kiem  nha cung cap
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select NhaCungCap, DiaChi, Email, SoDienThoai from nhacungcap where NhaCungCap like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
+		sql = `select id, NhaCungCap, DiaChi, Email, SoDienThoai from nhacungcap where NhaCungCap like ? or DiaChi like ? or Email like ? or SoDienThoai like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
 								noi_dung_tim_kiem]); 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
@@ -573,11 +587,13 @@ app.get('/danhSachNhaCungCap', async function(req, res) {
 		danhSachNhaCungCap = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachNhaCungCap.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 			if (danhSachNhaCungCap.length>i)
-				{
-					display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
-				} 
+			{
+				display_danhSachNhaCungCap.push(danhSachNhaCungCap[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/quan-ly-nha-cung-cap', { danhSachNhaCungCap: display_danhSachNhaCungCap, 
 														pageSize: pageSize, 
 														pageCount: pageCount, 
@@ -660,11 +676,12 @@ app.post('/xoaNhaCungCap', json.json(), function(req, res) {
 			res.end();
 		}
 		else {
+			pageSize = 5;
 			sql = "select * from nhacungcap"; 
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
 			pageCount = Math.ceil(results.length / pageSize)
-			page = req.body.currentPage;  
+			page = req.body.currentPage;   
 			danhsachnhacungcap = [];
 			k = 0;
 			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
@@ -728,11 +745,13 @@ app.get('/quanLyMuonSach', async function(req, res) {
 		danhSachMuonSach = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachMuonSach.length/pageSize); 
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++) {
 			if (danhSachMuonSach.length>i)
-				{
-					display_danhSachMuonSach.push(danhSachMuonSach[i]);
-				} 
+			{
+				display_danhSachMuonSach.push(danhSachMuonSach[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/quan-ly-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
 														pageSize: pageSize, 
 														pageCount: pageCount, 
@@ -867,7 +886,8 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 
 // Lay thong tin chi tiet cua phieu muon
 app.post("/layTTPhieuMuon", json.json(), async function(req, res) {  
-	sql = `select docgia.MaThe, HoTen, Email, SoDienThoai, date_format(NgayMuon, '%Y-%m-%d') as NgayMuon, ThoiHanMuon, 
+	sql = `select docgia.MaThe, HoTen, Email, SoDienThoai, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon,
+		date_format(NgayTra, '%d-%m-%Y %H-%i-%s') as NgayTra, ThoiHanMuon, 
 		TongSoSach, TongTienCoc, TrangThai  
 		from phieu_muon_tra, docgia where phieu_muon_tra.MaThe = docgia.MaThe 
 		and phieu_muon_tra.id = ` + req.body.id;  
@@ -877,11 +897,13 @@ app.post("/layTTPhieuMuon", json.json(), async function(req, res) {
 			where phieu_muon_tra.id = chi_tiet_muon_tra.IdPhieuMuonTra and chi_tiet_muon_tra.MaVach = tailieuchitiet.MaVach
 			and tailieu.id = tailieuchitiet.TaiLieuId and phieu_muon_tra.id = ?`; 
 		sql = mysql.format(sql, req.body.id); 
+
 		danhsachmuonsach = await queryPromise(sql);
 
 		thongtinchitiet = {
 			'danhsachmuonsach': danhsachmuonsach,
 			'NgayMuon': thongtindocgia[0].NgayMuon,
+			'NgayTra': thongtindocgia[0].NgayTra,
 			'ThoiHanMuon': thongtindocgia[0].ThoiHanMuon,
 			'TongSoSach': thongtindocgia[0].TongSoSach,
 			'TongTienCoc': thongtindocgia[0].TongTienCoc,
@@ -1059,51 +1081,61 @@ app.get('/thongTinMuonSach', async function(req, res) {
 
 	// Hien thi danh sach muon sach
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select MaVach, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaThe = ?`;
-		sql = mysql.format(sql, MaThe)
-		noi_dung_tim_kiem = '';
+		sql = `select id, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon, 
+		 ThoiHanMuon, TongSoSach, TongTienCoc, TrangThai from phieu_muon_tra where MaThe = ?`;
+		sql = mysql.format(sql, MaThe);
+		noi_dung_tim_kiem = ''; 
+		danhSachMuonSach = await queryPromise(sql); 
+		TongSoSach = danhSachMuonSach.reduce(function(TongSoSach, curr){
+										TongSoSach += curr.TongSoSach;
+									    return TongSoSach;
+									    }, 0); 
+		TongTienCoc = danhSachMuonSach.reduce(function(TongTienCoc, curr){
+									    TongTienCoc += curr.TongTienCoc;
+									    return TongTienCoc;
+									    }, 0); 
 	}
 	else //Tim kiem phieu muon
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select MaVach, NgayMuon, ThoiHanMuon, TienCoc from muon_tra where TrangThai = "Mượn" and MaThe = ? and (MaVach like ? or NgayMuon like ? or ThoiHanMuon like ? or TienCoc like ?)`;
-		sql = mysql.format(sql, [MaThe, noi_dung_tim_kiem, noi_dung_tim_kiem, 
-								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		sql = `select id, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon, 
+		 ThoiHanMuon, TongSoSach, TongTienCoc, TrangThai from phieu_muon_tra 
+		 where MaThe =? and (NgayMuon like ? or ThoiHanMuon like ? 
+		  or TongTienCoc like ? or TongSoSach like ? or TrangThai like ?)`;
+		sql = mysql.format(sql, [MaThe, noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
+								 noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		 
 		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
 	}
 	try { 
 		danhSachMuonSach = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachMuonSach.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 			if (danhSachMuonSach.length>i)
-				{
-					display_danhSachMuonSach.push(danhSachMuonSach[i]);
-				} 
-		for (var i=0; i<danhSachMuonSach.length; i++)
-		{
-			tong_so_tien_coc += parseFloat(danhSachMuonSach[i].TienCoc);
+			{
+				display_danhSachMuonSach.push(danhSachMuonSach[i]);
+			} 
+			else break;
 		}
+	 
 		res.render('views/pages/thong-tin-muon-sach', { danhSachMuonSach: display_danhSachMuonSach, 
 														pageSize: pageSize, 
 														pageCount: pageCount, 
 														currentPage: currentPage, 
 														noi_dung_tim_kiem: noi_dung_tim_kiem,
-														username: MaThe,
-														tong_so_sach_muon: danhSachMuonSach.length,
-														tong_so_tien_coc: tong_so_tien_coc});
+														TongSoSach: TongSoSach,
+														TongTienCoc: TongTienCoc,
+														username: MaThe});
 		 
 	} 
 	catch(Exception) {
 		res.send('ERROR');
 	} 
-});
-
-
-
+}); 
 
 // Lay danh sach doc gia
-app.get('/danhSachDocGia', async function(req, res) {
+app.get('/danhSachDocGia', async function(req, res) { 
 	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
@@ -1111,33 +1143,35 @@ app.get('/danhSachDocGia', async function(req, res) {
 	display_danhSachDocGia = new Array();
 	var k = 0;
 	var sql; 
-	var noi_dung_tim_kiem;
+	var noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
 	if (typeof req.query.page != 'undefined') {
-		currentPage = +req.query.page;
+		currentPage = req.query.page;
 	}
   //date_format(NgayMuon, '%Y-%m-%d %H-%i-%s') as NgayMuon
 	// Hien thi danh sachdoc gia
 	if (req.query.noi_dung_tim_kiem == undefined || req.query.noi_dung_tim_kiem.trim() == "") { 
-		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d ') as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia`;
-		noi_dung_tim_kiem = '';
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%d-%m-%Y ') as NgayCap ,  date_format(HanSD, '%d-%m-%Y ') as HanSD, MaNV,  date_format(NgayCN, '%d-%m-%Y ') as NgayCN from docgia`;
+		noi_dung_tim_kiem = ''; 
 	}
 	else //Tim kiemdoc gia
 	{
 		noi_dung_tim_kiem = "%" + req.query.noi_dung_tim_kiem + "%";
-		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d ') as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
+		sql = `select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%d-%m-%Y ') as NgayCap ,  date_format(HanSD, '%d-%m-%Y ') as HanSD, MaNV,  date_format(NgayCN, '%d-%m-%Y ') as NgayCN from docgia where MaThe like ? or HoTen like ? or DiaChi like ? or Email like ? or SoDienThoai like ? or MaNV like ?`;
 		sql = mysql.format(sql, [noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem, 
-								noi_dung_tim_kiem, noi_dung_tim_kiem]); 
-		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
+								noi_dung_tim_kiem, noi_dung_tim_kiem, noi_dung_tim_kiem]); 
+		noi_dung_tim_kiem = req.query.noi_dung_tim_kiem; 
 	}
 	try { 
 		danhSachDocGia = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachDocGia.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 			if (danhSachDocGia.length>i)
-				{
-					display_danhSachDocGia.push(danhSachDocGia[i]);
-				} 
+			{
+				display_danhSachDocGia.push(danhSachDocGia[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/quan-ly-doc-gia', { danhSachDocGia: display_danhSachDocGia, 
 														pageSize: pageSize, 
 														pageCount: pageCount, 
@@ -1149,7 +1183,6 @@ app.get('/danhSachDocGia', async function(req, res) {
 		res.send('ERROR');
 	} 
 });
-
  
  
  // Them doc gia 
@@ -1314,11 +1347,13 @@ app.get('/danhSachTaiLieu', async function(req, res) {
 		danhSachTaiLieu = await queryPromise(sql);
 		pageCount = Math.ceil(danhSachTaiLieu.length/pageSize);
 
-		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++)
+		for (var i=(currentPage-1)*pageSize; i<currentPage*pageSize; i++){
 			if (danhSachTaiLieu.length>i)
-				{
-					display_danhSachTaiLieu.push(danhSachTaiLieu[i]);
-				} 
+			{
+				display_danhSachTaiLieu.push(danhSachTaiLieu[i]);
+			} 
+			else break;
+		}
 		res.render('views/pages/danh-sach-tai-lieu', { danhSachTaiLieu: display_danhSachTaiLieu, 
 														pageSize: pageSize, 
 														pageCount: pageCount, 
@@ -1335,7 +1370,9 @@ app.get('/danhSachTaiLieu', async function(req, res) {
 app.post('/themTaiLieu', json.json(), async function(req, res) { 
 	var sql;
 	try {	
-		sql = `INSERT INTO tailieu (TenTL, TenTheLoai, TenTG, TenNXB, NamXB, TenNgonNgu, NoiDung, SoTrang, KhoGiay, LanTB, GiaBia, SoPH, NgayPH, TongSo, MaVT, NgayCN, MaNV, Anh) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+		sql = `INSERT INTO tailieu (TenTL, TenTheLoai, TenTG, TenNXB, NamXB, TenNgonNgu, NoiDung, SoTrang, 
+				KhoGiay, LanTB, GiaBia, SoPH, NgayPH, TongSo, MaVT, NgayCN, MaNV, Anh) 
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 		sql = mysql.format(sql, [req.body.TenTL, req.body.TenTheLoai, req.body.TenTG, req.body.TenNXB, 
 			req.body.NamXB, req.body.TenNgonNgu, req.body.NoiDung, req.body.SoTrang, req.body.KhoGiay, req.body.LanTB, 
 			req.body.GiaBia, req.body.SoPH, req.body.NgayPH, req.body.TongSo, req.body.MaVT, req.body.NgayCN,
@@ -1372,13 +1409,31 @@ app.post('/themTaiLieu', json.json(), async function(req, res) {
 	} 
 })
 
+// Lay thong tin chi tiet cua tai lieu
+app.post('/layTTtailieu', json.json(), function(req, res) {
+	var sql = `select id, TenTL, TenTheLoai, TenTG, TenNXB, NamXB, TenNgonNgu, NoiDung, SoTrang, 
+		KhoGiay, LanTB, GiaBia, SoPH, NgayPH, TongSo, MaVT, NgayCN, MaNV, Anh from tailieu where id = ` + req.body.id;
+	connect.query(sql, function(err, result) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		res.write(JSON.stringify(result));
+		res.end();
+	})
+})
+
 // Sua tai lieu 
-app.post('/suaTaiLieu', json.json(), function(req, res) {
-	var sql = `update tailieu set TenTL = ?, TenTheLoai = ?, TenTG = ?, GiaBia = ? 
-	where id = ?`;
+app.post('/suaTaiLieu', json.json(), function(req, res) { 
+	var sql = `update tailieu set TenTL = ?, TenTheLoai = ?, TenTG = ?, TenNXB = ?, NamXB = ?, TenNgonNgu = ?, 
+				NoiDung = ?, SoTrang = ?, KhoGiay = ?, LanTB = ?, GiaBia = ?, SoPH = ?, NgayPH = ?, TongSo = ?, MaVT = ?, 
+				NgayCN = ?, MaNV = ?, Anh = ?
+				where id = ?`;
 	
 	sql = mysql.format(sql, [req.body.TenTL, req.body.TenTheLoai, req.body.TenTG,
-		req.body.GiaBia, req.body.id]); 
+			req.body.TenNXB, req.body.NamXB, req.body.TenNgonNgu, req.body.NoiDung, req.body.SoTrang,
+			req.body.KhoGiay, req.body.LanTB, req.body.GiaBia, req.body.SoPH, req.body.NgayPH, 
+			req.body.TongSo, req.body.MaVT, req.body.NgayCN, req.body.MaNV, req.body.Anh, req.body.id]);  
 	connect.query(sql, async function(err, results) {
 		if (err) {
 			res.write('0');
@@ -1392,6 +1447,7 @@ app.post('/suaTaiLieu', json.json(), function(req, res) {
 			res.end();
 		}
 	})
+	 
 })
 
 // Xoa tai lieu
@@ -1404,6 +1460,8 @@ app.post('/xoaTaiLieu', json.json(), async function(req, res) {
 			res.end();
 		}
 		else {
+			sql = "delete from tailieuchitiet where TaiLieuId = " + req.body.id;
+			await queryPromise(sql);
 			pageSize = 5;
 			sql = "select * from tailieu"; 
 			sql = mysql.format(sql, req.body.id);
@@ -1425,4 +1483,4 @@ app.post('/xoaTaiLieu', json.json(), async function(req, res) {
 			res.end();
 		}
 	})
-})
+}) 

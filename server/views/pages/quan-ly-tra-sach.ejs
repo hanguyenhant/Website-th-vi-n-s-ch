@@ -14,7 +14,7 @@
 	<%include ../partials/header%>
 	<div style="min-height: 85%"> 
 		<% include ../partials/anhchay %>
-		<div class="container" style="margin-top: 20px; ">  
+		<div class="container" style="margin-top: 20px; " id="noidung">  
 			<!-- <div class="row"> -->
 				<div class="form-group">
 					<!-- <div class="col-sm-3"> -->
@@ -98,8 +98,17 @@
 			
 		</div>	 
 	</div>
+	<br>
+	<br>
+	<div id="footer1"></div>
 </body>
 <script type="text/javascript">
+	if (sessionStorage.getItem('username') == undefined) {
+		html = ejs.render(`<%include ../partials/theloai%>`);
+		document.getElementById('noidung').innerHTML = html;
+		html = ejs.render(`<%include ../partials/footer%>`);
+		document.getElementById('footer1').innerHTML = html;
+	}
 	$(document).ready(function(){
 	    var date_input=$('input[name="date"]'); //our date input has the name "date"
 	    var container=$('.bootstrap form').length>0 ? $('.bootstrap form').parent() : "body";

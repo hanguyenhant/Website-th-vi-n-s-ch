@@ -13,7 +13,7 @@
 	<%include ../partials/header%>
 	<div style="min-height: 85%">  
 		<% include ../partials/anhchay %>
-		<div class="container" style="margin-top: 20px; ">  
+		<div class="container" style="margin-top: 20px; "  id="noidung">  
 			<form action="/doiMatKhau" method="post">
 				<a href="/doiMatKhau">
 					<h4 style="color: red;"><b>Đổi mật khẩu</b></h4>
@@ -53,42 +53,46 @@
 	<!-- Footer -->
 	<% include ../partials/footer %> 
 	<script type="text/javascript"> 
-	window.onload = function(){
-		document.getElementById("TaiKhoan").value = sessionStorage.getItem("username");
-	}
+		if (sessionStorage.getItem('username') == undefined) {
+			html = ejs.render(`<%include ../partials/theloai%>`);
+			document.getElementById('noidung').innerHTML = html; 
+		}
+		window.onload = function(){
+			document.getElementById("TaiKhoan").value = sessionStorage.getItem("username");
+		}
 
-	function doiMatKhau() {
-		var valid = true; // Kiem tra 2 mat khau nhap co giong nhau khong. true => hop le 
-		var matkhaucu = document.getElementById("MatKhauCu").value;
-		var matkhaumoi = document.getElementById("MatKhauMoi").value;
-		var nhaplaimatkhau = document.getElementById("NhapLaiMatKhau").value;  
-		var TenTk = document.getElementById("TaiKhoan").value; 
-		if (matkhaumoi != nhaplaimatkhau) {
-			alert("Mật khẩu không khớp.");
-			document.getElementById("MatKhauMoi").focus();
-			valid = false;
-		} 
-		if (valid) {
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.open("POST", "/doiMatKhau", false); 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
-					if (xmlhttp.responseText == "1") {
-						alert("Thay đổi mật khẩu thành công.");
-						document.getElementById("MatKhauCu").value = "";
-						document.getElementById("MatKhauMoi").value = "";
-						document.getElementById("NhapLaiMatKhau").value = ""; 
-					}
-					else if (xmlhttp.responseText == "0") {
-						alert("Error!");
+		function doiMatKhau() {
+			var valid = true; // Kiem tra 2 mat khau nhap co giong nhau khong. true => hop le 
+			var matkhaucu = document.getElementById("MatKhauCu").value;
+			var matkhaumoi = document.getElementById("MatKhauMoi").value;
+			var nhaplaimatkhau = document.getElementById("NhapLaiMatKhau").value;  
+			var TenTk = document.getElementById("TaiKhoan").value; 
+			if (matkhaumoi != nhaplaimatkhau) {
+				alert("Mật khẩu không khớp.");
+				document.getElementById("MatKhauMoi").focus();
+				valid = false;
+			} 
+			if (valid) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/doiMatKhau", false); 
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+						if (xmlhttp.responseText == "1") {
+							alert("Thay đổi mật khẩu thành công.");
+							document.getElementById("MatKhauCu").value = "";
+							document.getElementById("MatKhauMoi").value = "";
+							document.getElementById("NhapLaiMatKhau").value = ""; 
+						}
+						else if (xmlhttp.responseText == "0") {
+							alert("Error!");
+						}
 					}
 				}
+				xmlhttp.setRequestHeader('Content-type', 'application/json');
+				var thongTinMatKhau = JSON.stringify({"TenTk": TenTk, "MatKhauCu": matkhaucu, "MatKhauMoi": matkhaumoi}); 
+				xmlhttp.send(thongTinMatKhau); 
 			}
-			xmlhttp.setRequestHeader('Content-type', 'application/json');
-			var thongTinMatKhau = JSON.stringify({"TenTk": TenTk, "MatKhauCu": matkhaucu, "MatKhauMoi": matkhaumoi}); 
-			xmlhttp.send(thongTinMatKhau); 
 		}
-	}
 	</script>
 </body>
 </html>

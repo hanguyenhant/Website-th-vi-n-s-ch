@@ -14,7 +14,7 @@
 	<%include ../partials/header%>
 	<div style="min-height: 85%"> 
 		<% include ../partials/anhchay %>
-		<div class="container" style="margin-top: 20px; ">  
+		<div class="container" style="margin-top: 20px; " id="noidung">  
 			<div class="row">
 				<div class="form-group">
 					<div class="col-sm-3">
@@ -262,8 +262,19 @@
 			<!-- Ket thuc Modal Xoa --> 
 		</div> 
 	</div>
+	<br>
+	<br>
+	<div id="footer1"></div>
 	 
 	<script type="text/javascript" language="javascript">  
+		if (sessionStorage.getItem('username') == undefined) {
+			console.log("Vao day");
+			console.log(typeof(sessionStorage.getItem('username')));
+			html = ejs.render(`<%include ../partials/theloai%>`);
+			document.getElementById('noidung').innerHTML = html;
+			html = ejs.render(`<%include ../partials/footer%>`);
+			document.getElementById('footer1').innerHTML = html;
+		}
 		function openModal() {
 			$('#addModal').modal(); 
 			document.getElementById("HoTen").value = '';
@@ -510,7 +521,7 @@
 					    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ (i) + '">' + (i) + '</a></li>'; 
 								}
 				    		}
-							hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ currentPage + '">' + currentPage + '</a></li>'; 
+							if (pageCount > currentPage) hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ currentPage + '">' + currentPage + '</a></li>'; 
 							 
 							if (parseInt(parseInt(pageCount) - parseInt(currentPage)) > 0) {
 								var j = 1;
@@ -522,7 +533,10 @@
 									hienthi_phantrang += '<li><a disabled>...</a></li>';
 								 
 								}  
-								hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>';
+								if (pageCount > currentPage) {
+									hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>';
+								}
+								hienthi_phantrang += '</ul>';
 				    		}    
 							else {
 								var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=" + pageCount;
@@ -530,7 +544,7 @@
 								// Thay doi gia tri url 
 								history.pushState(null, '', url);  
 							}
-							phantrang.innerHTML = hienthi_phantrang;
+							if (pageCount > 1) phantrang.innerHTML = hienthi_phantrang;
 						}
 						// Xu ly bang hien thi danh sach nhan vien
 						hienthi = '<table class="table table-striped" id="table_dsnv">';

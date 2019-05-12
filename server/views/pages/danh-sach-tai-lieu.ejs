@@ -14,7 +14,7 @@
 	<%include ../partials/header%>
 	<div style="min-height: 85%"> 
 		<% include ../partials/anhchay %>
-		<div class="container" style="margin-top: 20px; ">  
+		<div class="container" style="margin-top: 20px; " id="noidung">  
 			<div class="row">
 				<div class="form-group">
 					<div class="col-sm-3">
@@ -26,7 +26,7 @@
 				<form action="/danhSachTaiLieu" method="get">
 					<div class="form-group">
 						<div class="col-sm-3 col-sm-offset-2">
-							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem">
+							<input type="text" class="form-control" placeholder="Tìm kiếm tại đây..." name="noi_dung_tim_kiem" id="timkiem">
 						</div>
 						<div class="col-sm-1">
 							<div class="btn-group"> 
@@ -39,7 +39,7 @@
 					<button type="button" class="btn btn-primary" style="text-align: right;" onclick="openModal();">Thêm tài liệu</button>
 					<!-- Modal -->
 				 	<div class="modal fade" id="addModal" role="dialog">
-				    	<div class="modal-dialog modal-lg">
+				    	<div class="modal-dialog modal-lg" style="width: 900px;">
 				    
 				      	<!-- Noi dung cua modal -->
 				      	<div class="modal-content">
@@ -236,7 +236,7 @@
 						</tr>
 					</thead>
 					<tbody> 
-						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachTaiLieu.length && j<(danhSachTaiLieu.length + 4 * currentPage); i++, j++){%>
+						<%for (var i = 0, j=(currentPage - 1)*pageSize; i < danhSachTaiLieu.length && j<(danhSachTaiLieu.length + pageSize * currentPage); i++, j++){%>
 							<tr>
 								<td id="<%=danhSachTaiLieu[i].id%>"><%=j + 1%></td>
 								<td id="id<%=danhSachTaiLieu[i].id%>"><%=danhSachTaiLieu[i].id%></td>
@@ -245,7 +245,7 @@
 								<td id="TenTG<%=danhSachTaiLieu[i].id%>"><%=danhSachTaiLieu[i].TenTG%></td>
 								<td id="GiaBia<%=danhSachTaiLieu[i].id%>"><%=danhSachTaiLieu[i].GiaBia%></td>
 								<td>							
-									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu('<%=danhSachTaiLieu[i].id%>','<%=danhSachTaiLieu[i].TenNXB%>','<%=danhSachTaiLieu[i].NamXB%>','<%=danhSachTaiLieu[i].TenNgonNgu%>','<%=danhSachTaiLieu[i].NoiDung%>','<%=danhSachTaiLieu[i].SoTrang%>','<%=danhSachTaiLieu[i].KhoGiay%>','<%=danhSachTaiLieu[i].LanTB%>','<%=danhSachTaiLieu[i].SoPH%>','<%=danhSachTaiLieu[i].NgayPH%>','<%=danhSachTaiLieu[i].TongSo%>','<%=danhSachTaiLieu[i].MaVT%>','<%=danhSachTaiLieu[i].NgayCN%>','<%=danhSachTaiLieu[i].MaNV%>','<%=danhSachTaiLieu[i].Anh%>');" data-toggle="modal" data-target="#editModal">
+									<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(<%=danhSachTaiLieu[i].id%>);" data-toggle="modal" data-target="#editModal">
 									    <span class="glyphicon glyphicon-wrench"></span>
 									</button>  
 									<button type="submit" class="btn btn-default" name="delete" id="buttonDelete" data-toggle="modal" data-target="#deleteModal" onclick="layTTtailieu(<%=danhSachTaiLieu[i].id%>);">
@@ -278,7 +278,7 @@
 			                <% } else { %> 
 			                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
 			                <% } %>
-			                <% if (i == (currentPage + 4)) { %>
+			                <% if (i == (currentPage + 4) && pageCount!=5) { %>
 			                    <li class="disabled"><a href="#">...</a></li>
 			                <% break; } %>
 			            <% } %>
@@ -290,7 +290,7 @@
 			</div>
 			<!-- Modal Sua -->
 		 	<div class="modal fade" id="editModal" role="dialog">
-		    	<div class="modal-dialog modal-lg">
+		    	<div class="modal-dialog modal-lg" style="width: 900px;">
 		    
 			      	<!-- Noi dung cua modal -->
 			      	<div class="modal-content">
@@ -493,9 +493,19 @@
 			</div>	 
 			<!-- Ket thuc Modal Xoa --> 
 		</div> 
-	</div>
-	 
+	</div> 
+</div>
+<br><br>
+<div id="footer1"></div>
+		 
 	<script type="text/javascript" language="javascript">  
+		if (sessionStorage.getItem('username') == undefined) {
+			html = ejs.render(`<%include ../partials/theloai%>`);
+			document.getElementById('noidung').innerHTML = html;
+			html = ejs.render(`<%include ../partials/footer%>`);
+			document.getElementById('footer1').innerHTML = html;
+		}
+		document.getElementById("timkiem").value = '<%=noi_dung_tim_kiem%>'; 
 		$(document).ready(function(){
 		    var date_input=$('input[name="date"]'); //our date input has the name "date"
 		    var container=$('.bootstrap form').length>0 ? $('.bootstrap form').parent() : "body";
@@ -532,27 +542,43 @@
 
 		var id, sothutu;
 
-		function layTTtailieu(id, TenNXB, NamXB, TenNgonNgu, NoiDung, SoTrang, KhoGiay, LanTB, SoPH, NgayPH, TongSo, MaVT, NgayCN, MaNV, Anh) {
-			this.id = id;
-			document.getElementById("TenTL_Edit").value = document.getElementById("TenTL" + id).innerHTML;
-			document.getElementById("TenTheLoai_Edit").value = document.getElementById("TenTheLoai" + id).innerHTML;
-			document.getElementById("TenTG_Edit").value = document.getElementById("TenTG" + id).innerHTML;
-			document.getElementById("TenNXB_Edit").value = TenNXB;
-			document.getElementById("NamXB_Edit").value = NamXB;
-			document.getElementById("TenNgonNgu_Edit").value = TenNgonNgu;
-			document.getElementById("NoiDung_Edit").value = NoiDung;
-			document.getElementById("SoTrang_Edit").value = SoTrang;
-			document.getElementById("KhoGiay_Edit").value = KhoGiay;
-			document.getElementById("LanTB_Edit").value = LanTB;
-			document.getElementById("GiaBia_Edit").value = document.getElementById("GiaBia" + id).innerHTML;
-			document.getElementById("SoPH_Edit").value = SoPH;
-			document.getElementById("NgayPH_Edit").value = NgayPH;
-			document.getElementById("TongSo_Edit").value = TongSo;
-			document.getElementById("MaVT_Edit").value = MaVT;
-			document.getElementById("NgayCN_Edit").value = NgayCN;
-			document.getElementById("MaNV_Edit").value = MaNV;
-			document.getElementById("Anh_Edit").value = Anh;
-			this.sothutu = document.getElementById(id).innerHTML;
+		function layTTtailieu(id) {
+			this.id = id; 
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/layTTtailieu", false); 
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+					if (xmlhttp.responseText != "0") { 
+						thongtintailieu = JSON.parse(xmlhttp.responseText)[0]; 
+						document.getElementById("TenTL_Edit").value = document.getElementById("TenTL" + id).innerHTML;
+						document.getElementById("TenTheLoai_Edit").value = document.getElementById("TenTheLoai" + id).innerHTML;
+						document.getElementById("TenTG_Edit").value = document.getElementById("TenTG" + id).innerHTML;
+						document.getElementById("TenNXB_Edit").value = thongtintailieu.TenNXB;
+						document.getElementById("NamXB_Edit").value = thongtintailieu.NamXB;
+						document.getElementById("TenNgonNgu_Edit").value = thongtintailieu.TenNgonNgu;
+						document.getElementById("NoiDung_Edit").value = thongtintailieu.NoiDung;
+						document.getElementById("SoTrang_Edit").value = thongtintailieu.SoTrang;
+						document.getElementById("KhoGiay_Edit").value = thongtintailieu.KhoGiay;
+						document.getElementById("LanTB_Edit").value = thongtintailieu.LanTB;
+						document.getElementById("GiaBia_Edit").value = document.getElementById("GiaBia" + id).innerHTML;
+						document.getElementById("SoPH_Edit").value = thongtintailieu.SoPH;
+						document.getElementById("NgayPH_Edit").value = thongtintailieu.NgayPH;
+						document.getElementById("TongSo_Edit").value = thongtintailieu.TongSo;
+						document.getElementById("MaVT_Edit").value = thongtintailieu.MaVT;
+						document.getElementById("NgayCN_Edit").value = thongtintailieu.NgayCN;
+						document.getElementById("MaNV_Edit").value = thongtintailieu.MaNV;
+						document.getElementById("Anh_Edit").value = thongtintailieu.Anh;
+					}
+					else {
+						alert("Error")
+					}
+				}
+
+			}
+			xmlhttp.setRequestHeader('Content-type', 'application/json');
+			var thongTinDG = JSON.stringify({"id": id}); 
+			xmlhttp.send(thongTinDG); 
+ 
 		}
 
 		function themTL() {     
@@ -605,6 +631,7 @@
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
+							pageSize = 5;
 							// xu ly ajax
 							dstl = document.getElementById("DSTL"); 
 							ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
@@ -625,7 +652,7 @@
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
-								for (var i = 0, j=(pageCount - 1)*4; i < danhsachtailieu.length && j<(danhsachtailieu.length + 4 * pageCount); i++, j++)
+								for (var i = 0, j=(pageCount - 1)*pageSize; i < danhsachtailieu.length && j<(danhsachtailieu.length + pageSize * pageCount); i++, j++)
 								{
 									hienthi += '<tr>';
 										hienthi += '<td id = ' + danhsachtailieu[i].id + '>' + (j + 1) + '</td>';
@@ -637,9 +664,9 @@
  
 										hienthi += 
 										'<td>' +							
-											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ',' + danhsachtailieu[i].TenNXB + ','+ danhsachtailieu[i].NamXB + ',' + danhsachtailieu[i].TenNgonNgu + ',' + danhsachtailieu[i].NoiDung + ',' + danhsachtailieu[i].SoTrang + ',' + danhsachtailieu[i].KhoGiay + ',' + danhsachtailieu[i].LanTB + ',' + danhsachtailieu[i].SoPH + ',' + danhsachtailieu[i].NgayPH + ',' + danhsachtailieu[i].TongSo + ',' + danhsachtailieu[i].MaVT + ',' + danhsachtailieu[i].NgayCN + ',' + danhsachtailieu[i].MaNV + ',' + danhsachtailieu[i].Anh + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
+											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id  + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
-											'</button>' +  
+											'</button>&nbsp;' +  
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonDelete" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
@@ -676,8 +703,10 @@
 
 							// Tao html trong the co id = "menu"
 							dstl.innerHTML = hienthi; 
-							// Tao html trong the co phantrang = "menu"
-							phantrang.innerHTML = hienthi_phantrang; 
+							if (pageCount > 1) {
+								// Tao html trong the co phantrang = "menu"
+								phantrang.innerHTML = hienthi_phantrang; 
+							}
 
 							// Thay doi gia tri url 
 							history.pushState(null, '', url); 
@@ -705,7 +734,7 @@
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
-							// xu ly ajax => thay doi thong tin nhan vien tren dong tuong ung trong bang hien thi
+							// xu ly ajax => thay doi thong tin tai lieu tren dong tuong ung trong bang hien thi
 							thongtintailieudasua = JSON.parse(xmlhttp.responseText); 
 							thongtintailieudasua = thongtintailieudasua[0];
 							id =thongtintailieudasua.id; 
@@ -724,8 +753,8 @@
 
 				} 
 				xmlhttp.setRequestHeader('Content-type', 'application/json');
-				var thongTinTL = JSON.stringify({"id": this.id, "TenTL": document.getElementById("TenTL_Edit").value, "TenTheLoai": document.getElementById("TenTheLoai_Edit").value, "TenTG": document.getElementById("TenTG_Edit").value, "GiaBia": document.getElementById("GiaBia_Edit").value});
-
+				var thongTinTL = JSON.stringify({"id": this.id, "TenTL": document.getElementById("TenTL_Edit").value, "TenTheLoai": document.getElementById("TenTheLoai_Edit").value, "TenTG": document.getElementById("TenTG_Edit").value, "GiaBia": document.getElementById("GiaBia_Edit").value, "TenNXB": document.getElementById("TenNXB_Edit").value, "NamXB": document.getElementById("NamXB_Edit").value,"TenNgonNgu": document.getElementById("TenNgonNgu_Edit").value, "NoiDung": document.getElementById("NoiDung_Edit").value,"SoTrang": document.getElementById("SoTrang_Edit").value, "KhoGiay": document.getElementById("KhoGiay_Edit").value,"LanTB": document.getElementById("LanTB_Edit").value, "SoPH": document.getElementById("SoPH_Edit").value, "NgayPH": document.getElementById("NgayPH_Edit").value, "TongSo": document.getElementById("TongSo_Edit").value, "MaVT": document.getElementById("MaVT_Edit").value, "NgayCN": document.getElementById("NgayCN_Edit").value, "MaNV": document.getElementById("MaNV_Edit").value, "Anh": document.getElementById("Anh_Edit").value}); 
+				 
 				xmlhttp.send(thongTinTL); 
 			}
 		} 
@@ -743,6 +772,7 @@
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 					if (xmlhttp.responseText != "0") {   
+						pageSize = 5;
 						// xu ly ajax
 						dstl = document.getElementById("DSTL"); 
 						ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
@@ -763,7 +793,7 @@
 				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
 				    		}   
 				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';
-				    		hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
+				    		hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
 				            phantrang.innerHTML = hienthi_phantrang;
@@ -780,9 +810,16 @@
 							if (currentPage > 5) { 
 								hienthi_phantrang += '<li><a disabled>...</a></li>'; 
 				    		}  
-				    		for(var i = parseInt(currentPage) - 4; i < parseInt(currentPage) - 1 ; i++) { 
-				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ (i + 1) + '">' + (i + 1) + '</a></li>'; 
-							}
+				    		if (currentPage >= 5) {
+				    			for(var i = parseInt(currentPage) - 4; i <= parseInt(currentPage) - 1 ; i++) { 
+					    			hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ (i) + '">' + (i) + '</a></li>'; 
+								}
+				    		}
+				    		else {
+				    			for(var i = 1; i <= parseInt(currentPage) - 1 ; i++) { 
+					    			hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ (i) + '">' + (i) + '</a></li>'; 
+								}
+				    		}
 							hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ currentPage + '">' + currentPage + '</a></li>'; 
 							 
 							if (parseInt(parseInt(pageCount) - parseInt(currentPage)) >= 0) {
@@ -795,7 +832,9 @@
 									hienthi_phantrang += '<li><a disabled>...</a></li>';
 								 
 								}  
-								hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>';
+								if (pageCount > currentPage) {
+									hienthi_phantrang += '<li><a href=" ' + "/danhSachTaiLieu?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>';
+								}
 				    		}    
 							else {
 								var url = "/danhSachTaiLieu" + "?noi_dung_tim_kiem=&page=" + pageCount;
@@ -803,7 +842,9 @@
 								// Thay doi gia tri url 
 								history.pushState(null, '', url);  
 							}
-							phantrang.innerHTML = hienthi_phantrang;
+							if (pageCount > 1) {
+								phantrang.innerHTML = hienthi_phantrang;
+							}
 						}
 						hienthi = '<table class="table table-striped" id="table_dstl">';
 								hienthi += '<thead>';
@@ -818,7 +859,7 @@
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
-								for (var i = 0, j=(pageCount - 1)*4; i < danhsachtailieu.length && j<(danhsachtailieu.length + 4 * pageCount); i++, j++)
+								for (var i = 0, j=(pageCount - 1)*pageSize; i < danhsachtailieu.length && j<(danhsachtailieu.length + pageSize * pageCount); i++, j++)
 								{
 									hienthi += '<tr>';
 										hienthi += '<td id = ' + danhsachtailieu[i].id + '>' + (j + 1) + '</td>';
@@ -832,7 +873,7 @@
 										'<td>' +							
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
-											'</button>' +  
+											'</button>&nbsp;' +  
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTtailieu(' + danhsachtailieu[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
