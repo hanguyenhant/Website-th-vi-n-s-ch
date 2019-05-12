@@ -296,6 +296,7 @@
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
+							pageSize = 5;
 							// xu ly ajax
 							dsnv = document.getElementById("DSNV"); 
 							ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
@@ -316,7 +317,7 @@
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
-								for (var i = 0, j=(pageCount - 1)*4; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + 4 * pageCount); i++, j++)
+								for (var i = 0, j=(pageCount - 1)*pageSize; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + pageSize * pageCount); i++, j++)
 								{
 									hienthi += '<tr>';
 										hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (j + 1) + '</td>';
@@ -330,7 +331,7 @@
 										'<td>' +							
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
-											'</button>' +  
+											'</button>&nbsp;' +  
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
@@ -461,6 +462,7 @@
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 					if (xmlhttp.responseText != "0") {   
+						pageSize = 5;
 						// xu ly ajax
 						dsnv = document.getElementById("DSNV"); 
 						ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
@@ -544,7 +546,7 @@
 								hienthi += '</tr>';
 							hienthi += '</thead>';
 							hienthi += '<body>';
-							for (var i = 0, j=(currentPage - 1)*4; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + 4 * currentPage); i++, j++)
+							for (var i = 0, j=(currentPage - 1)*pageSize; i < danhsachnhanvien.length && j<(danhsachnhanvien.length + pageSize * currentPage); i++, j++)
 							{ 
 								hienthi += '<tr>';
 									hienthi += '<td id = ' + danhsachnhanvien[i].id + '>' + (j + 1) + '</td>';
@@ -557,7 +559,7 @@
 									'<td>' +							
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
-											'</button>' +  
+											'</button>&nbsp;' +  
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTNhanVien(' + danhsachnhanvien[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 								    		'<span class="glyphicon glyphicon-trash"></span>' + 
 										'</button>' + 	 

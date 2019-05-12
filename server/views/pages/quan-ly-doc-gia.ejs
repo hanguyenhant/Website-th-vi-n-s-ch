@@ -162,7 +162,7 @@
 						</tr>
 					</thead>
 					<tbody> 
-						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachDocGia.length && j<(danhSachDocGia.length + 4 * currentPage); i++, j++){%>
+						<%for (var i = 0, j=(currentPage - 1)*pageSize; i < danhSachDocGia.length && j<(danhSachDocGia.length + 4 * currentPage); i++, j++){%>
 							<tr>
 								<td id="<%=danhSachDocGia[i].id%>"><%=j + 1%></td>
 								<td id="MaThe<%=danhSachDocGia[i].id%>"><%=danhSachDocGia[i].MaThe%></td>
@@ -209,7 +209,7 @@
 			                <% } else { %> 
 			                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
 			                <% } %>
-			                <% if (i == (currentPage + 4)) { %>
+			                <% if (i == (currentPage + 4) && pageCount!=5) { %>
 			                    <li class="disabled"><a href="#">...</a></li>
 			                <% break; } %>
 			            <% } %>
@@ -392,6 +392,7 @@
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
+							pageSize= 5;
 							// xu ly ajax
 							dsdg = document.getElementById("DSDG"); 
 							ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
@@ -414,7 +415,7 @@
 									hienthi += '</tr>';
 								hienthi += '</thead>';
 								hienthi += '<body>';
-								for (var i = 0, j=(pageCount - 1)*4; i < danhsachdocgia.length && j<(danhsachdocgia.length + 4 * pageCount); i++, j++)
+								for (var i = 0, j=(pageCount - 1)*pageSize; i < danhsachdocgia.length && j<(danhsachdocgia.length + pageSize * pageCount); i++, j++)
 								{
 									hienthi += '<tr>';
 										hienthi += '<td id = ' + danhsachdocgia[i].id + '>' + (j + 1) + '</td>';
@@ -429,7 +430,7 @@
 										'<td>' +							
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(' + danhsachdocgia[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
-											'</button>' +  
+											'</button>&nbsp;' +  
 											'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(' + danhsachdocgia[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 									    		'<span class="glyphicon glyphicon-trash"></span>' + 
 											'</button>' + 											
@@ -455,10 +456,16 @@
 				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
-							// Tao html trong the co id = "menu"
+							// Tao html trong the co id = "dsdg"
 							dsdg.innerHTML = hienthi; 
-							// Tao html trong the co phantrang = "menu"
-							phantrang.innerHTML = hienthi_phantrang; 
+							if (pageCount == 1) {
+								// Tao html trong the co phantrang = "phantrang"
+								phantrang.innerHTML = '';
+							}
+							else {
+								// Tao html trong the co phantrang = "phantrang"
+								phantrang.innerHTML = hienthi_phantrang; 
+							}
 
 							// Thay doi gia tri url 
 							history.pushState(null, '', url); 
@@ -549,8 +556,11 @@
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.open("POST", "/xoaDocGia", false); 
 			// Lay trang hien tai (tren url)
-			var currentPage = location.search.split('page=')[1];
-			console.log("currentPage: " + currentPage);
+			var currentPage = location.search.split('page=')[1]; 
+
+			if (currentPage == undefined) {
+				currentPage = 1;
+			}
 
 			// Lay tong so hang cua bang 
 			var totalRowCount = $("#table_dsdg tr").length - 1; 
@@ -559,6 +569,7 @@
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 					if (xmlhttp.responseText != "0") {   
+						pageSize = 5;
 						// xu ly ajax
 						dsdg = document.getElementById("DSDG"); 
 						ketqua = JSON.parse(xmlhttp.responseText); // ket qua do server gui ve co dang JSON 
@@ -582,7 +593,14 @@
 				    		hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
-				            phantrang.innerHTML = hienthi_phantrang;
+				            if (pageCount == 1) {
+								// Tao html trong the co phantrang = "phantrang"
+								phantrang.innerHTML = '';
+							}
+							else {
+								// Tao html trong the co phantrang = "phantrang"
+								phantrang.innerHTML = hienthi_phantrang; 
+							}
 						}
 
 						// Xu ly bang hien thi danh sach doc gia
@@ -600,7 +618,7 @@
 								hienthi += '</tr>';
 							hienthi += '</thead>';
 							hienthi += '<body>';
-							for (var i = 0, j=(currentPage - 1)*4; i < danhsachdocgia.length && j<(danhsachdocgia.length + 4 * currentPage); i++, j++)
+							for (var i = 0, j=(currentPage - 1)*pageSize; i < danhsachdocgia.length && j<(danhsachdocgia.length + pageSize * currentPage); i++, j++)
 							{ 
 								hienthi += '<tr>';
 									hienthi += '<td id = ' + danhsachdocgia[i].id + '>' + (j + 1) + '</td>';
@@ -615,7 +633,7 @@
 									'<td>' +							
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(' + danhsachdocgia[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
 									    		'<span class="glyphicon glyphicon-wrench"></span>' + 
-											'</button>' +  
+											'</button>&nbsp;' +  
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTDocGia(' + danhsachdocgia[i].id + ');' + '"' + ' data-toggle="modal" data-target="#deleteModal">' +
 								    		'<span class="glyphicon glyphicon-trash"></span>' + 
 										'</button>' + 	 
@@ -625,7 +643,7 @@
 							hienthi +='</body>';
 						hienthi += '</table>';  
 
-						// Tao html trong the co id = "menu"
+						// Tao html trong the co id = "dsdg"
 						dsdg.innerHTML = hienthi;  
 						// Dong modal xoa doc gia
 						document.getElementById('close_Delete').click();

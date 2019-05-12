@@ -130,8 +130,7 @@
 						<th>Mã thẻ</th>
 						<th>Ngày mượn</th> 
 						<th>Thời hạn mượn</th>
-						<th>Mã NV cho mượn</th>
-						<th>Mã NV trả</th>
+						<th>Mã NV cho mượn</th> 
 						<th>Tổng số sách</th>
 						<th>Tổng tiền cọc</th>
 						<th>Hành động</th> 
@@ -143,8 +142,7 @@
 								<td><%=danhSachMuonSach[i].MaThe%></td>
 								<td><%=danhSachMuonSach[i].NgayMuon%></td>
 								<td><%=danhSachMuonSach[i].ThoiHanMuon%></td>
-								<td><%=danhSachMuonSach[i].MaNV_Muon%></td>
-								<td><%=danhSachMuonSach[i].MaNV_Tra%></td>
+								<td><%=danhSachMuonSach[i].MaNV_Muon%></td> 
 								<td><%=danhSachMuonSach[i].TongSoSach%></td>
 								<td><%=danhSachMuonSach[i].TongTienCoc%></td>
 								<td>
@@ -284,7 +282,9 @@
 	    date_input.datepicker(options);
 	})
 	var MaThe;
-	function openModal_ThemPhieuMuon() { 
+	var TongTienCoc = 0;
+	var danhSachMaVach = [];
+	function openModal_ThemPhieuMuon() {  
 		$("#addModal").modal();
 		document.getElementById("MaThe").value = '';
 		document.getElementById("HoTen").value = '';
@@ -297,6 +297,9 @@
 	 	for(var i = 1; i<table.rows.length;){
             table.deleteRow(i);
         }
+
+        TongTienCoc = 0;
+		danhSachMaVach = [];
 	}
 	function layTTDocGia(event) {
 		if (event.keyCode == 13) { // nhan phim enter
@@ -326,9 +329,7 @@
 			var thongTinDG = JSON.stringify({"MaThe": MaThe}); 
 			xmlhttp.send(thongTinDG); 
 		}
-	}
-	var TongTienCoc = 0;
-	var danhSachMaVach = [];
+	} 
 	function sachMuon() {  
 		if (event.keyCode == 13) { // nhan phim enter 
 			tr = document.getElementById("sachmuon");
@@ -372,7 +373,7 @@
 							document.getElementById("check_Sach").innerHTML = "";
 						}
 						else {
-							document.getElementById("check_Sach").innerHTML = "Không tìm thấy thông tin sách";
+							document.getElementById("check_Sach").innerHTML = "Không tìm thấy thông tin sách hoặc sách đã được mượn";
 						}
 					}
 
@@ -402,6 +403,7 @@
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 					if (xmlhttp.responseText != "0") {     
+						pageSize = 5;
 						danhSachMuonSach = JSON.parse(xmlhttp.responseText);
 						document.getElementById("close").click(); 
 				        // xu ly ajax 
@@ -416,31 +418,26 @@
 								hienthi += '<th>Mã thẻ</th>'; 
 								hienthi += '<th>Ngày mượn</th>';   
 								hienthi += '<th>Thời hạn mượn</th>';
-								hienthi += '<th>Mã NV cho mượn</th>';
-								hienthi += '<th>Mã NV trả</th>';
+								hienthi += '<th>Mã NV cho mượn</th>'; 
 								hienthi += '<th>Tổng số sách</th>';
 								hienthi += '<th>Tổng tiền đặt cọc</th>';
 								hienthi += '<th>Hành động</th>';
 							hienthi += '</thead>';
 							hienthi += '<body>';
-							for (var i = 0, j=(pageCount - 1)*4; i < danhsachmuonsach.length && j<(danhsachmuonsach.length + 4 * pageCount); i++, j++)
+							for (var i = 0, j=(pageCount - 1)*pageSize; i < danhsachmuonsach.length && j<(danhsachmuonsach.length + pageSize * pageCount); i++, j++)
 							{
 								hienthi += '<tr>';
 									hienthi += '<td>' + (j + 1) + '</td>';
 									hienthi +=  '<td>' + danhsachmuonsach[i].MaThe + '</td>';
 									hienthi += '<td>' + danhsachmuonsach[i].NgayMuon + '</td>'; 
 									hienthi +=  '<td>' + danhsachmuonsach[i].ThoiHanMuon + '</td>';
-									hienthi +=  '<td>' + danhsachmuonsach[i].MaNV_Muon + '</td>';
-									if (danhsachmuonsach[i].MaNV_Tra) {
-										hienthi +=  '<td>' + danhsachmuonsach[i].MaNV_Muon + '</td>';
-									}
-									else hienthi +=  '<td></td>';
+									hienthi +=  '<td>' + danhsachmuonsach[i].MaNV_Muon + '</td>'; 
 									hienthi +=  '<td>' + danhsachmuonsach[i].TongSoSach + '</td>';
 									hienthi +=  '<td>' + danhsachmuonsach[i].TongTienCoc + '</td>';
 									hienthi += 
 									'<td>' +							
 										'<button type="submit" class="btn btn-default" name="edit" id="buttonEdit" onclick="layTTPhieuMuon(' + danhsachmuonsach[i].id + ');' + '"' + ' data-toggle="modal" data-target="#editModal">' +
-								    		'<span class="glyphicon glyphicon-wrench"></span>' + 
+								    		'<span class="glyphicon glyphicon-list"></span>' + 
 										'</button>' +   							
 									'</td>';				
 								hienthi += '</tr>';
@@ -448,7 +445,7 @@
 							hienthi +='</body>';
 						hienthi += '</table>'; 
 
-						// Tao html trong the co id = "menu"
+						// Tao html trong the co id = "danhsachsachmuon"
 						document.getElementById('danhsachsachmuon').innerHTML = hienthi; 
 
 						// Thay doi url den trang cuoi cung
@@ -458,14 +455,13 @@
 			    		phantrang = document.getElementById('phantrang');
 			    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
 			    		hienthi_phantrang += '<ul class="pagination">';
-			    		hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page=1"+ '">' + '&laquo;</a></li>';
-			    		 
+			    		hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page=1"+ '">' + '&laquo;</a></li>'; 
 			    		if (pageCount > 5)  { 
 			    			var amount = 0;
 			    			hienthi_phantrang += '<li><a disabled>...</a></li>';
 			    			for(var i = pageCount - 4; i >= 0 && i < pageCount; i++) {
-			    			amount += 1;
-			    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
+				    			amount += 1;
+				    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
 			    			}   
 			    		} 
 			    		else {
@@ -476,13 +472,18 @@
 			    		hienthi_phantrang += '<li class="active"><a href=" ' + "/quanLyMuonSach?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
 			            hienthi_phantrang += '</ul>'; 
 
-						// Tao html trong the co phantrang = "menu"
-						phantrang.innerHTML = hienthi_phantrang; 
-
+						if (pageCount == 1) {
+							// Tao html trong the co phantrang = "phantrang"
+							phantrang.innerHTML = '';
+						}
+						else {
+							// Tao html trong the co phantrang = "phantrang"
+							phantrang.innerHTML = hienthi_phantrang; 
+						}
 						// Thay doi gia tri url 
 						history.pushState(null, '', url);  
-						document.getElementById("label_TongSoSach").innerHTML = "Tổng số sách mượn:" + ketqua.TongSoSach + " quyển";
-						document.getElementById("label_TongTienCoc").innerHTML = "Tổng tiền đặt cọc: " +ketqua.TongTienCoc + " VNĐ";
+						document.getElementById("label_TongSoSach").innerHTML = "Tổng số sách mượn:" + ketqua.TongSoSach;
+						document.getElementById("label_TongTienCoc").innerHTML = "Tổng tiền đặt cọc: " +ketqua.TongTienCoc;
 					}
 					else {
 						alert("Error!");

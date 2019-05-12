@@ -95,7 +95,7 @@ app.get('/information/:id', function(req, res) {
 
 // Xem thong tin cac tai lieu co TenTheLoai = tenTheLoai
 app.get('/theloai/:tenTheLoai', function(req, res) {
-	var pageSize = 8,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1,
 		books_currentpage = []; 
@@ -132,7 +132,7 @@ app.get('/search', function(req, res) {
 	var noi_dung_tim_kiem = req.query.noi_dung_tim_kiem;
 	var the_loai = req.query.the_loai;
 
-	var pageSize = 8,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1,
 		books_currentpage = []; 
@@ -193,7 +193,7 @@ app.get('/search', function(req, res) {
 
 // Lay danh sach nhan vien
 app.get('/danhSachNhanVien', async function(req, res) {
-	var pageSize = 4,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
 	danhSachNhanVien = new Array(); 
@@ -273,7 +273,7 @@ app.post('/themNhanVien', json.json(), async function(req, res) {
 				res.end();
 			}
 			else {
-				var pageSize = 4,
+				var pageSize = 5,
 					pageCount;
 				danhsachnhanvien = [];
 				results = await queryPromise("select * from nhanvien order by id desc");
@@ -340,11 +340,12 @@ app.post('/xoaNhanVien', json.json(), async function(req, res) {
 			sql = "select * from nhanvien"; 
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
-			pageCount = Math.ceil(results.length / 4)
+			pageSize = 5;
+			pageCount = Math.ceil(results.length / pageSize)
 			page = req.body.currentPage;  
 			danhsachnhanvien = [];
 			k = 0;
-			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
 				danhsachnhanvien[k] = results[i - 1]; 
 				k++;
 			} 
@@ -377,7 +378,7 @@ app.get('/thongTinChiTietNhanVien/:id', async function(req, res) {
 
 // Lay danh sach tai khoan cua nguoi dung
 app.get('/danhSachTaiKhoan', async function(req, res) {
-	var pageSize = 4,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
 	danhsachchuacotaikhoan = new Array();
@@ -490,7 +491,7 @@ app.get('/danhSachTaiKhoan', async function(req, res) {
 }) 
 // Xem thong tin cac tai lieu co TenTheLoai = tenTheLoai
 app.get('/theloai/:tenTheLoai', function(req, res) {
-	var pageSize = 8,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1,
 		books_currentpage = []; 
@@ -542,7 +543,7 @@ app.post('/resetMatKhau', json.json(), function(req, res) {
 
 // Lay danh sach  nha cung cap
 app.get('/danhSachNhaCungCap', async function(req, res) {
-	var pageSize = 4,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
 	danhSachNhaCungCap = new Array(); 
@@ -603,7 +604,7 @@ app.post('/themNhaCungCap', json.json(), async function(req, res) {
 				res.end();
 			}
 			else {
-				var pageSize = 4,
+				var pageSize = 5,
 					pageCount;
 				danhsachnhacungcap = [];
 				results = await queryPromise("select * from nhacungcap order by id desc");
@@ -646,8 +647,7 @@ app.post('/suaNhaCungCap', json.json(), function(req, res) {
 			res.write(JSON.stringify(danhsachnhacungcap)); 
 			res.end();
 		}
-	})
-	//console.log(sql);
+	}) 
 })
 
 // Xoa  nha cung cap 
@@ -663,11 +663,11 @@ app.post('/xoaNhaCungCap', json.json(), function(req, res) {
 			sql = "select * from nhacungcap"; 
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
-			pageCount = Math.ceil(results.length / 4)
+			pageCount = Math.ceil(results.length / pageSize)
 			page = req.body.currentPage;  
 			danhsachnhacungcap = [];
 			k = 0;
-			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
 				danhsachnhacungcap[k] = results[i - 1]; 
 				k++;
 			} 
@@ -771,8 +771,8 @@ app.post("/layTTDocGia", json.json(), function(req, res) {
 
 // Lay thong tin sach muon
 app.post("/layTTSachMuon", json.json(), function(req, res) { 
-	sql = "select tenTL, MaVach, GiaBia from tailieu, tailieuchitiet where MaVach = ? and TaiLieuId = tailieu.id"; 
-	sql = mysql.format(sql, req.body.MaVach); 
+	sql = "select tenTL, MaVach, GiaBia from tailieu, tailieuchitiet where MaVach = ? and TaiLieuId = tailieu.id and TinhTrang = ?"; 
+	sql = mysql.format(sql, [req.body.MaVach, "chưa mượn"]); 
 	connect.query(sql, function (err, result) {
 		if (err) {
 			res.write("0");
@@ -821,7 +821,15 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 		sql = "insert into chi_tiet_muon_tra(IdPhieuMuonTra, MaVach) values(?, ?)";
 		sql = mysql.format(sql, [IdPhieuMuonTra, danhsachmavach[i]]);
 		try {
-			result = await queryPromise(sql);
+			await queryPromise(sql);
+			sql = "update tailieuchitiet set TinhTrang = 'mượn' where MaVach = ?";
+			sql = mysql.format(sql, danhsachmavach[i]); 
+			try {
+				await queryPromise(sql);
+			} catch(ex) {
+				res.write("0");
+				res.end();
+			}
 		} catch(e) {
 			res.write("0");
 			res.end();
@@ -831,7 +839,7 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 			pageCount;
 		danhsachmuonsach = [];
 	results = await queryPromise(`select id, MaThe, date_format(NgayMuon, '%d-%m-%Y %H-%i-%s') as NgayMuon, 
-		 ThoiHanMuon, MaNV_Muon, MaNV_Tra, TongSoSach, TongTienCoc from phieu_muon_tra where TrangThai = "Mượn"
+		 ThoiHanMuon, MaNV_Muon, TongSoSach, TongTienCoc from phieu_muon_tra where TrangThai = "Mượn"
 		  order by id desc`);
 	TongSoSach = results.reduce(function(TongSoSach, curr){
 									TongSoSach += curr.TongSoSach;
@@ -860,10 +868,9 @@ app.post("/themPhieuMuon", json.json(), async function(req, res) {
 // Lay thong tin chi tiet cua phieu muon
 app.post("/layTTPhieuMuon", json.json(), async function(req, res) {  
 	sql = `select docgia.MaThe, HoTen, Email, SoDienThoai, date_format(NgayMuon, '%Y-%m-%d') as NgayMuon, ThoiHanMuon, 
-		TongSoSach, TongTienCoc  
+		TongSoSach, TongTienCoc, TrangThai  
 		from phieu_muon_tra, docgia where phieu_muon_tra.MaThe = docgia.MaThe 
-		and phieu_muon_tra.id = ?`; 
-	sql = mysql.format(sql, req.body.id); 
+		and phieu_muon_tra.id = ` + req.body.id;  
 	try {  
 		thongtindocgia = await queryPromise(sql); 
 		sql = `select tailieuchitiet.MaVach, TenTL from phieu_muon_tra, tailieuchitiet, tailieu, chi_tiet_muon_tra  
@@ -881,8 +888,9 @@ app.post("/layTTPhieuMuon", json.json(), async function(req, res) {
 			'MaThe': thongtindocgia[0].MaThe,
 			'HoTen': thongtindocgia[0].HoTen,
 			'Email': thongtindocgia[0].Email,
-			'SoDienThoai': thongtindocgia[0].SoDienThoai 
-		};   
+			'SoDienThoai': thongtindocgia[0].SoDienThoai,
+			'TrangThai': thongtindocgia[0].TrangThai
+		};    
 
 		res.write(JSON.stringify(thongtinchitiet)); 
 		res.end();  
@@ -896,6 +904,34 @@ app.post("/layTTPhieuMuon", json.json(), async function(req, res) {
 app.get('/quanLyTraSach', async function(req, res) {
 	res.render('views/pages/quan-ly-tra-sach');
 });
+
+// Xac nhan tra sach
+app.post('/xacNhanTraSach', json.json(), async function(req, res) { 
+	var NgayTra = (new Date()).getFullYear() + "-" + ((new Date()).getMonth() + 1) + "-" + ((new Date()).getDate()) + 
+	" " + (new Date()).getHours() + ":" + (new Date()).getMinutes() + ":" + (new Date()).getSeconds();
+	sql = "update phieu_muon_tra set NgayTra = ?, MaNV_Tra = ?, TrangThai='Trả' where id = " + req.body.id;  
+	sql = mysql.format(sql, [NgayTra, req.body.MaNV_Tra]); 
+	 
+	try {
+		results = await queryPromise(sql); 
+	 	danhsachmuonsach = req.body.danhsachmuonsach;
+		for (var i = 0; i < danhsachmuonsach.length; i++) { 
+			sql = "update tailieuchitiet set TinhTrang = 'chưa mượn' where MaVach = ?";
+			sql = mysql.format(sql, danhsachmuonsach[i].MaVach);  
+			try {
+				await queryPromise(sql); 
+			} catch(e) {
+				res.write("0");
+				res.end();
+			}
+		}
+		res.write('1');
+		res.end(); 
+	} catch(e) {
+		res.write('0');
+		res.end();
+	} 
+})
 
 // Đổi mật khẩu
 app.get('/doiMatKhau', async function(req, res) {
@@ -940,7 +976,7 @@ app.post('/doiMatKhau', json.json(), function(req, res) {
 
 // Thông tin người dùng
 app.get('/thongTinCaNhan', async function(req, res) {
-	var TenTk = req.query.username;
+	var TenTk = req.query.username; 
 	thongTinCaNhan = new Array();
 
 	sql = `select TenTk, HoTen, DiaChi, Email, SoDienThoai from login, docgia where TenTk = MaThe and TenTk = ?`;
@@ -953,7 +989,7 @@ app.get('/thongTinCaNhan', async function(req, res) {
 			sql = mysql.format(sql, TenTk); 
 			try { 
 				nhanvien = await queryPromise(sql);
-				thongTinCaNhan.push(nhanvien[0]);
+				thongTinCaNhan.push(nhanvien[0]); 
 			}
 			catch(Exception) {
 				res.send('ERROR');
@@ -961,7 +997,7 @@ app.get('/thongTinCaNhan', async function(req, res) {
 		}
 		else
 		{
-			thongTinCaNhan.push(docgia[0]);
+			thongTinCaNhan.push(docgia[0]); 
 		}
 
 	} catch(Exception) {
@@ -1007,7 +1043,7 @@ app.post('/capNhatThongTin', json.json(), function(req, res) {
 
 //Thông tin mượn sách độc giả
 app.get('/thongTinMuonSach', async function(req, res) {
-	var pageSize = 1,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
 	danhSachMuonSach = new Array(); 
@@ -1066,9 +1102,9 @@ app.get('/thongTinMuonSach', async function(req, res) {
 
 
 
-// Lay danh sachdoc gia
+// Lay danh sach doc gia
 app.get('/danhSachDocGia', async function(req, res) {
-	var pageSize = 4,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
 	danhSachDocGia = new Array(); 
@@ -1141,7 +1177,7 @@ app.post('/themDocGia', json.json(), async function(req, res) {
 				res.end();
 			}
 			else {
-				var pageSize = 4,
+				var pageSize = 5,
 					pageCount;
 				danhsachdocgia = [];
 				results = await queryPromise("select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d  as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia order by id desc");
@@ -1184,8 +1220,7 @@ app.post('/suaDocGia', json.json(), function(req, res) {
 			res.write(JSON.stringify(danhsachdocgia)); 
 			res.end();
 		}
-	})
-	//console.log(sql);
+	}) 
 })
 
 // Xoadoc gia 
@@ -1198,14 +1233,15 @@ app.post('/xoaDocGia', json.json(), function(req, res) {
 			res.end();
 		}
 		else {
+			pageSize = 5;
 			sql = "select * from docgia"; 
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
-			pageCount = Math.ceil(results.length / 4)
+			pageCount = Math.ceil(results.length / pageSize)
 			page = req.body.currentPage;  
 			danhsachdocgia = [];
 			k = 0;
-			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
 				danhsachdocgia[k] = results[i - 1]; 
 				k++;
 			} 
@@ -1222,7 +1258,7 @@ app.post('/xoaDocGia', json.json(), function(req, res) {
 
 // Lay danh sach tai lieu
 app.get('/danhSachTaiLieu', async function(req, res) {
-	var pageSize = 4,
+	var pageSize = 5,
 		pageCount,
 		currentPage = 1;
 	danhSachTaiLieu = new Array(); 
@@ -1287,7 +1323,7 @@ app.post('/themTaiLieu', json.json(), async function(req, res) {
 				res.end();
 			}
 			else {
-				var pageSize = 4,
+				var pageSize = 5,
 					pageCount;
 				danhsachtailieu = [];
 				results = await queryPromise("select * from tailieu order by id desc");
@@ -1344,14 +1380,15 @@ app.post('/xoaTaiLieu', json.json(), async function(req, res) {
 			res.end();
 		}
 		else {
+			pageSize = 5;
 			sql = "select * from tailieu"; 
 			sql = mysql.format(sql, req.body.id);
 			results = await queryPromise(sql);
-			pageCount = Math.ceil(results.length / 4)
+			pageCount = Math.ceil(results.length / pageSize)
 			page = req.body.currentPage;  
 			danhsachtailieu = [];
 			k = 0;
-			for (var i = page * 4 - 3; i <= page * 4 && i <= results.length; i++) {
+			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
 				danhsachtailieu[k] = results[i - 1]; 
 				k++;
 			} 

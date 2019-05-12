@@ -132,7 +132,7 @@
 				                <% } else { %> 
 				                    <li><a href=<%=url+"&page="+ i %>><%= i %></a></li>
 				                <% } %>
-				                <% if (i == (currentPage + 4)) { %>
+				                <% if (i == (currentPage + 4) && pageCount!=5) { %>
 				                    <li class="disabled"><a href="#">...</a></li>
 				                <% break; } %>
 				            <% } %>
