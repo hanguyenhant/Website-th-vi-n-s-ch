@@ -115,7 +115,7 @@
 						</tr>
 					</thead>
 					<tbody> 
-						<%for (var i = 0, j=(currentPage - 1)*4; i < danhSachNhanVien.length && j<(danhSachNhanVien.length + 4 * currentPage); i++, j++){%>
+						<%for (var i = 0, j=(currentPage - 1)*pageSize; i < danhSachNhanVien.length && j<(danhSachNhanVien.length + pageSize * currentPage); i++, j++){%>
 							<tr>
 								<td id="<%=danhSachNhanVien[i].id%>"><%=j + 1%></td>
 								<td id="MaNV<%=danhSachNhanVien[i].id%>"><%=danhSachNhanVien[i].MaNV%></td>
@@ -307,6 +307,9 @@
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
+							// Lay trang hien tai (tren url)
+							var currentPage = location.search.split('page=')[1]; 
+							if (currentPage == undefined) currentPage = 1;
 							pageSize = 5;
 							// xu ly ajax
 							dsnv = document.getElementById("DSNV"); 
@@ -377,10 +380,12 @@
 				    		hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
-							// Tao html trong the co id = "menu"
+							// Tao html trong the co id = "dsnv"
 							dsnv.innerHTML = hienthi; 
-							// Tao html trong the co phantrang = "menu"
-							phantrang.innerHTML = hienthi_phantrang; 
+						 	if (pageCount > 1) {
+						 		// Tao html trong the co phantrang = "phantrang"
+								phantrang.innerHTML = hienthi_phantrang; 
+						 	}
 
 							// Thay doi gia tri url 
 							history.pushState(null, '', url); 
@@ -489,12 +494,12 @@
 							phantrang = document.getElementById('phantrang');
 				    		hienthi_phantrang = '<hr class="mt-2 mb-5">';
 				    		hienthi_phantrang += '<ul class="pagination">';
-				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ 1 + '">' + 1 + '</a></li>'; 
+				    		hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ 1 + '">' + 1 + '</a></li>'; 
 				    		for(var i = 2; i <= 5 && i <= pageCount; i++) { 
 				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
 				    		}   
 				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';
-				    		hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
+				    		hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
 				            phantrang.innerHTML = hienthi_phantrang;
@@ -521,29 +526,31 @@
 					    			hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ (i) + '">' + (i) + '</a></li>'; 
 								}
 				    		}
-							if (pageCount > currentPage) hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ currentPage + '">' + currentPage + '</a></li>'; 
+							hienthi_phantrang += '<li class="active"><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ currentPage + '">' + currentPage + '</a></li>'; 
 							 
-							if (parseInt(parseInt(pageCount) - parseInt(currentPage)) > 0) {
+							if (parseInt(parseInt(pageCount) - parseInt(currentPage)) >= 0) {
 								var j = 1;
-								for(var i = parseInt(currentPage) + 1; j <= 4 && i <= parseInt(pageCount); i++) { 
+								for(var i = parseInt(currentPage) + 1; j <= 5 && i <= parseInt(pageCount); i++) { 
 									j++;
 				    				hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';   
 				    			}
-				    			if (parseInt(parseInt(pageCount) - parseInt(currentPage)) > 4) {
+				    			if (parseInt(parseInt(pageCount) - parseInt(currentPage)) > 5) {
 									hienthi_phantrang += '<li><a disabled>...</a></li>';
 								 
 								}  
 								if (pageCount > currentPage) {
 									hienthi_phantrang += '<li><a href=" ' + "/danhSachNhanVien?noi_dung_tim_kiem=" + "&page="+ pageCount + '">' + '&raquo;</a></li>';
-								}
-								hienthi_phantrang += '</ul>';
+								}  
 				    		}    
 							else {
+								 
 								var url = "/danhSachNhanVien" + "?noi_dung_tim_kiem=&page=" + pageCount;
 								currentPage = pageCount;
 								// Thay doi gia tri url 
 								history.pushState(null, '', url);  
 							}
+
+							hienthi_phantrang += '</ul>';
 							if (pageCount > 1) phantrang.innerHTML = hienthi_phantrang;
 						}
 						// Xu ly bang hien thi danh sach nhan vien

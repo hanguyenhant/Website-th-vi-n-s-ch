@@ -412,6 +412,9 @@
 				xmlhttp.onreadystatechange = function() {
 					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
 						if (xmlhttp.responseText != "0") { 
+							// Lay trang hien tai (tren url)
+							var currentPage = location.search.split('page=')[1]; 
+							if (currentPage == undefined) currentPage = 1;
 							pageSize= 5;
 							// xu ly ajax
 							dsdg = document.getElementById("DSDG"); 
@@ -479,16 +482,12 @@
 				    			amount += 1;
 				    			if (i > 0) hienthi_phantrang += '<li><a href=" ' + url + "&page="+ i + '">' + i + '</a></li>';  
 				    		}   
-				    		hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
+				    		if (pageCount > currentPage) hienthi_phantrang += '<li class="active"><a href=" ' + url + "&page="+ pageCount + '">' + pageCount + '</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
 							// Tao html trong the co id = "dsdg"
 							dsdg.innerHTML = hienthi; 
-							if (pageCount == 1) {
-								// Tao html trong the co phantrang = "phantrang"
-								phantrang.innerHTML = '';
-							}
-							else {
+							if(pageCount > 1) {
 								// Tao html trong the co phantrang = "phantrang"
 								phantrang.innerHTML = hienthi_phantrang; 
 							}
@@ -616,14 +615,10 @@
 				    			hienthi_phantrang += '<li><a href=" ' + "/danhSachDocGia?noi_dung_tim_kiem=" + "&page="+ i + '">' + i + '</a></li>';  
 				    		}   
 				    		if (pageCount > 5) hienthi_phantrang += '<li><a disabled>...</a></li>';;
-				    		hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
+				    		if (pageCount > currentPage) hienthi_phantrang += '<li><a href=" ' + url + "&page="+ pageCount + '">' + '&raquo;</a></li>'; 
 				            hienthi_phantrang += '</ul>';
 
-				            if (pageCount == 1) {
-								// Tao html trong the co phantrang = "phantrang"
-								phantrang.innerHTML = '';
-							}
-							else {
+				            if(pageCount > 1) {
 								// Tao html trong the co phantrang = "phantrang"
 								phantrang.innerHTML = hienthi_phantrang; 
 							}
