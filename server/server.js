@@ -17,7 +17,7 @@ app.use(express.static('public'));
 // Ket noi nodejs voi mysql
 const mysql = require("mysql"); 
 var connect = mysql.createConnection({
-	database: 'laptrinhweb',
+	database: 'laptrinhweb1',
 	host: 'localhost',
 	user: 'root',
 	password: '123456',
@@ -1223,7 +1223,8 @@ app.post('/suaDocGia', json.json(), function(req, res) {
 	}) 
 })
 
-// Xoadoc gia 
+// Xoadoc gia
+/* 
 app.post('/xoaDocGia', json.json(), function(req, res) {
 	var sql = `delete from docgia where id = ?`; 
 	sql = mysql.format(sql, req.body.id);  
@@ -1255,7 +1256,49 @@ app.post('/xoaDocGia', json.json(), function(req, res) {
 		}
 	})
 })
+*/
 
+// Xoa  doc gia 
+app.post('/xoaDocGia', json.json(), async function(req, res) {
+	var sql = "select MaThe from docgia where id = ?" ;
+	sql = mysql.format(sql, req.body.id);
+	result = await queryPromise(sql);
+	MaThe = result[0].MaThe;
+	sql = `delete from docgia where id = ?`; 
+	sql = mysql.format(sql, req.body.id);  
+	connect.query(sql, async function(err, result) {
+		if (err) {
+			res.write('0');
+			res.end();
+		}
+		else {
+			// Xoa tai khoan trong bang login 
+			sql = "delete from login where TenTk = ?";
+			sql = mysql.format(sql, MaThe);
+			result_delete = await queryPromise(sql);
+			sql = "select * from docgia"; 
+			sql = mysql.format(sql, req.body.id);
+			results = await queryPromise(sql);
+			pageSize = 5;
+			pageCount = Math.ceil(results.length / pageSize)
+			page = req.body.currentPage;  
+			danhsachdocgia = [];
+			k = 0;
+			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
+				danhsachdocgia[k] = results[i - 1]; 
+				k++;
+			} 
+			dsdg_pagecount = {
+					'danhsachdocgia': danhsachdocgia,
+					'pageCount': pageCount
+
+			};  
+			res.write(JSON.stringify(dsdg_pagecount)); 
+			res.end();
+		}
+	})
+})
+  
 // Lay danh sach tai lieu
 app.get('/danhSachTaiLieu', async function(req, res) {
 	var pageSize = 5,
