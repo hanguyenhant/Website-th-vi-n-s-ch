@@ -1150,7 +1150,9 @@ app.get('/danhSachDocGia', async function(req, res) {
 	} 
 });
 
-// Themdoc gia
+ 
+ 
+ // Them doc gia 
 app.post('/themDocGia', json.json(), async function(req, res) { 
 	var sql;
 	sql = "select MaThe from docgia where id = (select max(id) from docgia)";
@@ -1166,11 +1168,19 @@ app.post('/themDocGia', json.json(), async function(req, res) {
 			MaThe = "DG0" + stt;
 		}
 		else MaThe = "DG" + stt; 
+		sql = 'insert into login (TenTk, MatKhau) values(?, ?)';
+		sql = mysql.format(sql, [MaThe, '12345689']);
+		connect.query(sql, function(err) {
+			if (err) {
+				res.write("0");
+				res.end();
+			}
+		})
 		sql = `insert into docgia(MaThe, HoTen, DiaChi, Email, SoDienThoai, NgayCap, HanSD, MaNV, NgayCN) 
 		values (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 		sql = mysql.format(sql, [MaThe, req.body.HoTen, req.body.DiaChi, 
-			req.body.Email, req.body.SoDienThoai,
-			req.body.NgayCap,req.body.HanSD,req.body.MaNV,req.body.NgayCN]); 
+			req.body.Email, req.body.SoDienThoai, req.body.NgayCap,
+			req.body.HanSD, req.body.MaNV, req.body.NgayCN]); 
 		connect.query(sql, async function(err, results) {
 			if (err) { 
 				res.write("0");
@@ -1180,16 +1190,18 @@ app.post('/themDocGia', json.json(), async function(req, res) {
 				var pageSize = 5,
 					pageCount;
 				danhsachdocgia = [];
-				results = await queryPromise("select id, MaThe, HoTen, DiaChi, Email, SoDienThoai,  date_format(NgayCap, '%Y-%m-%d  as NgayCap ,  date_format(HanSD, '%Y-%m-%d ') as HanSD, MaNV,  date_format(NgayCN, '%Y-%m-%d ') as NgayCN from docgia order by id desc");
+				results = await queryPromise("select * from docgia order by id desc");
 				pageCount = Math.ceil(results.length/pageSize);
-				for (var i = 0; i < pageSize; i++) {
-					danhsachdocgia[i] = results[pageSize - i - 1];
+				soluong = results.length % pageSize; // so luong doc gia thuoc trang cuoi cung
+				if (soluong == 0) soluong = pageSize;
+				for (var i = 0; i < pageSize && i < soluong; i++) {
+					danhsachdocgia[soluong - i - 1] = results[i];
 				}
 				dsdg_pagecount = {
 					'danhsachdocgia': danhsachdocgia,
 					'pageCount': pageCount
 
-				}; 
+				};  
 				res.write(JSON.stringify(dsdg_pagecount)); 
 				res.end(); 
 			}
@@ -1198,7 +1210,10 @@ app.post('/themDocGia', json.json(), async function(req, res) {
 		res.write("0");
 		res.end();
 	} 
+//console.log(sql);
 })
+ 
+ 
  
 // Suadoc gia 
 app.post('/suaDocGia', json.json(), function(req, res) {
@@ -1223,40 +1238,6 @@ app.post('/suaDocGia', json.json(), function(req, res) {
 	}) 
 })
 
-// Xoadoc gia
-/* 
-app.post('/xoaDocGia', json.json(), function(req, res) {
-	var sql = `delete from docgia where id = ?`; 
-	sql = mysql.format(sql, req.body.id);  
-	connect.query(sql, async function(err, result) {
-		if (err) {
-			res.write('0');
-			res.end();
-		}
-		else {
-			pageSize = 5;
-			sql = "select * from docgia"; 
-			sql = mysql.format(sql, req.body.id);
-			results = await queryPromise(sql);
-			pageCount = Math.ceil(results.length / pageSize)
-			page = req.body.currentPage;  
-			danhsachdocgia = [];
-			k = 0;
-			for (var i = page * pageSize - (pageSize - 1); i <= page * pageSize && i <= results.length; i++) {
-				danhsachdocgia[k] = results[i - 1]; 
-				k++;
-			} 
-			dsdg_pagecount = {
-					'danhsachdocgia': danhsachdocgia,
-					'pageCount': pageCount
-
-			};  
-			res.write(JSON.stringify(dsdg_pagecount)); 
-			res.end();
-		}
-	})
-})
-*/
 
 // Xoa  doc gia 
 app.post('/xoaDocGia', json.json(), async function(req, res) {
