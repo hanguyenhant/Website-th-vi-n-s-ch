@@ -17,7 +17,7 @@ app.use(express.static('public'));
 // Ket noi nodejs voi mysql
 const mysql = require("mysql"); 
 var connect = mysql.createConnection({
-	database: 'laptrinhweb',
+	database: 'laptrinhweb1',
 	host: 'localhost',
 	user: 'root',
 	password: '123456',

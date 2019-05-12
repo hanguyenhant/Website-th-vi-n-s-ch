@@ -93,36 +93,38 @@
 				           				<label>Ngay Cấp: </label>
 				           				<div class="input-group">
 				           					<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i> 
+												<i class="glyphicon glyphicon-calendar"></i> 
 											</span>
-											<input type="text" class="form-control" required="" id="NgayCap">
+											<input type="text" class="form-control" required="" id="NgayCap" placeholder="yyyy-mm-dd" name="date">
 				           				</div>
 				           			</div> 
 									<div class="form-group-inline">
 				           				<label>Hạn SD: </label>
 				           				<div class="input-group">
 				           					<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i> 
+												<i class="glyphicon glyphicon-calendar"></i> 
 											</span>
-											<input type="text" class="form-control" required="" id="HanSD">
+											<input type="text" class="form-control" required="" id="HanSD" placeholder="yyyy-mm-dd" name="date">
 				           				</div>
 				           			</div> 
 									<div class="form-group-inline">
 				           				<label>Mã NV: </label>
 				           				<div class="input-group">
 				           					<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i> 
+												<i class="glyphicon glyphicon-book"></i> 
 											</span>
 											<input type="text" class="form-control" required="" id="MaNV">
 				           				</div>
 				           			</div> 
+									
+									
 									<div class="form-group-inline">
 				           				<label>Ngay CN: </label>
 				           				<div class="input-group">
 				           					<span class="input-group-addon">
-												<i class="glyphicon glyphicon-envelope"></i> 
+												<i class="glyphicon glyphicon-calendar"></i> 
 											</span>
-											<input type="text" class="form-control" required="" id="NgayCN">
+											<input type="text" class="form-control" required="" id="NgayCN" placeholder="yyyy-mm-dd" name="date">
 				           				</div>
 				           			</div>  
 					       		</div>  
@@ -278,25 +280,25 @@
 			           				<label for="ma-nhan-vien">NgayCap: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-calendar"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="NgayCap_Edit">
+										<input type="text" class="form-control" required="" id="NgayCap_Edit" placeholder="yyyy-mm-dd" name="date">
 			           				</div>
 			           			</div>   
 								<div class="form-group-inline">
 			           				<label for="ma-nhan-vien">HanSD: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-calendar"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="HanSD_Edit">
+										<input type="text" class="form-control" required="" id="HanSD_Edit" placeholder="yyyy-mm-dd" name="date">
 			           				</div>
 			           			</div>   
 								<div class="form-group-inline">
 			           				<label for="ma-nhan-vien">MaNV: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-book"></i> 
 										</span>
 										<input type="text" class="form-control" required="" id="MaNV_Edit">
 			           				</div>
@@ -305,9 +307,9 @@
 			           				<label for="ma-nhan-vien">NgayCN: </label>
 			           				<div class="input-group">
 			           					<span class="input-group-addon">
-											<i class="glyphicon glyphicon-envelope"></i> 
+											<i class="glyphicon glyphicon-calendar"></i> 
 										</span>
-										<input type="text" class="form-control" required="" id="NgayCN_Edit">
+										<input type="text" class="form-control" required="" id="NgayCN_Edit" placeholder="yyyy-mm-dd" name="date">
 			           				</div>
 			           			</div>   
 								
@@ -351,12 +353,27 @@
 	<div id="footer1"></div>
 	 
 	<script type="text/javascript" language="javascript">  
+	  $(document).ready(function(){
+		    var date_input=$('input[name="date"]'); //our date input has the name "date"
+		    var container=$('.bootstrap form').length>0 ? $('.bootstrap form').parent() : "body";
+		    var options={
+		    	format: 'yyyy-mm-dd',
+		        container: container,
+		        todayHighlight: true,
+		        autoclose: true,
+		    };
+		    date_input.datepicker(options);
+		})
+	
 		if (sessionStorage.getItem('username') == undefined) {
 			html = ejs.render(`<%include ../partials/theloai%>`);
 			document.getElementById('noidung').innerHTML = html;
 			html = ejs.render(`<%include ../partials/footer%>`);
 			document.getElementById('footer1').innerHTML = html;
 		}
+		
+		//document.getElementById("timkiem").value = '<%=noi_dung_tim_kiem%>'; 
+		
 		function openModal() {
 			$('#addModal').modal(); 
 			document.getElementById("HoTen").value = '';
